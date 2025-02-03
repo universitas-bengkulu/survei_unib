@@ -34,7 +34,7 @@
     </ul>
 </li>
 
-<li class="treeview">
+<li class="treeview {{ set_active(['operator.indikator.sarana_prasarana', 'operator.laporan.per_indikator.alumni']) }}">
     <a href="#">
       <i class="fa fa-building"></i>
       <span>Survei Sarana&Prasarana</span>
@@ -43,7 +43,7 @@
       </span>
     </a>
     <ul class="treeview-menu">
-      <li class="{{ set_active('operator.indikator') }}"><a href="{{ route('operator.indikator') }}"><i class="fa fa-circle-o"></i> Manajemen Indikator</a></li>
+      <li class="{{ set_active('operator.indikator.sarana_prasarana') }}"><a href="{{ route('operator.indikator.sarana_prasarana') }}"><i class="fa fa-circle-o"></i> Manajemen Indikator</a></li>
       <li class="{{ set_active('operator.laporan.per_prodi') }}"><a href="{{ route('operator.laporan.per_prodi') }}"><i class="fa fa-circle-o"></i> Laporan Per Pekerjaan</a></li>
       <li class="{{ set_active('operator.laporan.per_indikator') }}"><a href="{{ route('operator.laporan.per_indikator') }}"><i class="fa fa-circle-o"></i> Laporan Per Indikator</a></li>
     </ul>

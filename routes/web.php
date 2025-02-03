@@ -22,11 +22,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/', function () {
-//     // return redirect()->route('login');
-//     return redirect()->route('evaluasi.dashboard');
-// });
-
 Route::group(['prefix'  => '/'],function(){
     Route::get('/',[HomeController::class, 'dashboard'])->name('dashboard');
     Route::get('/dosen-tendik',[HomeController::class, 'dosentendik'])->name('dosen-tendik');
@@ -34,6 +29,7 @@ Route::group(['prefix'  => '/'],function(){
     Route::get('/sarana-prasarana',[HomeController::class, 'saranaprasarana'])->name('sarana-prasarana');
     Route::post('evaluasi-dosen-tentik/',[HomeController::class, 'postDosenTendik'])->name('evaluasi-dosen-tentik.post');
     Route::post('lulusan/',[HomeController::class, 'postLulusan'])->name('lulusan.post');
+    Route::post('sarana-prasarana/',[HomeController::class, 'postSaranaPrasarana'])->name('saranaprasarana.post');
 });
 
 
@@ -78,6 +74,22 @@ Route::group(['prefix'  => 'operator/'],function(){
         Route::get('/pesan_dan_saran',[LaporanController::class, 'saranAlumni'])->name('operator.laporan.saran.alumni');
 
         Route::get('evaluasi/export', [LaporanController::class, 'exportAlumni'])->name('evaluasi.export.alumni');
+    });
+
+
+    //sarana prasarana
+    Route::group(['prefix'  => 'indikator-alumni/'],function(){
+        Route::get('/',[IndikatorController::class, 'indikatorSaranaPrasarana'])->name('operator.indikator.sarana_prasarana');
+        Route::post('/',[IndikatorController::class, 'postSaranaPrasarana'])->name('operator.indikator.post.sarana_prasarana');
+        Route::delete('/{id}/aktif',[IndikatorController::class, 'aktifIndikatorSaranaPrasarana'])->name('operator.indikator.aktif.sarana_prasarana');
+        Route::delete('/{id}/nonaktif',[IndikatorController::class, 'nonaktifIndikatorSaranaPrasarana'])->name('operator.indikator.nonaktif.sarana_prasarana');
+    });
+
+    Route::group(['prefix'  => 'laporan-sarana-prasarana/'],function(){
+        Route::get('/pesan_dan_indikator',[LaporanController::class, 'indikatorSaranaPrasarana'])->name('operator.laporan.per_indikator.sarana_prasarana');
+        Route::get('/pesan_dan_saran',[LaporanController::class, 'saranSaranaPrasarana'])->name('operator.laporan.saran.sarana_prasarana');
+
+        Route::get('evaluasi/export', [LaporanController::class, 'exportSaranaPrasarana'])->name('evaluasi.export.sarana_prasarana');
     });
 
 });
