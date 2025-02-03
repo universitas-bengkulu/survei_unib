@@ -201,7 +201,7 @@
                                                         <fieldset class=" grid   grid-cols-1  text-left">
 
 
-                                                            <!-- 5  -->
+                                                            <!-- 4  -->
                                                             <div class="flex  mb-2">
                                                                 <input type="radio" id="nilai_{{ $item->id }}_4"
                                                                     name="nilai{{ $item->id }}" value="4"
