@@ -78,7 +78,7 @@ Route::group(['prefix'  => 'operator/'],function(){
 
 
     //sarana prasarana
-    Route::group(['prefix'  => 'indikator-alumni/'],function(){
+    Route::group(['prefix'  => 'indikator-sarana-prasarana/'],function(){
         Route::get('/',[IndikatorController::class, 'indikatorSaranaPrasarana'])->name('operator.indikator.sarana_prasarana');
         Route::post('/',[IndikatorController::class, 'postSaranaPrasarana'])->name('operator.indikator.post.sarana_prasarana');
         Route::delete('/{id}/aktif',[IndikatorController::class, 'aktifIndikatorSaranaPrasarana'])->name('operator.indikator.aktif.sarana_prasarana');
