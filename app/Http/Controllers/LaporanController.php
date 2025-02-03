@@ -89,6 +89,41 @@ class LaporanController extends Controller
 
 
 
+    //Sarana Prasarana
+    public function indikatorSaranaPrasarana(){
+        $results = $this->getPivotResults(3);
+
+    $questions = DB::table('indikators')->select('id')->where('category', 3)->get();
+
+    $evaluasiList = collect($results)->map(function ($item) {
+        return (object) $item;
+    });
+
+    return view('operator.laporan.saranaPrasarana', compact(['evaluasiList', 'questions']));
+    }
+
+    public function exportSaranaPrasarana(){
+        $results = $this->getPivotResults(3);
+        $evaluasiList = collect($results)->map(function ($item) {
+            return (object) $item;
+        });
+        $questions = DB::table('indikators')->where('category', 3)->count();
+
+        return Excel::download(
+            new EvaluasiExport($evaluasiList, $questions),
+            'laporan_evaluasi_' . date('Y-m-d') . '.xlsx'
+        );
+    }
+
+    public function saranSaranaPrasarana(){
+        $sarans = Saran::select('pendidikan','pekerjaan','nama_lengkap','akses','saran','created_at')->orderBy('pendidikan')->where('category', 3)->orderBy('pekerjaan')->orderBy('created_at','desc')->get();
+        return view('operator/laporan.saran',[
+            'sarans'    => $sarans,
+        ]);
+    }
+
+
+
 
 
 

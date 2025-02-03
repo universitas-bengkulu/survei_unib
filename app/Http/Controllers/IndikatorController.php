@@ -111,4 +111,56 @@ class IndikatorController extends Controller
         return redirect()->route('operator.indikator.alumni')->with($notification);
     }
 
+    //sarna prasarna
+    public function indikatorSaranaPrasarana (){
+        $indikators = Indikator::select('id','nama_indikator','ditampilkan')->where('category', 3)->get();
+        return view('operator/indikator.sarana_prasarana',[
+            'indikators'    => $indikators,
+        ]);
+    }
+
+
+    public function postSaranaPrasarana(Request $request){
+        $attributes = [
+            'nama_indikator'   =>  'Nama Indikator',
+        ];
+        $this->validate($request, [
+            'nama_indikator'    =>  'required',
+        ],$attributes);
+
+        Indikator::create([
+            'nama_indikator'    =>  $request->nama_indikator,
+            'ditampilkan'       =>  1,
+            'category'       =>  3,
+        ]);
+
+        $notification = array(
+            'message' => 'Berhasil, indikator penilaian berhasil ditambahkan!',
+            'alert-type' => 'success'
+        );
+        return redirect()->route('operator.indikator.sarana_prasarana')->with($notification);
+    }
+
+
+
+    public function aktifIndikatorSaranaPrasarana($id){
+        $indikator = Indikator::where('id', $id)->first();
+        $indikator->update(['ditampilkan' => 0]);
+        $notification = array(
+            'message' => 'Berhasil, indikator penilaian berhasil dinonaktifkan!',
+            'alert-type' => 'success'
+        );
+        return redirect()->route('operator.indikator.sarana_prasarana')->with($notification);
+    }
+
+    public function nonaktifIndikatorSaranaPrasarana($id){
+        $indikator = Indikator::where('id', $id)->first();
+        $indikator->update(['ditampilkan' => 1]);
+        $notification = array(
+            'message' => 'Berhasil, indikator penilaian berhasil dinonaktifkan!',
+            'alert-type' => 'success'
+        );
+        return redirect()->route('operator.indikator.sarana_prasarana')->with($notification);
+    }
+
 }
