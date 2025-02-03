@@ -1,7 +1,7 @@
 @extends('layouts.user')
 @section('content')
     <!-- slider -->
-    <section class="  md:h-[40vh] h-[25vh] lg:h-[55vh]  relative   bg-red-500">
+    <section class="  md:h-[40vh] h-[25vh] lg:h-[55vh]  relative   bg-blue-500">
         <div class="h-full w-full absolute  z-0  "
             style="background-color: transparent;background-image: url({{ asset('assets/Rektorat.webp') }});background-repeat: no-repeat;background-position: left 50%; background-size: cover;">
         </div>
