@@ -27,9 +27,11 @@ use Illuminate\Support\Facades\Route;
 //     return redirect()->route('evaluasi.dashboard');
 // });
 
-// Route::get('/', [HomeController::class, 'dashboard'])->name('evaluasi.dashboard');
 Route::group(['prefix'  => '/'],function(){
     Route::get('/',[HomeController::class, 'dashboard'])->name('dashboard');
+    Route::get('/dosen-tendik',[HomeController::class, 'dosentendik'])->name('dosen-tendik');
+    Route::get('/alumni',[HomeController::class, 'alumni'])->name('alumni');
+    Route::get('/sarana-prasarana',[HomeController::class, 'saranaprasarana'])->name('sarana-prasarana');
     Route::post('evaluasi/',[HomeController::class, 'post'])->name('evaluasi.post');
 });
 
@@ -47,7 +49,8 @@ Route::group(['prefix'  => 'operator/'],function(){
     Route::group(['prefix'  => 'indikator/'],function(){
         Route::get('/',[IndikatorController::class, 'index'])->name('operator.indikator');
         Route::post('/',[IndikatorController::class, 'post'])->name('operator.indikator.post');
-        Route::delete('/{id}/delete',[IndikatorController::class, 'delete'])->name('operator.indikator.delete');
+        Route::delete('/{id}/aktif',[IndikatorController::class, 'aktif'])->name('operator.indikator.aktif');
+        Route::delete('/{id}/nonaktif',[IndikatorController::class, 'nonaktif'])->name('operator.indikator.nonaktif');
     });
 
     Route::group(['prefix'  => 'laporan/'],function(){
@@ -63,24 +66,9 @@ Route::group(['prefix'  => 'operator/'],function(){
 });
 
 Auth::routes();
-// Route::get('/login',[PandaController::class, 'showLoginForm'])->name('login');
 Route::post('/pandalogin',[PandaController::class, 'pandaLogin'])->name('panda.login');
 Route::get('/logout', [PandaController::class, 'authLogout'])->name('authLogout');
-// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-// Route::group(['prefix'  => 'evaluasi/'],function(){
-//     Route::get('/',[HomeController::class, 'dashboard'])->name('evaluasi.dashboard');
-//     Route::post('/',[HomeController::class, 'post'])->name('evaluasi.post');
-// });
-
-// Route::group(['prefix'  => 'operator/'],function(){
-//     Route::get('/login', function () {
-//         return view('auth/login_tendik');
-//     })->name('tendik.login');
-
-//     Route::get('/dashboard',[TendikController::class, 'dashboard'])->name('tendik.dashboard');
-//     Route::post('/',[TendikController::class, 'post'])->name('tendik.post');
-// });
 
 
 Route::group(['prefix'  => 'perencanaan/'],function(){

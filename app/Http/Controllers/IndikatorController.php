@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 class IndikatorController extends Controller
 {
     public function index(){
-        $indikators = Indikator::select('id','nama_indikator')->get();
+        $indikators = Indikator::select('id','nama_indikator','ditampilkan')->get();
         return view('operator/indikator.index',[
             'indikators'    => $indikators,
         ]);
@@ -34,10 +34,23 @@ class IndikatorController extends Controller
         return redirect()->route('operator.indikator')->with($notification);
     }
 
-    public function delete($id){
-        Indikator::where('id',$id)->delete();
+
+
+    public function aktif($id){
+        $indikator = Indikator::where('id', $id)->first();
+        $indikator->update(['ditampilkan' => 0]);
         $notification = array(
-            'message' => 'Berhasil, indikator penilaian berhasil dihapus!',
+            'message' => 'Berhasil, indikator penilaian berhasil dinonaktifkan!',
+            'alert-type' => 'success'
+        );
+        return redirect()->route('operator.indikator')->with($notification);
+    }
+
+    public function nonaktif($id){
+        $indikator = Indikator::where('id', $id)->first();
+        $indikator->update(['ditampilkan' => 1]);
+        $notification = array(
+            'message' => 'Berhasil, indikator penilaian berhasil dinonaktifkan!',
             'alert-type' => 'success'
         );
         return redirect()->route('operator.indikator')->with($notification);

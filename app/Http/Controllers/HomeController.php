@@ -33,23 +33,35 @@ class HomeController extends Controller
     }
 
     public function dashboard(){
-        $indikators = Indikator::where('ditampilkan',true)->get();
+        return view('user.home');
+    }
+
+    public function dosentendik(){
+        $indikators = Indikator::where('ditampilkan',true)->where('category', 1)->get();
+        return view('user.dosen_tendik',compact('indikators'));
+    }
+    public function alumni(){
+        $indikators = Indikator::where('ditampilkan',true)->where('category', 2)->get();
+        return view('user.alumni',compact('indikators'));
+    }
+    public function saranaprasarana(){
+        $indikators = Indikator::where('ditampilkan',true)->where('category', 3)->get();
         return view('welcome',compact('indikators'));
     }
 
     public function post(Request $request){
         $validated = $request->validate([
-            'nilai.*' => 'required|in:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18',  
-            'nama' => 'required',  
-            // 'jenis_kelamin' => 'required',  
-            // 'pendidikan' => 'required',  
-            'pekerjaan' => 'required',    
+            'nilai.*' => 'required|in:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18',
+            'nama' => 'required',
+            // 'jenis_kelamin' => 'required',
+            // 'pendidikan' => 'required',
+            'pekerjaan' => 'required',
         ], [
-            'nama.required' => 'Nama harus diisi',   
-            'nilai.*.required' => 'Nilai harus dipilih untuk setiap indikator',   
-            // 'jenis_kelamin.required' => 'Jenis Kelamin harus dipilih',   
-            // 'pendidikan.required' => 'Pendidikan harus diisi',   
-            'pekerjaan.required' => 'Pekerjaan harus diisi',  
+            'nama.required' => 'Nama harus diisi',
+            'nilai.*.required' => 'Nilai harus dipilih untuk setiap indikator',
+            // 'jenis_kelamin.required' => 'Jenis Kelamin harus dipilih',
+            // 'pendidikan.required' => 'Pendidikan harus diisi',
+            'pekerjaan.required' => 'Pekerjaan harus diisi',
         ]);
 
     try {
@@ -70,7 +82,7 @@ class HomeController extends Controller
                 'pekerjaan' => $request->pekerjaan,
                 'indikator_id' => $item->id,
                 'nama_indikator' => $item->nama_indikator,
-                'skor' => $nilai,  
+                'skor' => $nilai,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             );
@@ -104,7 +116,8 @@ class HomeController extends Controller
 
         $notification = array(
             'message' => 'Kuisioner berhasil disimpan!',
-            'alert-type' => 'success'
+            'alert-type' => 'success',
+            'titel' => 'Berhasil!'
         );
 
         return redirect()->back()->with($notification);
@@ -114,7 +127,8 @@ class HomeController extends Controller
 
         $notification = array(
             'message' => 'Kuisioner gagal disimpan! ' . $e->getMessage(),
-            'alert-type' => 'error'
+            'alert-type' => 'error',
+            'titel' => 'Gagal'
         );
 
         return redirect()->back()->with($notification);

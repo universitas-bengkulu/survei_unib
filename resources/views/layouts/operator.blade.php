@@ -132,7 +132,7 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        LPTIK, Universitas Bengkulu
+         Universitas Bengkulu
         <small>Sistem Informasi Evaluasi </small>
       </h1>
       <ol class="breadcrumb">
@@ -153,7 +153,7 @@
 
   <footer class="main-footer ">
     <div class="pull-right hidden-xs">
-      <a href="" target="_blank"><b>LPTIK, Universitas Bengkulu</b></a>
+      <a href="" target="_blank"><b> Universitas Bengkulu</b></a>
     </div>
     <strong>Copyright &copy; 2022 <a href="">Survei Kepuasan</a>.</strong> All rights
     reserved.

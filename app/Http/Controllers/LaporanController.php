@@ -36,8 +36,9 @@ class LaporanController extends Controller
 
     public function indikator(){
         $results = $this->getPivotResults();
-     
-    $questions = DB::table('indikators')->count(); 
+
+    $questions = DB::table('indikators')->select('id')->get();
+
     $evaluasiList = collect($results)->map(function ($item) {
         return (object) $item;
     });
@@ -53,7 +54,7 @@ class LaporanController extends Controller
         $questions = DB::table('indikators')->count();
 
         return Excel::download(
-            new EvaluasiExport($evaluasiList, $questions), 
+            new EvaluasiExport($evaluasiList, $questions),
             'laporan_evaluasi_' . date('Y-m-d') . '.xlsx'
         );
     }
@@ -103,11 +104,11 @@ class LaporanController extends Controller
             ->get();
 
         $select = ['nama'];
-        
+
         foreach ($questions as $question) {
             $select[] = DB::raw("MAX(CASE WHEN indikator_id = {$question->id} THEN skor END) as '{$question->id}'");
         }
-        
+
         $select[] = DB::raw('SUM(skor) as total');
 
         return DB::table('evaluasis')

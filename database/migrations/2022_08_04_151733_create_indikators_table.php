@@ -17,6 +17,7 @@ class CreateIndikatorsTable extends Migration
             $table->id();
             $table->string('nama_indikator');
             $table->boolean('ditampilkan');
+            $table->integer('category');
             $table->timestamps();
         });
     }

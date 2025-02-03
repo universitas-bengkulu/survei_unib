@@ -61,7 +61,7 @@
                 <h3 class="box-title"><i class="fa fa-book"></i>&nbsp;Manajemen Data Indikator</h3>
             </div>
             <div class="mb-3">
-    <a href="{{ route('evaluasi.export') }}" class="btn btn-success">
+    <a href="{{ route('evaluasi.export') }}" class="btn btn-success  " style="margin-left: 25px; margin-top: 10px;">
         <i class="fas fa-file-excel"></i> Export to Excel
     </a>
 </div>
@@ -78,7 +78,7 @@
                         <i class="fa fa-users"></i>
                         </div>
                     </div>
-                </div> 
+                </div>
                 <div class="col-lg-4 col-xs-12" style="padding-bottom:10px !important;">
                     <!-- small box -->
                     <div class="small-box bg-yellow" style="margin-bottom:0px;">
@@ -105,23 +105,23 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="box-body">
                 <div class="row">
-                     
+
                     <div class="col-md-12 table-responsive" style="padding:0px 40px">
                     <div class="overflow-x-auto">
             <table class="table table-hover table-striped table-bordered" id="table">
                 <thead style="background-color: #3C8DBC; color: white;">
                     <tr  >
                         <th   rowspan="2" style="text-align:center">Nama</th>
-                        <th   style="text-align:center" colspan="{{$questions}}" >Pertanyaan</th>
-                        
+                        <th   style="text-align:center" colspan="{{$questions->count()}}" >Pertanyaan</th>
+
                         <th  rowspan="2" style="text-align:center">Total</th>
-                        
+
                     </tr>
                     <tr>
-                    @for ($i = 1; $i <=  $questions ; $i++)
+                    @for ($i = 1; $i <=  $questions->count() ; $i++)
                             <th >  {{ $i }}</th>
                         @endfor
                         </tr>
@@ -130,11 +130,11 @@
                     @foreach ($evaluasiList as $evaluasi)
                         <tr class="hover:bg-gray-50">
                             <td >{{ $evaluasi->nama }}</td>
-                            @for ($i = 1; $i <=  $questions ; $i++)
+                            @foreach ($questions as $question)
                                 <td class="px-4 py-2 border text-center">
-                                    {{ $evaluasi->$i }}
+                                    {{ isset($evaluasi->{$question->id}) ? $evaluasi->{$question->id} : '-' }}
                                 </td>
-                            @endfor
+                            @endforeach
                             <td class="px-4 py-2 border font-bold text-center">
                                 {{ $evaluasi->total }}
                             </td>
@@ -143,7 +143,7 @@
                 </tbody>
             </table>
         </div>
- 
+
                     </div>
                 </div>
             </div>

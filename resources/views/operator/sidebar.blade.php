@@ -5,22 +5,49 @@
     </a>
 </li>
 
-<li class="{{ set_active('operator.indikator') }}">
-    <a href="{{ route('operator.indikator') }}">
-        <i class="fa fa-edit"></i> <span>Manajemen Indikator</span>
+<li class="treeview {{ set_active(['operator.indikator', 'operator.laporan.per_prodi', 'operator.laporan.per_indikator']) }}">
+    <a href="#">
+      <i class="fa fa-pie-chart"></i>
+      <span>Survei Dosen Dan Tendik</span>
+      <span class="pull-right-container">
+        <i class="fa fa-angle-left pull-right"></i>
+      </span>
     </a>
+    <ul class="treeview-menu">
+      <li class="{{ set_active('operator.indikator') }}"><a href="{{ route('operator.indikator') }}"><i class="fa fa-circle-o"></i> Manajemen Indikator</a></li>
+      <li class="{{ set_active('operator.laporan.per_prodi') }}"><a href="{{ route('operator.laporan.per_prodi') }}"><i class="fa fa-circle-o"></i> Laporan Per Pekerjaan</a></li>
+      <li class="{{ set_active('operator.laporan.per_indikator') }}"><a href="{{ route('operator.laporan.per_indikator') }}"><i class="fa fa-circle-o"></i> Laporan Per Indikator</a></li>
+    </ul>
 </li>
 
-<li class="header" style="font-weight:bold;">LAPORAN</li>
-<li class="{{ set_active('operator.laporan.per_prodi') }}">
-    <a href="{{ route('operator.laporan.per_prodi') }}">
-        <i class="fa fa-bar-chart"></i> <span>Laporan Per Pekerjaan</span>
+<li class="treeview  ">
+    <a href="#">
+      <i class="fa fa-graduation-cap"></i>
+      <span>Survei Lulusan/Alumni</span>
+      <span class="pull-right-container">
+        <i class="fa fa-angle-left pull-right"></i>
+      </span>
     </a>
+    <ul class="treeview-menu">
+      <li class="{{ set_active('operator.indikator') }}"><a href="{{ route('operator.indikator') }}"><i class="fa fa-circle-o"></i> Manajemen Indikator</a></li>
+      <li class="{{ set_active('operator.laporan.per_prodi') }}"><a href="{{ route('operator.laporan.per_prodi') }}"><i class="fa fa-circle-o"></i> Laporan Per Pekerjaan</a></li>
+      <li class="{{ set_active('operator.laporan.per_indikator') }}"><a href="{{ route('operator.laporan.per_indikator') }}"><i class="fa fa-circle-o"></i> Laporan Per Indikator</a></li>
+    </ul>
 </li>
-<li class="{{ set_active('operator.laporan.per_prodi') }}">
-    <a href="{{ route('operator.laporan.per_indikator') }}">
-        <i class="fa fa-bar-chart"></i> <span>Laporan Per Indikator</span>
+
+<li class="treeview">
+    <a href="#">
+      <i class="fa fa-building"></i>
+      <span>Survei Sarana&Prasarana</span>
+      <span class="pull-right-container">
+        <i class="fa fa-angle-left pull-right"></i>
+      </span>
     </a>
+    <ul class="treeview-menu">
+      <li class="{{ set_active('operator.indikator') }}"><a href="{{ route('operator.indikator') }}"><i class="fa fa-circle-o"></i> Manajemen Indikator</a></li>
+      <li class="{{ set_active('operator.laporan.per_prodi') }}"><a href="{{ route('operator.laporan.per_prodi') }}"><i class="fa fa-circle-o"></i> Laporan Per Pekerjaan</a></li>
+      <li class="{{ set_active('operator.laporan.per_indikator') }}"><a href="{{ route('operator.laporan.per_indikator') }}"><i class="fa fa-circle-o"></i> Laporan Per Indikator</a></li>
+    </ul>
 </li>
 
 {{--<li class="{{ set_active('operator.laporan.per_fakultas') }}">
