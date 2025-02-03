@@ -55,7 +55,7 @@ class LoginController extends Controller
             'password' =>  'required',
         ],$messages,$attributes);
 
-        if (auth()->attempt(array('username'   =>  $input['username'], 'password' =>  $input['password'], 'aktif'    =>  true))) {
+        if (auth()->attempt(array('username'   =>  htmlspecialchars($input['username']), 'password' =>  htmlspecialchars($input['password']), 'aktif'    =>  true))) {
            if (Auth::check()) {
             if (auth()->user()->akses == "administrator") {
                 $notification1 = array(

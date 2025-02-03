@@ -24,7 +24,7 @@ class IndikatorController extends Controller
         ],$attributes);
 
         Indikator::create([
-            'nama_indikator'    =>  $request->nama_indikator,
+            'nama_indikator'    =>  htmlspecialchars($request->nama_indikator),
             'ditampilkan'       =>  1,
             'category'       =>  1,
         ]);
@@ -77,7 +77,7 @@ class IndikatorController extends Controller
         ],$attributes);
 
         Indikator::create([
-            'nama_indikator'    =>  $request->nama_indikator,
+            'nama_indikator'    =>  htmlspecialchars($request->nama_indikator),
             'ditampilkan'       =>  1,
             'category'       =>  2,
         ]);
@@ -129,7 +129,7 @@ class IndikatorController extends Controller
         ],$attributes);
 
         Indikator::create([
-            'nama_indikator'    =>  $request->nama_indikator,
+            'nama_indikator'    =>  htmlspecialchars($request->nama_indikator),
             'ditampilkan'       =>  1,
             'category'       =>  3,
         ]);
