@@ -66,8 +66,8 @@ class HomeController extends Controller
                 $nilai = $request->input('nilai' . $item->id);
 
                 $kuisioner[] = array(
-                    'nama' => $request->nama,
-                    'pekerjaan' => $request->pekerjaan,
+                    'nama' => htmlspecialchars($request->nama),
+                    'pekerjaan' => htmlspecialchars($request->pekerjaan),
                     'indikator_id' => $item->id,
                     'nama_indikator' => $item->nama_indikator,
                     'category' => 1,
@@ -83,19 +83,19 @@ class HomeController extends Controller
             $rata = $total / $jumlah;
 
             EvaluasiRekap::create([
-                'nama' => $request->nama,
+                'nama' => htmlspecialchars($request->nama),
                 'category' => 1,
-                'pekerjaan' => $request->pekerjaan,
+                'pekerjaan' => htmlspecialchars($request->pekerjaan),
                 'total_skor' => $total,
                 'rata_rata' => $rata,
             ]);
 
-            if (!empty($request->saran)) {
+            if (!empty(htmlspecialchars($request->saran))) {
                 Saran::create([
-                    'nama' => $request->nama,
-                    'pekerjaan' => $request->pekerjaan,
+                    'nama' => htmlspecialchars($request->nama),
+                    'pekerjaan' => htmlspecialchars($request->pekerjaan),
                     'category' => 1,
-                    'saran' => $request->saran,
+                    'saran' => htmlspecialchars($request->saran),
                 ]);
             }
 
@@ -153,10 +153,10 @@ class HomeController extends Controller
                 $nilai = $request->input('nilai' . $item->id);
 
                 $kuisioner[] = array(
-                    'nama' => $request->nama,
-                    'pendidikan' => $request->pendidikan,
-                    'pendidikan' => $request->instansi,
-                    'pekerjaan' => $request->pekerjaan,
+                    'nama' => htmlspecialchars($request->nama),
+                    'pendidikan' => htmlspecialchars($request->pendidikan),
+                    'pendidikan' => htmlspecialchars($request->instansi),
+                    'pekerjaan' => htmlspecialchars($request->pekerjaan),
                     'indikator_id' => $item->id,
                     'nama_indikator' => $item->nama_indikator,
                     'category' => 2,
@@ -172,23 +172,23 @@ class HomeController extends Controller
             $rata = $total / $jumlah;
 
             EvaluasiRekap::create([
-                'nama' => $request->nama,
+                'nama' => htmlspecialchars($request->nama),
                 'category' => 2,
-                'pendidikan' => $request->pendidikan,
-                'instansi' => $request->instansi,
-                'pekerjaan' => $request->pekerjaan,
+                'pendidikan' => htmlspecialchars($request->pendidikan),
+                'instansi' => htmlspecialchars($request->instansi),
+                'pekerjaan' => htmlspecialchars($request->pekerjaan),
                 'total_skor' => $total,
                 'rata_rata' => $rata,
             ]);
 
-            if (!empty($request->saran)) {
+            if (!empty(htmlspecialchars($request->saran))) {
                 Saran::create([
-                    'nama' => $request->nama,
-                    'pendidikan' => $request->pendidikan,
-                    'instansi' => $request->instansi,
-                    'pekerjaan' => $request->pekerjaan,
+                    'nama' => htmlspecialchars($request->nama),
+                    'pendidikan' => htmlspecialchars($request->pendidikan),
+                    'instansi' => htmlspecialchars($request->instansi),
+                    'pekerjaan' => htmlspecialchars($request->pekerjaan),
                     'category' => 2,
-                    'saran' => $request->saran,
+                    'saran' => htmlspecialchars($request->saran),
                 ]);
             }
 
@@ -241,7 +241,7 @@ class HomeController extends Controller
                 $nilai = $request->input('nilai' . $item->id);
 
                 $kuisioner[] = array(
-                    'pekerjaan' => $request->pekerjaan,
+                    'pekerjaan' => htmlspecialchars($request->pekerjaan),
                     'indikator_id' => $item->id,
                     'nama_indikator' => $item->nama_indikator,
                     'category' => 3,
@@ -257,18 +257,18 @@ class HomeController extends Controller
             $rata = $total / $jumlah;
 
             EvaluasiRekap::create([
-                'pekerjaan' => $request->pekerjaan,
+                'pekerjaan' => htmlspecialchars($request->pekerjaan),
                 'category' => 3,
 
                 'total_skor' => $total,
                 'rata_rata' => $rata,
             ]);
 
-            if (!empty($request->saran)) {
+            if (!empty(htmlspecialchars($request->saran))) {
                 Saran::create([
-                    'pekerjaan' => $request->pekerjaan,
+                    'pekerjaan' => htmlspecialchars($request->pekerjaan),
                     'category' => 3,
-                    'saran' => $request->saran,
+                    'saran' => htmlspecialchars($request->saran),
                 ]);
             }
 
