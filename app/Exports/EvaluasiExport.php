@@ -64,13 +64,13 @@ class EvaluasiExport implements FromCollection, WithHeadings, WithStyles, WithCu
     public function map($evaluasi): array
     {
         $row = [$evaluasi->nama];
-        
+
         for ($i = 1; $i <= $this->questions; $i++) {
             $row[] = $evaluasi->$i;
         }
-        
+
         $row[] = $evaluasi->total;
-        
+
         return $row;
     }
 
@@ -82,7 +82,7 @@ class EvaluasiExport implements FromCollection, WithHeadings, WithStyles, WithCu
         // Merge cells for first row headers
         $lastColumn = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($this->questions + 1);
         $sheet->mergeCells('B1:' . $lastColumn . '1');
-        
+
         // Style for headers
         $headerStyle = [
             'font' => [
@@ -106,7 +106,7 @@ class EvaluasiExport implements FromCollection, WithHeadings, WithStyles, WithCu
 
         // Apply styles
         $sheet->getStyle('A1:' . $lastColumn . '2')->applyFromArray($headerStyle);
-        
+
         // Style for data cells
         $dataStyle = [
             'borders' => [
@@ -118,7 +118,7 @@ class EvaluasiExport implements FromCollection, WithHeadings, WithStyles, WithCu
                 'horizontal' => Alignment::HORIZONTAL_CENTER,
             ],
         ];
-        
+
         $sheet->getStyle('A3:' . $lastColumn . $sheet->getHighestRow())->applyFromArray($dataStyle);
     }
 

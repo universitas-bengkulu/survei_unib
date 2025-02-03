@@ -47,21 +47,37 @@ Route::group(['prefix'  => 'operator/'],function(){
 
     Route::get('/dashboard',[OperatorController::class, 'dashboard'])->name('operator.dashboard');
 
-    Route::group(['prefix'  => 'indikator/'],function(){
-        Route::get('/',[IndikatorController::class, 'index'])->name('operator.indikator');
-        Route::post('/',[IndikatorController::class, 'post'])->name('operator.indikator.post');
-        Route::delete('/{id}/aktif',[IndikatorController::class, 'aktif'])->name('operator.indikator.aktif');
-        Route::delete('/{id}/nonaktif',[IndikatorController::class, 'nonaktif'])->name('operator.indikator.nonaktif');
+    //dosen dan tendik
+    Route::group(['prefix'  => 'indikator-dosen-tendik/'],function(){
+        Route::get('/e',[IndikatorController::class, 'indikatorDosenTendik'])->name('operator.indikator');
+        Route::get('/',[IndikatorController::class, 'indikatorDosenTendik'])->name('operator.indikator.dosen_tendik');
+        Route::post('/',[IndikatorController::class, 'postDosenTendik'])->name('operator.indikator.post.dosen_tendik');
+        Route::delete('/{id}/aktif',[IndikatorController::class, 'aktifDosenTendik'])->name('operator.indikator.aktif.dosen_tendik');
+        Route::delete('/{id}/nonaktif',[IndikatorController::class, 'nonaktifDosenTendik'])->name('operator.indikator.nonaktif.dosen_tendik');
     });
 
-    Route::group(['prefix'  => 'laporan/'],function(){
+    Route::group(['prefix'  => 'laporan-dosen-tendik/'],function(){
         Route::get('/per_prodi',[LaporanController::class, 'perProdi'])->name('operator.laporan.per_prodi');
-        Route::get('/per_fakultas',[LaporanController::class, 'perFakultas'])->name('operator.laporan.per_fakultas');
-        Route::get('/keseluruhan',[LaporanController::class, 'keseluruhan'])->name('operator.laporan.keseluruhan');
         Route::get('/pesan_dan_indikator',[LaporanController::class, 'indikator'])->name('operator.laporan.per_indikator');
         Route::get('/pesan_dan_saran',[LaporanController::class, 'saran'])->name('operator.laporan.saran');
 
         Route::get('evaluasi/export', [LaporanController::class, 'export'])->name('evaluasi.export');
+    });
+
+
+    //alumni
+    Route::group(['prefix'  => 'indikator-alumni/'],function(){
+        Route::get('/',[IndikatorController::class, 'indikatorAlumni'])->name('operator.indikator.alumni');
+        Route::post('/',[IndikatorController::class, 'postAlumni'])->name('operator.indikator.post.alumni');
+        Route::delete('/{id}/aktif',[IndikatorController::class, 'aktifIndikatorAlumni'])->name('operator.indikator.aktif.alumni');
+        Route::delete('/{id}/nonaktif',[IndikatorController::class, 'nonaktifIndikatorAlumni'])->name('operator.indikator.nonaktif.alumni');
+    });
+
+    Route::group(['prefix'  => 'laporan-alumni/'],function(){
+        Route::get('/pesan_dan_indikator',[LaporanController::class, 'indikatorAlumni'])->name('operator.laporan.per_indikator.alumni');
+        Route::get('/pesan_dan_saran',[LaporanController::class, 'saranAlumni'])->name('operator.laporan.saran.alumni');
+
+        Route::get('evaluasi/export', [LaporanController::class, 'exportAlumni'])->name('evaluasi.export.alumni');
     });
 
 });

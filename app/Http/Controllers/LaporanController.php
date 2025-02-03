@@ -13,31 +13,18 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class LaporanController extends Controller
 {
+    //dosen dan tendik
     public function perProdi(){
-        $jumlah = EvaluasiRekap::select('pekerjaan','pendidikan',DB::raw('count(pekerjaan) as jumlah'),DB::raw('sum(rata_rata) as skor'))->groupBy('pekerjaan')->orderBy('pendidikan')->get();
+        $jumlah = EvaluasiRekap::select('pekerjaan','pendidikan',DB::raw('count(pekerjaan) as jumlah'),DB::raw('sum(rata_rata) as skor'))->where('category', 1)->groupBy('pekerjaan')->orderBy('pendidikan')->get();
         return view('operator/laporan.per_prodi',[
             'jumlah'    => $jumlah,
         ]);
     }
 
-    public function perFakultas(){
-        $jumlah = EvaluasiRekap::select('pendidikan',DB::raw('count(pendidikan) as jumlah'),DB::raw('sum(rata_rata) as skor'))->groupBy('pendidikan')->orderBy('pendidikan')->get();
-        return view('operator/laporan.per_fakultas',[
-            'jumlah'    => $jumlah,
-        ]);
-    }
-
-    public function keseluruhan(){
-        $jumlah = EvaluasiRekap::select('pendidikan','pekerjaan','nama_lengkap','akses','total_skor','rata_rata','created_at')->orderBy('pendidikan')->orderBy('pekerjaan')->get();
-        return view('operator/laporan.keseluruhan',[
-            'jumlah'    => $jumlah,
-        ]);
-    }
-
     public function indikator(){
-        $results = $this->getPivotResults();
+        $results = $this->getPivotResults(1);
 
-    $questions = DB::table('indikators')->select('id')->get();
+    $questions = DB::table('indikators')->select('id')->where('category', 1)->get();
 
     $evaluasiList = collect($results)->map(function ($item) {
         return (object) $item;
@@ -47,11 +34,11 @@ class LaporanController extends Controller
     }
 
     public function export(){
-        $results = $this->getPivotResults();
+        $results = $this->getPivotResults(1);
         $evaluasiList = collect($results)->map(function ($item) {
             return (object) $item;
         });
-        $questions = DB::table('indikators')->count();
+        $questions = DB::table('indikators')->where('category', 1)->count();
 
         return Excel::download(
             new EvaluasiExport($evaluasiList, $questions),
@@ -60,23 +47,70 @@ class LaporanController extends Controller
     }
 
     public function saran(){
-        $sarans = Saran::select('pendidikan','pekerjaan','nama_lengkap','akses','saran','created_at')->orderBy('pendidikan')->orderBy('pekerjaan')->orderBy('created_at','desc')->get();
+        $sarans = Saran::select('pendidikan','pekerjaan','nama_lengkap','akses','saran','created_at')->orderBy('pendidikan')->where('category', 1)->orderBy('pekerjaan')->orderBy('created_at','desc')->get();
         return view('operator/laporan.saran',[
             'sarans'    => $sarans,
         ]);
     }
 
 
-    public static function generate()
+    //alumni
+    public function indikatorAlumni(){
+        $results = $this->getPivotResults(2);
+
+    $questions = DB::table('indikators')->select('id')->where('category', 2)->get();
+
+    $evaluasiList = collect($results)->map(function ($item) {
+        return (object) $item;
+    });
+
+    return view('operator.laporan.indikator', compact(['evaluasiList', 'questions']));
+    }
+
+    public function exportAlumni(){
+        $results = $this->getPivotResults(2);
+        $evaluasiList = collect($results)->map(function ($item) {
+            return (object) $item;
+        });
+        $questions = DB::table('indikators')->where('category', 2)->count();
+
+        return Excel::download(
+            new EvaluasiExport($evaluasiList, $questions),
+            'laporan_evaluasi_' . date('Y-m-d') . '.xlsx'
+        );
+    }
+
+    public function saranAlumni(){
+        $sarans = Saran::select('pendidikan','pekerjaan','nama_lengkap','akses','saran','created_at')->orderBy('pendidikan')->where('category', 2)->orderBy('pekerjaan')->orderBy('created_at','desc')->get();
+        return view('operator/laporan.saran',[
+            'sarans'    => $sarans,
+        ]);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //function export
+
+    public static function generate($category)
     {
         // Get all question IDs from pertanyaan table
         $questions = DB::table('indikators')
-            ->select('id')
+            ->select('id')->where('category', $category)
             ->orderBy('id')
             ->get();
 
         // Start building the pivot query
-        $query = DB::table('evaluasis')->select('nama');
+        $query = DB::table('evaluasis')->select('nama')->where('category', $category);
 
         // Dynamically add CASE statements for each question
         foreach ($questions as $question) {
@@ -96,10 +130,10 @@ class LaporanController extends Controller
     }
 
     // Alternative method using DB::raw() for more complex cases
-    public static function generateAlternative()
+    public static function generateAlternative($category)
     {
         $questions = DB::table('indikators')
-            ->select('id')
+            ->select('id')->where('category', $category)
             ->orderBy('id')
             ->get();
 
@@ -112,20 +146,20 @@ class LaporanController extends Controller
         $select[] = DB::raw('SUM(skor) as total');
 
         return DB::table('evaluasis')
-            ->select($select)
+            ->select($select)->where('category', $category)
             ->groupBy('nama')
             ->orderBy('nama');
     }
 
     // Get results
-    public static function getPivotResults()
+    public static function getPivotResults($category)
     {
-        return self::generate()->get();
+        return self::generate($category)->get();
     }
 
     // Get SQL
-    public static function getPivotSQL()
+    public static function getPivotSQL($category)
     {
-        return self::generate()->toSql();
+        return self::generate($category)->toSql();
     }
 }

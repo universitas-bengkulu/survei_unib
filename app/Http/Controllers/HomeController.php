@@ -104,6 +104,7 @@ class HomeController extends Controller
                 // 'jenis_kelamin' => $request->jenis_kelamin,
                 // 'usia' => $request->usia,
                 // 'pendidikan' => $request->pendidikan,
+                'category' => 1,
                 'pekerjaan' => $request->pekerjaan,
                 'total_skor' => $total,
                 'rata_rata' => $rata,

@@ -5,7 +5,7 @@
     </a>
 </li>
 
-<li class="treeview {{ set_active(['operator.indikator', 'operator.laporan.per_prodi', 'operator.laporan.per_indikator']) }}">
+<li class="treeview {{ set_active(['operator.indikator.dosen_tendik', 'operator.laporan.per_prodi', 'operator.laporan.per_indikator']) }}">
     <a href="#">
       <i class="fa fa-pie-chart"></i>
       <span>Survei Dosen Dan Tendik</span>
@@ -14,13 +14,13 @@
       </span>
     </a>
     <ul class="treeview-menu">
-      <li class="{{ set_active('operator.indikator') }}"><a href="{{ route('operator.indikator') }}"><i class="fa fa-circle-o"></i> Manajemen Indikator</a></li>
+      <li class="{{ set_active('operator.indikator.dosen_tendik') }}"><a href="{{ route('operator.indikator.dosen_tendik') }}"><i class="fa fa-circle-o"></i> Indikator</a></li>
       <li class="{{ set_active('operator.laporan.per_prodi') }}"><a href="{{ route('operator.laporan.per_prodi') }}"><i class="fa fa-circle-o"></i> Laporan Per Pekerjaan</a></li>
       <li class="{{ set_active('operator.laporan.per_indikator') }}"><a href="{{ route('operator.laporan.per_indikator') }}"><i class="fa fa-circle-o"></i> Laporan Per Indikator</a></li>
     </ul>
 </li>
 
-<li class="treeview  ">
+<li class="treeview  {{ set_active(['operator.indikator.alumni', 'operator.laporan.per_indikator.alumni']) }}">
     <a href="#">
       <i class="fa fa-graduation-cap"></i>
       <span>Survei Lulusan/Alumni</span>
@@ -29,9 +29,8 @@
       </span>
     </a>
     <ul class="treeview-menu">
-      <li class="{{ set_active('operator.indikator') }}"><a href="{{ route('operator.indikator') }}"><i class="fa fa-circle-o"></i> Manajemen Indikator</a></li>
-      <li class="{{ set_active('operator.laporan.per_prodi') }}"><a href="{{ route('operator.laporan.per_prodi') }}"><i class="fa fa-circle-o"></i> Laporan Per Pekerjaan</a></li>
-      <li class="{{ set_active('operator.laporan.per_indikator') }}"><a href="{{ route('operator.laporan.per_indikator') }}"><i class="fa fa-circle-o"></i> Laporan Per Indikator</a></li>
+      <li class="{{ set_active('operator.indikator.alumni') }}"><a href="{{ route('operator.indikator.alumni') }}"><i class="fa fa-circle-o"></i> Indikator</a></li>
+      <li class="{{ set_active('operator.laporan.per_indikator.alumni') }}"><a href="{{ route('operator.laporan.per_indikator.alumni') }}"><i class="fa fa-circle-o"></i> Laporan Per Indikator</a></li>
     </ul>
 </li>
 

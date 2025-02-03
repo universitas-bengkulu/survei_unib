@@ -154,11 +154,11 @@
         <div class="col-md-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fa fa-book"></i>&nbsp;Manajemen Data Indikator</h3>
+                    <h3 class="box-title"><i class="fa fa-book"></i>&nbsp;Manajemen Data Indikator Kepuasan Untuk Lulusan</h3>
                 </div>
                 <div class="box-body">
                     <div class="row">
-                        <form action="{{ route('operator.indikator.post') }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('operator.indikator.post.alumni') }}" method="POST" enctype="multipart/form-data">
                             {{ csrf_field() }} {{ method_field('POST') }}
                             <div class="form-group col-md-12">
                                 <label for="">Indikator Penilaian</label>
@@ -216,7 +216,7 @@
 
                                                             @if ($indikator->ditampilkan == 1)
                                                                 <form
-                                                                    action="{{ route('operator.indikator.aktif', [$indikator->id]) }}"
+                                                                    action="{{ route('operator.indikator.aktif.alumni', [$indikator->id]) }}"
                                                                     method="POST">
                                                                     {{ csrf_field() }} {{ method_field('DELETE') }}
                                                                     <button type="submit"
@@ -225,7 +225,7 @@
                                                                 </form>
                                                             @else
                                                                 <form
-                                                                    action="{{ route('operator.indikator.nonaktif', [$indikator->id]) }}"
+                                                                    action="{{ route('operator.indikator.nonaktif.alumni', [$indikator->id]) }}"
                                                                     method="POST">
                                                                     {{ csrf_field() }} {{ method_field('DELETE') }}
                                                                     <button type="submit"
