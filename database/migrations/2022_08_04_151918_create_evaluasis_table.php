@@ -15,14 +15,17 @@ class CreateEvaluasisTable extends Migration
     {
         Schema::create('evaluasis', function (Blueprint $table) {
             $table->id();
-            $table->string('nama');
-            $table->string('jenis_kelamin');
-            $table->string('usia');
-            $table->string('pendidikan');
-            $table->string('pekerjaan');
-            $table->unsignedBigInteger('indikator_id');
-            $table->string('nama_indikator');
-            $table->integer('skor');
+            $table->string('nama')->nullable();
+            $table->string('jenis_kelamin')->nullable();
+            $table->string('usia')->nullable();
+            $table->string('pendidikan')->nullable();
+            $table->string('pekerjaan')->nullable();
+            $table->string('instansi')->nullable();
+            $table->integer('category');
+
+            $table->unsignedBigInteger('indikator_id')->nullable();
+            $table->string('nama_indikator')->nullable();
+            $table->integer('skor')->nullable();
             $table->timestamps();
         });
     }

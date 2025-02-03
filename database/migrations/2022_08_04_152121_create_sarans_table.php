@@ -15,12 +15,16 @@ class CreateSaransTable extends Migration
     {
         Schema::create('sarans', function (Blueprint $table) {
             $table->id();
-            $table->string('nama');
-            $table->string('jenis_kelamin');
-            $table->string('usia');
-            $table->string('pendidikan');
-            $table->string('pekerjaan');
-            $table->text('saran');
+            $table->string('nama')->nullable();
+            $table->string('jenis_kelamin')->nullable();
+            $table->string('usia')->nullable();
+            $table->string('pendidikan')->nullable();
+            $table->string('pekerjaan')->nullable();
+            $table->string('instansi')->nullable();
+
+            $table->text('saran')->nullable();
+            $table->integer('category');
+
             $table->timestamps();
         });
     }

@@ -32,7 +32,8 @@ Route::group(['prefix'  => '/'],function(){
     Route::get('/dosen-tendik',[HomeController::class, 'dosentendik'])->name('dosen-tendik');
     Route::get('/alumni',[HomeController::class, 'alumni'])->name('alumni');
     Route::get('/sarana-prasarana',[HomeController::class, 'saranaprasarana'])->name('sarana-prasarana');
-    Route::post('evaluasi/',[HomeController::class, 'post'])->name('evaluasi.post');
+    Route::post('evaluasi-dosen-tentik/',[HomeController::class, 'postDosenTendik'])->name('evaluasi-dosen-tentik.post');
+    Route::post('lulusan/',[HomeController::class, 'postLulusan'])->name('lulusan.post');
 });
 
 

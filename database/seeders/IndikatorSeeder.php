@@ -14,6 +14,7 @@ class IndikatorSeeder extends Seeder
     public function run()
     {
         DB::table('indikators')->insert([
+            //dosen tendik
             [ 'nama_indikator' => 'UNIB memiliki dan menjalankan sistem seleksi, rekrutmen, orientasi, dan penempatan pegawai.', 'ditampilkan' => 1,'category' => 1],
             [ 'nama_indikator' => 'Ada pemberitahuan atau pengumuman tentang permintaan tenaga dosen atau tenaga pendidik yang baru.', 'ditampilkan' => 1,'category' => 1],
             [ 'nama_indikator' => 'Rekrutmen dosen dan tendik dilakukan secara transparan dan melalui test yang terpercaya.', 'ditampilkan' => 1,'category' => 1],
@@ -33,7 +34,7 @@ class IndikatorSeeder extends Seeder
             [ 'nama_indikator' => 'UNIB memberikan layanan kebutuhan sosial dan layanan atau santunan kematian.', 'ditampilkan' => 1,'category' => 1],
             [ 'nama_indikator' => 'Ada upaya sungguh-sungguh pimpinan unit kerja memperhatikan kesejahteraan dosen dan tenaga kependidikan melalui kebijakan dan program yang mendukung.', 'ditampilkan' => 1,'category' => 1],
 
-
+            //lulusan
             ['nama_indikator' => 'Etika', 'ditampilkan' => 1,'category' => 2],
             ['nama_indikator' => 'Keahlian Pada bidang Ilmu (Kompetensi Utama)', 'ditampilkan' => 1,'category' => 2],
             ['nama_indikator' => 'Kemampuan Berbahasa Asing', 'ditampilkan' => 1,'category' => 2],
@@ -41,6 +42,20 @@ class IndikatorSeeder extends Seeder
             ['nama_indikator' => 'Kemampuan Berkomunikasi', 'ditampilkan' => 1,'category' => 2],
             ['nama_indikator' => 'Kerjasama', 'ditampilkan' => 1,'category' => 2],
             ['nama_indikator' => 'Pengembangan Diri', 'ditampilkan' => 1,'category' => 2],
+
+            //sarana prasarana
+            ['nama_indikator' => 'Ruang kuliah tertata dengan bersih, Rapi dan tersedia fasilitas Pembuangan sampah', 'ditampilkan' => 1,'category' => 3],
+            ['nama_indikator' => 'Ruang kuliah sejuk, nyaman dan pengcahayaan memadai', 'ditampilkan' => 1,'category' => 3],
+            ['nama_indikator' => 'Sarana pembelajaran yang tersedia di ruang kuliah secara memadai (tersedia LCD, atau Smart TV, dan sebagainya)', 'ditampilkan' => 1,'category' => 3],
+            ['nama_indikator' => 'Tersedia fasilitas perpustakaan secara memadai dan lengkap', 'ditampilkan' => 1,'category' => 3],
+            ['nama_indikator' => 'Perpustakaan telah melakukan kemutahiran Buku/Referensi/e-journal secara berkala', 'ditampilkan' => 1,'category' => 3],
+            ['nama_indikator' => 'Ketersediaan SOP penggunaan Fasilitas Unib', 'ditampilkan' => 1,'category' => 3],
+            ['nama_indikator' => 'Standar laboratorium, bengkel yang relevan dengan kebutuhan keilmuan', 'ditampilkan' => 1,'category' => 3],
+            ['nama_indikator' => 'Setiap Gedung di Lingkungan Unib tersedia fasilitas Toilet yang bersih, memadai dan dapat dimanfaat oleh berkebutuhan khusus', 'ditampilkan' => 1,'category' => 3],
+            ['nama_indikator' => 'Tersedia Fasilitas ibadah, olahraga, kesehatan yang memadai dan mudah diakses', 'ditampilkan' => 1,'category' => 3],
+            ['nama_indikator' => 'Tersedia fasilitas, parkir, tangga atau jalur khusus untuk berkebutuhan khusus', 'ditampilkan' => 1,'category' => 3],
+            ['nama_indikator' => 'Tersedia fasilitas sistem informasi untuk pendidikan, penelitian dan Pengabdian yang mudah diakses setiap saat', 'ditampilkan' => 1,'category' => 3],
+
         ]);
     }
 }

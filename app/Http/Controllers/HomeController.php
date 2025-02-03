@@ -32,24 +32,29 @@ class HomeController extends Controller
         return view('home');
     }
 
-    public function dashboard(){
+    public function dashboard()
+    {
         return view('user.home');
     }
 
-    public function dosentendik(){
-        $indikators = Indikator::where('ditampilkan',true)->where('category', 1)->get();
-        return view('user.dosen_tendik',compact('indikators'));
+    public function dosentendik()
+    {
+        $indikators = Indikator::where('ditampilkan', true)->where('category', 1)->get();
+        return view('user.dosen_tendik', compact('indikators'));
     }
-    public function alumni(){
-        $indikators = Indikator::where('ditampilkan',true)->where('category', 2)->get();
-        return view('user.alumni',compact('indikators'));
+    public function alumni()
+    {
+        $indikators = Indikator::where('ditampilkan', true)->where('category', 2)->get();
+        return view('user.alumni', compact('indikators'));
     }
-    public function saranaprasarana(){
-        $indikators = Indikator::where('ditampilkan',true)->where('category', 3)->get();
-        return view('welcome',compact('indikators'));
+    public function saranaprasarana()
+    {
+        $indikators = Indikator::where('ditampilkan', true)->where('category', 3)->get();
+        return view('welcome', compact('indikators'));
     }
 
-    public function post(Request $request){
+    public function postDosenTendik(Request $request)
+    {
         $validated = $request->validate([
             'nilai.*' => 'required|in:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18',
             'nama' => 'required',
@@ -64,74 +69,160 @@ class HomeController extends Controller
             'pekerjaan.required' => 'Pekerjaan harus diisi',
         ]);
 
-    try {
-        $jumlah = $request->jumlah;
+        try {
+            $jumlah = $request->jumlah;
 
-        $data = Indikator::where('ditampilkan', 1)->get();
+            $data = Indikator::where('ditampilkan', 1)->where('category', 1)->get();
 
-        $kuisioner = array();
+            $kuisioner = array();
 
-        foreach ($data as $item) {
-            $nilai = $request->input('nilai' . $item->id);
+            foreach ($data as $item) {
+                $nilai = $request->input('nilai' . $item->id);
 
-            $kuisioner[] = array(
+                $kuisioner[] = array(
+                    'nama' => $request->nama,
+                    // 'jenis_kelamin' => $request->jenis_kelamin,
+                    // 'usia' => $request->usia,
+                    // 'pendidikan' => $request->pendidikan,
+                    'pekerjaan' => $request->pekerjaan,
+                    'indikator_id' => $item->id,
+                    'nama_indikator' => $item->nama_indikator,
+                    'category' => 1,
+                    'skor' => $nilai,
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                );
+            }
+
+            Evaluasi::insert($kuisioner);
+
+            $total = array_sum(array_column($kuisioner, 'skor'));
+            $rata = $total / $jumlah;
+
+            EvaluasiRekap::create([
                 'nama' => $request->nama,
                 // 'jenis_kelamin' => $request->jenis_kelamin,
                 // 'usia' => $request->usia,
                 // 'pendidikan' => $request->pendidikan,
                 'pekerjaan' => $request->pekerjaan,
-                'indikator_id' => $item->id,
-                'nama_indikator' => $item->nama_indikator,
-                'skor' => $nilai,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
+                'total_skor' => $total,
+                'rata_rata' => $rata,
+            ]);
+
+            if (!empty($request->saran)) {
+                Saran::create([
+                    'nama' => $request->nama,
+                    // 'jenis_kelamin' => $request->jenis_kelamin,
+                    // 'usia' => $request->usia,
+                    // 'pendidikan' => $request->pendidikan,
+                    'pekerjaan' => $request->pekerjaan,
+                    'category' => 1,
+                    'saran' => $request->saran,
+                ]);
+            }
+
+            $notification = array(
+                'message' => 'Kuisioner berhasil disimpan!',
+                'alert-type' => 'success',
+                'titel' => 'Berhasil!'
             );
+
+            return redirect()->back()->with($notification);
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            $notification = array(
+                'message' => 'Kuisioner gagal disimpan! ' . $e->getMessage(),
+                'alert-type' => 'error',
+                'titel' => 'Gagal'
+            );
+
+            return redirect()->back()->with($notification);
         }
+    }
 
-        Evaluasi::insert($kuisioner);
+    public function postLulusan(Request $request)
+    {
+        $validated = $request->validate([
+            'instansi' => 'required',
+            'pekerjaan' => 'required',
+            'nama' => 'required',
+            'pendidikan' => 'required',
 
-        $total = array_sum(array_column($kuisioner, 'skor'));
-        $rata = $total / $jumlah;
+        ], [
+            'instansi.required' => 'Nama Perusahaan harus diisi',
+            'pekerjaan.required' => 'Jabatan harus diisi',
+            'nama.required' => 'Nama Alumni Yang Dinilai harus diisi',
+            'pendidikan.required' => 'Program Studi Alumni Yang Dinilai harus diisi',
 
-        EvaluasiRekap::create([
-            'nama' => $request->nama,
-            // 'jenis_kelamin' => $request->jenis_kelamin,
-            // 'usia' => $request->usia,
-            // 'pendidikan' => $request->pendidikan,
-            'pekerjaan' => $request->pekerjaan,
-            'total_skor' => $total,
-            'rata_rata' => $rata,
         ]);
 
-        if (!empty($request->saran)) {
-            Saran::create([
+        try {
+            $jumlah = $request->jumlah;
+
+            $data = Indikator::where('ditampilkan', 1)->where('category', 2)->get();
+
+            $kuisioner = array();
+
+            foreach ($data as $item) {
+                $nilai = $request->input('nilai' . $item->id);
+
+                $kuisioner[] = array(
+                    'nama' => $request->nama,
+                    'pendidikan' => $request->pendidikan,
+                    'pendidikan' => $request->instansi,
+                    'pekerjaan' => $request->pekerjaan,
+                    'indikator_id' => $item->id,
+                    'nama_indikator' => $item->nama_indikator,
+                    'category' => 2,
+                    'skor' => $nilai,
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                );
+            }
+
+            Evaluasi::insert($kuisioner);
+
+            $total = array_sum(array_column($kuisioner, 'skor'));
+            $rata = $total / $jumlah;
+
+            EvaluasiRekap::create([
                 'nama' => $request->nama,
-                // 'jenis_kelamin' => $request->jenis_kelamin,
-                // 'usia' => $request->usia,
-                // 'pendidikan' => $request->pendidikan,
+                'pendidikan' => $request->pendidikan,
+                'pendidikan' => $request->instansi,
                 'pekerjaan' => $request->pekerjaan,
-                'saran' => $request->saran,
+                'total_skor' => $total,
+                'rata_rata' => $rata,
             ]);
+
+            if (!empty($request->saran)) {
+                Saran::create([
+                    'nama' => $request->nama,
+                    'pendidikan' => $request->pendidikan,
+                    'pendidikan' => $request->instansi,
+                    'pekerjaan' => $request->pekerjaan,
+                    'category' => 2,
+                    'saran' => $request->saran,
+                ]);
+            }
+
+            $notification = array(
+                'message' => 'Kuisioner berhasil disimpan!',
+                'alert-type' => 'success',
+                'titel' => 'Berhasil!'
+            );
+
+            return redirect()->back()->with($notification);
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            $notification = array(
+                'message' => 'Kuisioner gagal disimpan! ' . $e->getMessage(),
+                'alert-type' => 'error',
+                'titel' => 'Gagal'
+            );
+
+            return redirect()->back()->with($notification);
         }
-
-        $notification = array(
-            'message' => 'Kuisioner berhasil disimpan!',
-            'alert-type' => 'success',
-            'titel' => 'Berhasil!'
-        );
-
-        return redirect()->back()->with($notification);
-    }
-    catch (\Exception $e) {
-        DB::rollback();
-
-        $notification = array(
-            'message' => 'Kuisioner gagal disimpan! ' . $e->getMessage(),
-            'alert-type' => 'error',
-            'titel' => 'Gagal'
-        );
-
-        return redirect()->back()->with($notification);
-    }
     }
 }

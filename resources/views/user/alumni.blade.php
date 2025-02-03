@@ -63,7 +63,7 @@
                 @else
                     <div
                         class=" w-full mt-6 main-question mb-8 flex flex-col divide-y text-gray-800  text-base">
-                        <form action="{{ route('evaluasi.post') }}" method="post">
+                        <form action="{{ route('lulusan.post') }}" method="post">
                             @csrf
                             <input type="hidden" name="jumlah" value="{{ count($indikators) }}">
                             <input type="hidden" name="nama_lengkap" value="{{ Session::get('nama_lengkap') }}">
@@ -78,32 +78,58 @@
                                     <div class="  -mt-6 lg:px-6      grid grid-cols-1  ">
                                         <div class="mb-3   ">
 
+                                            <label for="instansi"
+                                                class=" after:content-['*'] after:text-red-500 font-semibold  text-white  after:ml-2 text-sm pb-1">Nama Perusahaan</label>
+                                            <input type="text" id="instansi" name="instansi"
+                                                class="   w-full rounded-lg border-2  border-white
+                                                bg-white px-3 py-2.5 text-sm font-normal transition-all duration-500   focus:border-white
+                                                focus:ring-white
+                                                focus:shadow-[-4px_4px_10px_0px_#000]  "
+                                                placeholder="Nama Perusahaan" required/>
+                                            @if ($errors->has('instansi'))
+                                                <p class="text-red-500 text-sm font-bold">{{ $errors->first('instansi') }}</p>
+                                            @endif
+                                        </div>
+                                        <div class="mb-3   ">
+
+                                            <label for="pekerjaan"
+                                                class=" after:content-['*'] after:text-red-500 font-semibold  text-white  after:ml-2 text-sm pb-1">Jabatan</label>
+                                            <input type="text" id="pekerjaan" name="pekerjaan"
+                                                class="   w-full rounded-lg border-2  border-white
+                                                bg-white px-3 py-2.5 text-sm font-normal transition-all duration-500   focus:border-white
+                                                focus:ring-white
+                                                focus:shadow-[-4px_4px_10px_0px_#000]  "
+                                                placeholder="Jabatan" required/>
+                                            @if ($errors->has('pekerjaan'))
+                                                <p class="text-red-500 text-sm font-bold">{{ $errors->first('pekerjaan') }}</p>
+                                            @endif
+                                        </div>
+                                        <div class="mb-3   ">
+
                                             <label for="nama"
-                                                class=" after:content-['*'] after:text-red-500 font-semibold  text-white  after:ml-2 text-sm pb-1">Nama
-                                                (Tanpa Gelar)</label>
+                                                class=" after:content-['*'] after:text-red-500 font-semibold  text-white  after:ml-2 text-sm pb-1">Nama Alumni Yang Dinilai</label>
                                             <input type="text" id="nama" name="nama"
                                                 class="   w-full rounded-lg border-2  border-white
                                                 bg-white px-3 py-2.5 text-sm font-normal transition-all duration-500   focus:border-white
                                                 focus:ring-white
                                                 focus:shadow-[-4px_4px_10px_0px_#000]  "
-                                                placeholder="Nama (Tanpa Gelar)" required/>
+                                                placeholder="Nama Alumni Yang Dinilai" required/>
                                             @if ($errors->has('nama'))
                                                 <p class="text-red-500 text-sm font-bold">{{ $errors->first('nama') }}</p>
                                             @endif
                                         </div>
-                                        <div class="mb-3">
-                                            <label for="pekerjaan"
-                                                class=" after:content-['*'] after:text-red-500 font-semibold  text-white  after:ml-2 text-sm pb-1">pekerjaan</label>
-                                            <select name="pekerjaan"
+                                        <div class="mb-3   ">
+
+                                            <label for="pendidikan"
+                                                class=" after:content-['*'] after:text-red-500 font-semibold  text-white  after:ml-2 text-sm pb-1">Program Studi Alumni Yang Dinilai</label>
+                                            <input type="text" id="pendidikan" name="pendidikan"
                                                 class="   w-full rounded-lg border-2  border-white
-                                                bg-white px-3 py-2.5 text-sm font-normal transition-all duration-500  focus:border-white
-                                                focus:ring-white focus:shadow-[-4px_4px_10px_0px_#000] " required>
-                                                <option disabled selected>-- pilih pekerjaan--</option>
-                                                <option value="Dosen">Dosen</option>
-                                                <option value="Tenaga Kependidikan">Tenaga Kependidikan</option>
-                                            </select>
-                                            @if ($errors->has('pekerjaan'))
-                                                <p class="text-red-500 text-sm font-bold">{{ $errors->first('pekerjaan') }}</p>
+                                                bg-white px-3 py-2.5 text-sm font-normal transition-all duration-500   focus:border-white
+                                                focus:ring-white
+                                                focus:shadow-[-4px_4px_10px_0px_#000]  "
+                                                placeholder="Program Studi Alumni Yang Dinilai" required/>
+                                            @if ($errors->has('pendidikan'))
+                                                <p class="text-red-500 text-sm font-bold">{{ $errors->first('pendidikan') }}</p>
                                             @endif
                                         </div>
 
@@ -125,20 +151,19 @@
 
 
                                         <p class="text-sm    ">Survei ini dilakukan untuk melihat kepuasan Pengguna untuk
-                                            Dosen dan Tenaga
-                                            Kependidikan Universitas
+                                            Lulusan
+                                             Universitas
                                             Bengkulu (UNIB).
                                             Beri penilaian terhadap item-item penilaian di bawah ini dengan cara memilih
                                             salah
                                             satu opsi pada
                                             kolom
                                             Persepsi.</p>
-                                        <p class="text-xl font-extrabold   ">Generate Point Rubrik</p>
+                                        <p class="text-xl font-extrabold   ">Kriteria Penilaian</p>
 
                                         <ul class=" list-disc    ml-10 text-left   text-sm ">
-                                            <li><strong>Sangat Baik</strong> = Nilai 5</li>
-                                            <li><strong>Baik</strong> = Nilai 4</li>
-                                            <li><strong>Cukup</strong> = Nilai 3</li>
+                                            <li><strong>Sangat Baik</strong> = Nilai 4</li>
+                                            <li><strong>Baik</strong> = Nilai 3</li>
                                             <li><strong>Kurang</strong> = Nilai 2</li>
                                             <li><strong>Sangat Kurang</strong> = Nilai 1</li>
                                         </ul>
@@ -154,7 +179,7 @@
                                 <div>
                                     <div
                                         class=" text-white   bg-blue-800  inline-block    items-center relative rounded-xl     p-4      transform duration-500 ease-in mx-4 md:mx-0  md:left-4 -top-10 lg:text-xl text-sm font-sans lg:font-bold ">
-                                        Survei Kepuasan Pengguna untuk Dosen dan Tenaga Kependidikan Universitas Bengkulu Tahun
+                                        Survei Kepuasan Pengguna untuk Lulusan  Universitas Bengkulu Tahun
                                         <script>
                                             document.write(new Date().getFullYear())
                                         </script>
@@ -174,18 +199,7 @@
                                                 <div class="mt-2 duration-300 transform">
                                                     <div class="  pt-1  ">
                                                         <fieldset class=" grid   grid-cols-1  text-left">
-                                                            <!-- 5  -->
-                                                            <div class="flex  mb-2">
-                                                                <input type="radio" id="nilai_{{ $item->id }}_5"
-                                                                    name="nilai{{ $item->id }}" value="5" required
-                                                                    class="h-4 w-4 border-gray-300 mt-[2px] focus:ring-2 focus:ring-blue-300"
-                                                                    aria-labelledby="nilai_{{ $item->id }}_5"
-                                                                    aria-describedby="nilai_{{ $item->id }}_5">
-                                                                <label for="nilai_{{ $item->id }}_5"
-                                                                    class="text-sm font-medium text-gray-900   ml-2 block">
-                                                                    Sangat baik
-                                                                </label>
-                                                            </div>
+
 
                                                             <!-- 5  -->
                                                             <div class="flex  mb-2">
@@ -197,7 +211,7 @@
                                                                     aria-describedby="nilai_{{ $item->id }}_4">
                                                                 <label for="nilai_{{ $item->id }}_4"
                                                                     class="text-sm font-medium text-gray-900   ml-2 block">
-                                                                    Baik
+                                                                    Sangat baik
                                                                 </label>
                                                             </div>
 
@@ -211,7 +225,7 @@
                                                                     aria-describedby="nilai_{{ $item->id }}_3">
                                                                 <label for="nilai_{{ $item->id }}_3"
                                                                     class="text-sm font-medium text-gray-900   ml-2 block">
-                                                                    Cukup
+                                                                    Baik
                                                                 </label>
                                                             </div>
 
@@ -254,7 +268,7 @@
                                         <div class=" md:mx-4 lg:mx-6 py-6">
                                             <label for="comment"
                                                 class="block mb-2  font-bold text-gray-900  ">Masukan
-                                                Pesan dan Saran Anda Untuk Dosen dan Tenaga Kependidikan Universitas
+                                                Pesan dan Saran Anda Untuk Lulusan  Universitas
                                                 Bengkulu
                                                 <span class="text-green-500 text-sm font-normal">(Optional)</span></label>
                                             <textarea name="saran" id="saran" rows="4"

@@ -15,13 +15,17 @@ class CreateEvaluasiRekapsTable extends Migration
     {
         Schema::create('evaluasi_rekaps', function (Blueprint $table) {
             $table->id();
-            $table->string('nama');
-            $table->string('jenis_kelamin');
-            $table->string('usia');
-            $table->string('pendidikan');
-            $table->string('pekerjaan');
-            $table->integer('total_skor');
-            $table->double('rata_rata');
+            $table->string('nama')->nullable();
+            $table->string('jenis_kelamin')->nullable();
+            $table->string('usia')->nullable();
+            $table->string('pendidikan')->nullable();
+            $table->string('pekerjaan')->nullable();
+            $table->string('instansi')->nullable();
+            $table->integer('category');
+
+
+            $table->integer('total_skor')->nullable();
+            $table->double('rata_rata')->nullable();
             $table->timestamps();
         });
     }

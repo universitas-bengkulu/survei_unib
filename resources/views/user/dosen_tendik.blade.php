@@ -63,7 +63,7 @@
                 @else
                     <div
                         class=" w-full mt-6 main-question mb-8 flex flex-col divide-y text-gray-800  text-base">
-                        <form action="{{ route('evaluasi.post') }}" method="post">
+                        <form action="{{ route('evaluasi-dosen-tentik.post') }}" method="post">
                             @csrf
                             <input type="hidden" name="jumlah" value="{{ count($indikators) }}">
                             <input type="hidden" name="nama_lengkap" value="{{ Session::get('nama_lengkap') }}">
@@ -133,7 +133,7 @@
                                             satu opsi pada
                                             kolom
                                             Persepsi.</p>
-                                        <p class="text-xl font-extrabold   ">Generate Point Rubrik</p>
+                                        <p class="text-xl font-extrabold   ">Kriteria Penilaian</p>
 
                                         <ul class=" list-disc    ml-10 text-left   text-sm ">
                                             <li><strong>Sangat Baik</strong> = Nilai 5</li>

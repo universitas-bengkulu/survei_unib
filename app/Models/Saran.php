@@ -14,6 +14,8 @@ class Saran extends Model
         'usia',
         'pendidikan',
         'pekerjaan',
+        'instansi',
+        'category',
         'saran',
     ];
 }

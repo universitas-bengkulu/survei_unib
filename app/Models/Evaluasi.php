@@ -17,6 +17,8 @@ class Evaluasi extends Model
         'pekerjaan',
         'indikator_id',
         'nama_indikator',
+        'instansi',
+        'category',
         'skor',
         'created_at',
         'updated_at'

@@ -13,6 +13,8 @@ class EvaluasiRekap extends Model
         'jenis_kelamin',
         'usia',
         'pendidikan',
+        'instansi',
+        'category',
         'pekerjaan','total_skor','rata_rata'
     ];
 }
