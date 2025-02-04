@@ -195,7 +195,7 @@
                                         <th>No</th>
                                         <th>Nama Jenis Survei</th>
                                         <th>Slug</th>
-                                        <th></th>
+                                        <th>Custom Page</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
@@ -208,17 +208,41 @@
                                             <td> {{ $no++ }} </td>
                                             <td> {{ $item->nama_category }} </td>
                                             <td> {{ $item->slug }} </td>
-                                            <td> <label class="label label-info">ID : {{ $item->id }}</label> </td>
+                                            <td style="display:inline-block !important;text-align:center;">
+
+
+                                                @if ($item->default == 0)
+                                                    <form action="{{ route('operator.category.aktif', [$item->id]) }}"
+                                                        method="POST">
+                                                        {{ csrf_field() }} {{ method_field('POST') }}
+                                                        <button type="submit" class="btn btn-warning btn-sm btn-flat"><i
+                                                                class="fa fa-thumbs-down"></i></button>
+                                                    </form>
+                                                @else
+                                                    <form action="{{ route('operator.category.nonaktif', [$item->id]) }}"
+                                                        method="POST">
+                                                        {{ csrf_field() }} {{ method_field('POST') }}
+                                                        <button type="submit" class="btn btn-success btn-sm btn-flat"><i
+                                                                class="fa fa-thumbs-up"></i></button>
+                                                    </form>
+                                                @endif
+
+                                                <label class="label label-info">ID : {{ $item->id }}</label>
+                                            </td>
                                             <td style="display:inline-block !important;">
                                                 <table>
                                                     <tr>
                                                         <td>
-                                                            <a href="{{ route('operator.category.formulir', [$item->id]) }}" class="btn btn-info btn-sm btn-flat" >
-                                                                <i class="fa fa-folder"></i>&nbsp; Form ({{ $item->formulirs_count }})
+                                                            <a href="{{ route('operator.category.formulir', [$item->id]) }}"
+                                                                class="btn btn-info btn-sm btn-flat">
+                                                                <i class="fa fa-folder"></i>&nbsp; Form
+                                                                ({{ $item->formulirs_count }})
                                                             </a>
                                                         </td>
                                                         <td>
-                                                            <button type="button" class="btn btn-warning btn-sm btn-flat" data-toggle="modal" data-target="#editModal{{ $item->id }}">
+                                                            <button type="button" class="btn btn-warning btn-sm btn-flat"
+                                                                data-toggle="modal"
+                                                                data-target="#editModal{{ $item->id }}">
                                                                 <i class="fa fa-edit"></i>&nbsp; Ubah
                                                             </button>
                                                         </td>
@@ -239,12 +263,16 @@
                                         </tr>
 
                                         <!-- Edit Modal -->
-                                        <div class="modal fade" id="editModal{{ $item->id }}" tabindex="-1" role="dialog" aria-labelledby="editModalLabel{{ $item->id }}" aria-hidden="true">
+                                        <div class="modal fade" id="editModal{{ $item->id }}" tabindex="-1"
+                                            role="dialog" aria-labelledby="editModalLabel{{ $item->id }}"
+                                            aria-hidden="true">
                                             <div class="modal-dialog" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h3 class="modal-title" id="editModalLabel{{ $item->id }}"><strong>Ubah Jenis Survei</strong></h3>
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <h3 class="modal-title" id="editModalLabel{{ $item->id }}">
+                                                            <strong>Ubah Jenis Survei</strong></h3>
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close">
                                                             <span aria-hidden="true">&times;</span>
                                                         </button>
                                                     </div>
@@ -253,18 +281,24 @@
                                                         <div class="modal-body">
                                                             <div class="form-group">
                                                                 <label for="nama_category">Nama Jenis Survei</label>
-                                                                <input type="text" name="nama_category" id="nama_category" class="form-control" value="{{ $item->nama_category }}">
-                                                                <input type="hidden" name="id" id="id" value="{{ $item->id }}">
+                                                                <input type="text" name="nama_category"
+                                                                    id="nama_category" class="form-control"
+                                                                    value="{{ $item->nama_category }}">
+                                                                <input type="hidden" name="id" id="id"
+                                                                    value="{{ $item->id }}">
                                                                 <div>
                                                                     @if ($errors->has('nama_category'))
-                                                                        <small class="form-text text-danger">{{ $errors->first('nama_category') }}</small>
+                                                                        <small
+                                                                            class="form-text text-danger">{{ $errors->first('nama_category') }}</small>
                                                                     @endif
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-                                                            <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                                                            <button type="button" class="btn btn-secondary"
+                                                                data-dismiss="modal">Tutup</button>
+                                                            <button type="submit" class="btn btn-primary">Simpan
+                                                                Perubahan</button>
                                                         </div>
                                                     </form>
                                                 </div>

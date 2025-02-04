@@ -12,10 +12,9 @@ class IndikatorController extends Controller
     public function indikator (Request $request){
         $idd = $request->segment(3);
         $id = base64_decode($idd);
-        $category_id = substr($id, -1);
-        $category = Category::where('id', $category_id)->first();
-
+        $category_id = substr($id, 8);
         $indikators = Indikator::select('id','nama_indikator','ditampilkan')->where('category_id', $category_id)->get();
+        $category = Category::where('id', $category_id)->first();
         return view('operator.indikator.index',[
             'indikators'    => $indikators,
             'category'      => $category,
@@ -57,7 +56,7 @@ class IndikatorController extends Controller
         $indikator = Indikator::where('id', $id)->first();
         $indikator->update(['ditampilkan' => 1]);
         $notification = array(
-            'message' => 'Berhasil, indikator penilaian berhasil dinonaktifkan!',
+            'message' => 'Berhasil, indikator penilaian berhasil diaktifkan!',
             'alert-type' => 'success'
         );
         return redirect()->route('operator.indikator.'.$slug)->with($notification);

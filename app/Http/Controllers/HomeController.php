@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Evaluasi;
+use App\Models\Evaluasi_data;
 use App\Models\EvaluasiRekap;
+use App\Models\Formulir;
 use App\Models\Indikator;
 use App\Models\Saran;
 use Carbon\Carbon;
@@ -38,40 +40,41 @@ class HomeController extends Controller
         return view('user.home', compact('categories'));
     }
 
-    //default (2)
+    //default
     public function home_survei(Request $request)
     {
         $idd = $request->segment(1);
         $id = base64_decode($idd);
-        $category_id = substr($id, -1);
+        $category_id = substr($id, 8);
         $categories = Category::where('id', $category_id)->first();
+        $formulir = Formulir::where('category_id', $category_id)->get();
         $indikators = Indikator::where('ditampilkan', true)->where('category_id', $category_id)->get();
-        return view('user.home_survei', compact(['indikators', 'categories']));
+        return view('user.home_survei', compact(['indikators', 'categories', 'formulir']));
     }
     public function post_survei(Request $request)
     {
-        $validated = $request->validate([
-            // 'nilai.*' => 'required|in:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18',
-            // 'nama' => 'required',
-            'pekerjaan' => 'required',
-        ], [
-            // 'nama.required' => 'Nama harus diisi',
-            // 'nilai.*.required' => 'Nilai harus dipilih untuk setiap indikator',
-            'pekerjaan.required' => 'Pekerjaan harus diisi',
-        ]);
+        $formulir = Formulir::where('category_id', $request->category_id)->get();
+        $rules = [];
+        $messages = [];
+        foreach ($formulir as $item) {
+            $rules[$item->variable] = 'required';
+            $messages[$item->variable . '.required'] = $item->label . ' harus diisi';
+        }
+        $validated = $request->validate($rules, $messages);
         try {
             $jumlah = $request->jumlah;
             $data = Indikator::where('ditampilkan', 1)->where('category_id', 2)->get();
             $last_id =EvaluasiRekap::max('id')+1;
-            $kuisioner = array();
+            EvaluasiRekap::create([
+                'category_id' => 2,
+            ]);
+
+
             foreach ($data as $item) {
                 $nilai = $request->input('nilai' . $item->id);
                 $kuisioner[] = array(
-                    // 'nama' => htmlspecialchars($request->nama),
-                    'nama' => 'user'.$last_id,
-                    'pekerjaan' => htmlspecialchars($request->pekerjaan),
-                    'indikator_id' => $item->id,
-                    'nama_indikator' => $item->nama_indikator,
+                    'evaluasi_rekap_id' => $last_id ,
+
                     'category_id' => 2,
                     'skor' => $nilai,
                     'created_at' => Carbon::now(),
@@ -79,16 +82,19 @@ class HomeController extends Controller
                 );
             }
             Evaluasi::insert($kuisioner);
-            $total = array_sum(array_column($kuisioner, 'skor'));
-            $rata = $total / $jumlah;
-            EvaluasiRekap::create([
-                // 'nama' => htmlspecialchars($request->nama),
-                'nama' => 'user'.$last_id,
-                'category_id' => 2,
-                'pekerjaan' => htmlspecialchars($request->pekerjaan),
-                'total_skor' => $total,
-                'rata_rata' => $rata,
-            ]);
+
+
+
+            foreach ($formulir as $item) {
+                $data_user[] = array(
+                    'evaluasi_rekap_id' => $last_id ,
+                       'variable'   => $item->variable,
+                       'isi' =>  $request->input($item->variable),
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                );
+                }
+                Evaluasi_data::insert($data_user);
             if (!empty(htmlspecialchars($request->saran))) {
                 Saran::create([
                     // 'nama' => htmlspecialchars($request->nama),

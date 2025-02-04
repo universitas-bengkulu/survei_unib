@@ -62,11 +62,14 @@ Route::group(['prefix'  => 'operator/'],function(){
     Route::post('/post-survei',[CategoryController::class, 'post'])->name('operator.category.post');
     Route::post('/update-survei',[CategoryController::class, 'update'])->name('operator.category.update');
     Route::delete('/{id}/delete/',[CategoryController::class, 'delate'])->name('operator.category.delete');
+    Route::post('/{category_id}/aktif',[CategoryController::class, 'aktif'])->name('operator.category.aktif');
+    Route::post('/{category_id}/nonaktif',[CategoryController::class, 'nonaktif'])->name('operator.category.nonaktif');
 
     Route::get('/jenis-survei/{id}/formulir/',[CategoryController::class, 'formulir'])->name('operator.category.formulir');
     Route::post('/post-formulir',[CategoryController::class, 'post_formulir'])->name('operator.category.formulir.post');
     Route::post('/update-formulir',[CategoryController::class, 'update_formulir'])->name('operator.category.formulir.update');
     Route::delete('/{category_id}/delete/{id}/formulir',[CategoryController::class, 'delate_formulir'])->name('operator.category.formulir.delete');
+
 
     $categories = Category::all();
     foreach ($categories as $category) {

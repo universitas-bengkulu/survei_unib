@@ -65,6 +65,35 @@ class CategoryController extends Controller
         return redirect()->route('operator.category')->with($notification);
     }
 
+    public function aktif ($id){
+        $category = Category::where('id', $id)->first();
+        if ($category) {
+            $category->update(['default' => 1]);
+        } else {
+            $notification = array(
+                'message' => 'Gagal, Category tidak ditemukan!',
+                'alert-type' => 'error'
+            );
+            return redirect()->route('operator.category')->with($notification);
+        }
+        $notification = array(
+            'message' => 'Berhasil, Category berhasil diaktifkan!',
+            'alert-type' => 'success'
+        );
+        return redirect()->route('operator.category')->with($notification);
+    }
+
+    public function nonaktif ($id){
+
+        $category = Category::where('id', $id)->first();
+        $category->update(['default' => 0]);
+        $notification = array(
+            'message' => 'Berhasil, category berhasil dinonaktifkan!',
+            'alert-type' => 'success'
+        );
+        return redirect()->route('operator.category')->with($notification);
+    }
+
 
     public function formulir ($id){
         $formulir = formulir::where('category_id',$id)->get();
@@ -129,4 +158,6 @@ class CategoryController extends Controller
         );
         return redirect()->route('operator.category.formulir', [$category_id])->with($notification);
     }
+
+
 }

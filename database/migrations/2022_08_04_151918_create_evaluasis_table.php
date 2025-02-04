@@ -15,12 +15,7 @@ class CreateEvaluasisTable extends Migration
     {
         Schema::create('evaluasis', function (Blueprint $table) {
             $table->id();
-            $table->string('nama')->nullable();
-            $table->string('jenis_kelamin')->nullable();
-            $table->string('usia')->nullable();
-            $table->string('pendidikan')->nullable();
-            $table->string('pekerjaan')->nullable();
-            $table->string('instansi')->nullable();
+            $table->foreignId('evaluasi_rekap_id')->constrained('evaluasi_rekaps')->onDelete('cascade');
             $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
             $table->foreignId('indikator_id')->nullable()->constrained('indikators')->onDelete('set null');
             $table->string('nama_indikator')->nullable();

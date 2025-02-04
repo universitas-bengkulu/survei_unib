@@ -8,16 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Saran extends Model
 {
     use HasFactory;
-    protected $fillable = [
-        'nama',
-        'jenis_kelamin',
-        'usia',
-        'pendidikan',
-        'pekerjaan',
-        'instansi',
-        'category_id',
-        'saran',
-    ];
+    protected $guarded = [];
 
     public function category()
     {

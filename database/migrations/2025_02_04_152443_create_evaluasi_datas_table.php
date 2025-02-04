@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCategoriesTable extends Migration
+class CreateEvaluasiDatasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,12 @@ class CreateCategoriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('categories', function (Blueprint $table) {
+        Schema::create('evaluasi_datas', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_category');
-            $table->string('slug')->unique();
-            $table->boolean('default')->default(1);
+            $table->foreignId('evaluasi_rekap_id')->constrained('evaluasi_rekaps')->onDelete('cascade');
+            $table->string('variable');
+            $table->string('isi');
+
             $table->timestamps();
         });
     }
@@ -29,6 +30,6 @@ class CreateCategoriesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('categories');
+        Schema::dropIfExists('evaluasi_datas');
     }
 }

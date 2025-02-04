@@ -15,17 +15,7 @@ class CreateEvaluasiRekapsTable extends Migration
     {
         Schema::create('evaluasi_rekaps', function (Blueprint $table) {
             $table->id();
-            $table->string('nama')->nullable();
-            $table->string('jenis_kelamin')->nullable();
-            $table->string('usia')->nullable();
-            $table->string('pendidikan')->nullable();
-            $table->string('pekerjaan')->nullable();
-            $table->string('instansi')->nullable();
             $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
-
-
-            $table->integer('total_skor')->nullable();
-            $table->double('rata_rata')->nullable();
             $table->timestamps();
         });
     }

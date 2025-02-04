@@ -25,7 +25,7 @@ class LaporanController extends Controller
     public function laporan_per_indikator (Request $request){
         $idd = $request->segment(4);
         $id = base64_decode($idd);
-        $category_id = substr($id, -1);
+        $category_id = substr($id, 8);
         $category = Category::where('id', $category_id)->first();
         $results = $this->getPivotResults($category_id);
 
@@ -54,7 +54,7 @@ class LaporanController extends Controller
     public function saran(Request $request){
         $idd = $request->segment(4);
         $id = base64_decode($idd);
-        $category_id = substr($id, -1);
+        $category_id = substr($id, 8);
         $category = Category::where('id', $category_id)->first();
         $sarans = Saran::select('pendidikan','pekerjaan','nama', 'saran','created_at')->orderBy('pendidikan')->where('category_id', $category_id)->orderBy('pekerjaan')->orderBy('created_at','desc')->get();
 

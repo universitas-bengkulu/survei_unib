@@ -13,11 +13,9 @@
             <div class="grid">
                 <img class=" place-self-center    h-20" src="{{ asset('assets/Logo.svg') }}" alt="Img" />
             </div>
-
-            <h2 class="mb-6 text-center font-sans text-xl lg:text-3xl font-bold text-white uppercase  ">
-                Survei Kepuasan <br>
-                Layanan Manajemen <br>
-                Universitas Bengkulu TAHUN
+            <h2 class="mb-6 mt-4 text-center font-sans text-xl lg:text-3xl font-bold text-white uppercase  ">
+                {{ $categories->nama_category }}<br>
+                Universitas Bengkulu Tahun
                 <script>
                     document.write(new Date().getFullYear())
                 </script>
@@ -27,7 +25,7 @@
     </div>
     <section class="  pattren  pb-8  text-gray-600  body-font  duration-300 transform    ">
         <div class="  h-[15vh]"></div>
-        <div class="px-2 -mt-56 relative">
+        <div class="px-2 -mt-48 relative">
             <div
                 class="container     mx-auto bg-white  duration-300 transform    lg:w-11/12     lg:px-12 md:px-8 px-4 py-3 rounded-lg   shadow-[0px_30px_20px_0px_#333] ">
                 <div class="col-md-12" style="margin-bottom: 10px;">
@@ -64,35 +62,34 @@
                 @else
                     <div
                         class=" w-full mt-6 main-question mb-8 flex flex-col divide-y text-gray-800  text-base">
-                        <form action="{{ route('survei-layanan-manajemen.post') }}" method="post">
+                        <form action="{{ route($categories->slug.'.post') }}" method="post">
                             @csrf
                             <input type="hidden" name="jumlah" value="{{ count($indikators) }}">
-                            <input type="hidden" name="nama_lengkap" value="{{ Session::get('nama_lengkap') }}">
-                            <input type="hidden" name="username" value="{{ Session::get('username') }}">
-                            <input type="hidden" name="akses" value="{{ Session::get('login_as') }}">
-                            <input type="hidden" name="prodi" value="{{ Session::get('prodi') }}">
-                            <input type="hidden" name="fakultas" value="{{ Session::get('fakultas') }}">
+                            <input type="hidden" name="category_id" value="{{ $categories->id }}">
                             <div
                                 class="relative    pt-3   bg-gradient-to-r from-blue-800 to-[#0F236A] rounded-xl w-full my-5 shadow-lg shadow-gray-500 mb-8 group  ">
 
                                 <div class="mt-6 px-6 py-4   w-full">
                                     <div class="  -mt-6 lg:px-6      grid grid-cols-1  ">
-                                        {{-- <div class="mb-3   ">
+                                        @foreach ($formulir as $form )
+                                        <div class="mb-3   ">
 
-                                            <label for="nama"
-                                                class=" after:content-['*'] after:text-red-500 font-semibold  text-white  after:ml-2 text-sm pb-1">Nama
-                                                (Tanpa Gelar)</label>
-                                            <input type="text" id="nama" name="nama"
+                                            <label for="{{$form->variable}}"
+                                                class=" after:content-['*'] after:text-red-500 font-semibold  text-white  after:ml-2 text-sm pb-1">{{$form->label}}</label>
+                                            <input type="text" id="{{$form->variable}}" name="{{$form->variable}}"
                                                 class="   w-full rounded-lg border-2  border-white
                                                 bg-white px-3 py-2.5 text-sm font-normal transition-all duration-500   focus:border-white
                                                 focus:ring-white
                                                 focus:shadow-[-4px_4px_10px_0px_#000]  "
-                                                placeholder="Nama (Tanpa Gelar)" required/>
-                                            @if ($errors->has('nama'))
-                                                <p class="text-red-500 text-sm font-bold">{{ $errors->first('nama') }}</p>
+                                                placeholder="Masukan {{$form->label}}" required/>
+                                            @if ($errors->has($form->variable))
+                                                <p class="text-red-500 text-sm font-bold">{{ $errors->first($form->variable) }}</p>
                                             @endif
-                                        </div> --}}
-                                        <div class="mb-3">
+                                        </div>
+
+                                        @endforeach
+
+                                        {{-- <div class="mb-3">
                                             <label for="pekerjaan"
                                                 class=" after:content-['*'] after:text-red-500 font-semibold  text-white  after:ml-2 text-sm pb-1">Pekerjaan</label>
                                             <select name="pekerjaan"
@@ -106,7 +103,7 @@
                                             @if ($errors->has('pekerjaan'))
                                                 <p class="text-red-500 text-sm font-bold">{{ $errors->first('pekerjaan') }}</p>
                                             @endif
-                                        </div>
+                                        </div> --}}
 
 
                                     </div>
@@ -125,7 +122,7 @@
                                     <div class="  -mt-6 px-6 ">
 
 
-                                        <p class="text-sm    ">Survei ini dilakukan untuk menilai {{$categories->nama_category}} Universitas
+                                        <p class="text-sm    "> {{$categories->nama_category}} Universitas
                                             Bengkulu (UNIB).
                                             Beri penilaian terhadap item-item penilaian di bawah ini dengan cara memilih
                                             salah
@@ -153,7 +150,7 @@
                                 <div>
                                     <div
                                         class=" text-white   bg-blue-800  inline-block    items-center relative rounded-xl     p-4      transform duration-500 ease-in mx-4 md:mx-0  md:left-4 -top-10 lg:text-xl text-sm font-sans lg:font-bold ">
-                                        Survei Kepuasan Pengguna untuk menilai {{$categories->nama_category}} Universitas Bengkulu Tahun
+                                         {{$categories->nama_category}} Universitas Bengkulu Tahun
                                         <script>
                                             document.write(new Date().getFullYear())
                                         </script>
@@ -253,7 +250,7 @@
                                         <div class=" md:mx-4 lg:mx-6 py-6">
                                             <label for="comment"
                                                 class="block mb-2  font-bold text-gray-900  ">Masukan
-                                                Pesan dan Saran Anda Untuk menilai {{$categories->nama_category}} Universitas
+                                                Pesan dan Saran Anda Untuk  {{$categories->nama_category}} Universitas
                                                 Bengkulu
                                                 <span class="text-green-500 text-sm font-normal">(Optional)</span></label>
                                             <textarea name="saran" id="saran" rows="4"

@@ -9,7 +9,7 @@ class Category extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['nama_category', 'slug'];
+    protected $guarded = [];
 
     public function indikators()
     {

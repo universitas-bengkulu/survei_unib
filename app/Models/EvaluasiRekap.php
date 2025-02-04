@@ -8,15 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class EvaluasiRekap extends Model
 {
     use HasFactory;
-    protected $fillable = [
-        'nama',
-        'jenis_kelamin',
-        'usia',
-        'pendidikan',
-        'instansi',
-        'category_id',
-        'pekerjaan','total_skor','rata_rata'
-    ];
+    protected $guarded = [];
 
     public function category()
     {
