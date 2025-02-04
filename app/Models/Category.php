@@ -30,4 +30,9 @@ class Category extends Model
     {
         return $this->hasMany(Saran::class);
     }
+
+    public function formulirs()
+    {
+        return $this->hasMany(Formulir::class);
+    }
 }

@@ -153,18 +153,28 @@
         <div class="col-md-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fa fa-book"></i>&nbsp;Manajemen Indikator </h3>
+                    <h3 class="box-title"><i class="fa fa-book"></i>&nbsp;Manajemen Formulir  </h3>
                 </div>
                 <div class="box-body">
                     <div class="row">
-                        <form action="{{ route('operator.category.post') }}" method="POST">
+                        <form action="{{ route('operator.category.formulir.post') }}" method="POST">
                             {{ csrf_field() }} {{ method_field('POST') }}
                             <div class="form-group col-md-12">
-                                <label for="">Nama Jenis Survei</label>
-                                <input type="text" name="nama_category" id="nama_category" class="form-control">
+                                <label for="">Nama Inputan (Label)</label>
+                                <input type="hidden" name="id" id="id" value="{{$category_id}}" class="form-control">
+                                <input type="text" name="label" id="label" class="form-control">
                                 <div>
-                                    @if ($errors->has('nama_category'))
-                                        <small class="form-text text-danger">{{ $errors->first('nama_category') }}</small>
+                                    @if ($errors->has('label'))
+                                        <small class="form-text text-danger">{{ $errors->first('label') }}</small>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label for="">Nama Variable</label>
+                                <input type="text" name="variable" id="variable" class="form-control">
+                                <div>
+                                    @if ($errors->has('variable'))
+                                        <small class="form-text text-danger">{{ $errors->first('variable') }}</small>
                                     @endif
                                 </div>
                             </div>
@@ -193,9 +203,8 @@
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>Nama Jenis Survei</th>
-                                        <th>Slug</th>
-                                        <th></th>
+                                        <th>Label</th>
+                                        <th>Variable</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
@@ -203,20 +212,15 @@
                                     @php
                                         $no = 1;
                                     @endphp
-                                    @foreach ($category as $item)
+
+                                    @foreach ($formulir as $item)
                                         <tr>
                                             <td> {{ $no++ }} </td>
-                                            <td> {{ $item->nama_category }} </td>
-                                            <td> {{ $item->slug }} </td>
-                                            <td> <label class="label label-info">ID : {{ $item->id }}</label> </td>
+                                            <td> {{ $item->label }} </td>
+                                            <td> {{ $item->variable }} </td>
                                             <td style="display:inline-block !important;">
                                                 <table>
                                                     <tr>
-                                                        <td>
-                                                            <a href="{{ route('operator.category.formulir', [$item->id]) }}" class="btn btn-info btn-sm btn-flat" >
-                                                                <i class="fa fa-folder"></i>&nbsp; Form ({{ $item->formulirs_count }})
-                                                            </a>
-                                                        </td>
                                                         <td>
                                                             <button type="button" class="btn btn-warning btn-sm btn-flat" data-toggle="modal" data-target="#editModal{{ $item->id }}">
                                                                 <i class="fa fa-edit"></i>&nbsp; Ubah
@@ -224,7 +228,7 @@
                                                         </td>
                                                         <td>
                                                             <form
-                                                                action="{{ route('operator.category.delete', [$item->id]) }}"
+                                                                action="{{ route('operator.category.formulir.delete', [$item->id, $category_id]) }}"
                                                                 method="POST">
                                                                 {{ csrf_field() }} {{ method_field('DELETE') }}
                                                                 <button type="submit"
@@ -248,16 +252,27 @@
                                                             <span aria-hidden="true">&times;</span>
                                                         </button>
                                                     </div>
-                                                    <form action="{{ route('operator.category.update') }}" method="POST">
+                                                    <form action="{{ route('operator.category.formulir.update') }}" method="POST">
                                                         {{ csrf_field() }} {{ method_field('POST') }}
                                                         <div class="modal-body">
-                                                            <div class="form-group">
-                                                                <label for="nama_category">Nama Jenis Survei</label>
-                                                                <input type="text" name="nama_category" id="nama_category" class="form-control" value="{{ $item->nama_category }}">
-                                                                <input type="hidden" name="id" id="id" value="{{ $item->id }}">
+                                                            <div class="form-group col-md-12">
+                                                                <label for="">Nama Inputan (Label)</label>
+                                                                <input type="hidden" name="id" id="id" value="{{ $item->id }}" class="form-control">
+                                                                <input type="hidden" name="category_id" id="category_id" value="{{$category_id}}" class="form-control">
+
+                                                                <input type="text" value="{{ $item->label }}" name="label" id="label" class="form-control">
                                                                 <div>
-                                                                    @if ($errors->has('nama_category'))
-                                                                        <small class="form-text text-danger">{{ $errors->first('nama_category') }}</small>
+                                                                    @if ($errors->has('label'))
+                                                                        <small class="form-text text-danger">{{ $errors->first('label') }}</small>
+                                                                    @endif
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group col-md-12">
+                                                                <label for="">Nama Variable</label>
+                                                                <input type="text" value="{{ $item->variable }}" name="variable" id="variable" class="form-control">
+                                                                <div>
+                                                                    @if ($errors->has('variable'))
+                                                                        <small class="form-text text-danger">{{ $errors->first('variable') }}</small>
                                                                     @endif
                                                                 </div>
                                                             </div>
@@ -270,6 +285,7 @@
                                                 </div>
                                             </div>
                                         </div>
+
                                     @endforeach
                                 </tbody>
                             </table>

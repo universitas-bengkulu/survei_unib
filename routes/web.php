@@ -29,9 +29,16 @@ Route::group(['prefix'  => '/'],function(){
 
     $categories = Category::all();
     foreach ($categories as $category) {
-        Route::get('/'.$category->slug, [HomeController::class, str_replace('-', '', $category->slug)])
+        if($category->default==1){
+            Route::get('/'.base64_encode(date('Ymd').$category->id).'/'.$category->slug, [HomeController::class, 'home_survei'])->name('survei.'.$category->slug);
+            Route::post('post-/'.$category->slug,[HomeController::class, 'post_survei'])->name($category->slug.'.post');
+        }else{
+            Route::get('/'.$category->slug, [HomeController::class, str_replace('-', '', $category->slug)])
             ->name('survei.'.$category->slug);
-        Route::post('post-/'.$category->slug,[HomeController::class, 'post_'.str_replace('-', '', $category->slug)])->name($category->slug.'.post');
+            Route::post('post-/'.$category->slug,[HomeController::class, 'post_'.str_replace('-', '', $category->slug)])->name($category->slug.'.post');
+
+        }
+
     }
 
     Route::get('/dosen-tendik',[HomeController::class, 'dosentendik'])->name('dosen-tendik');
@@ -55,6 +62,11 @@ Route::group(['prefix'  => 'operator/'],function(){
     Route::post('/post-survei',[CategoryController::class, 'post'])->name('operator.category.post');
     Route::post('/update-survei',[CategoryController::class, 'update'])->name('operator.category.update');
     Route::delete('/{id}/delete/',[CategoryController::class, 'delate'])->name('operator.category.delete');
+
+    Route::get('/jenis-survei/{id}/formulir/',[CategoryController::class, 'formulir'])->name('operator.category.formulir');
+    Route::post('/post-formulir',[CategoryController::class, 'post_formulir'])->name('operator.category.formulir.post');
+    Route::post('/update-formulir',[CategoryController::class, 'update_formulir'])->name('operator.category.formulir.update');
+    Route::delete('/{category_id}/delete/{id}/formulir',[CategoryController::class, 'delate_formulir'])->name('operator.category.formulir.delete');
 
     $categories = Category::all();
     foreach ($categories as $category) {

@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Formulir;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
     public function index (){
-        $category = Category::get();
+        $category = Category::withCount('formulirs')->get();
         return view('operator.category.index',[
             'category'      => $category,
         ]);
@@ -62,5 +63,70 @@ class CategoryController extends Controller
             'alert-type' => 'success'
         );
         return redirect()->route('operator.category')->with($notification);
+    }
+
+
+    public function formulir ($id){
+        $formulir = formulir::where('category_id',$id)->get();
+        return view('operator.category.formulir',[
+            'formulir'      => $formulir,
+            'category_id'   => $id,
+        ]);
+    }
+
+
+    public function post_formulir(Request $request){
+        $attributes = [
+            'label'   =>  'Label formulir',
+            'variable'   =>  'Variable formulir',
+        ];
+        $this->validate($request, [
+            'label'    =>  'required',
+            'variable'    =>  'required',
+        ],$attributes);
+
+        Formulir::create([
+            'category_id'    =>  $request->id,
+            'label'    =>  htmlspecialchars($request->label),
+            'variable'    =>  htmlspecialchars($request->variable),
+        ]);
+
+        $notification = array(
+            'message' => 'Berhasil, Formulir berhasil ditambahkan!',
+            'alert-type' => 'success'
+        );
+        return redirect()->route('operator.category.formulir', [$request->id])->with($notification);
+    }
+
+    public function update_formulir(Request $request){
+        $attributes = [
+            'label'   =>  'Label formulir',
+            'variable'   =>  'Variable formulir',
+        ];
+        $this->validate($request, [
+            'label'    =>  'required',
+            'variable'    =>  'required',
+        ],$attributes);
+
+        $formulir = Formulir::findOrFail($request->id);
+        $formulir->update([
+            'label'    =>  htmlspecialchars($request->label),
+            'variable'    =>  htmlspecialchars($request->variable),
+        ]);
+
+        $notification = array(
+            'message' => 'Berhasil, Formulir berhasil diperbarui!',
+            'alert-type' => 'success'
+        );
+        return redirect()->route('operator.category.formulir', [$request->category_id])->with($notification);
+    }
+
+    public function delate_formulir ($id, $category_id){
+        Formulir::where('id',$id)->delete();
+        $notification = array(
+            'message' => 'Berhasil, Formulir berhasil dihapus!',
+            'alert-type' => 'success'
+        );
+        return redirect()->route('operator.category.formulir', [$category_id])->with($notification);
     }
 }

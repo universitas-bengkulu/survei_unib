@@ -38,6 +38,83 @@ class HomeController extends Controller
         return view('user.home', compact('categories'));
     }
 
+    //default (2)
+    public function home_survei(Request $request)
+    {
+        $idd = $request->segment(1);
+        $id = base64_decode($idd);
+        $category_id = substr($id, -1);
+        $categories = Category::where('id', $category_id)->first();
+        $indikators = Indikator::where('ditampilkan', true)->where('category_id', $category_id)->get();
+        return view('user.home_survei', compact(['indikators', 'categories']));
+    }
+    public function post_survei(Request $request)
+    {
+        $validated = $request->validate([
+            // 'nilai.*' => 'required|in:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18',
+            // 'nama' => 'required',
+            'pekerjaan' => 'required',
+        ], [
+            // 'nama.required' => 'Nama harus diisi',
+            // 'nilai.*.required' => 'Nilai harus dipilih untuk setiap indikator',
+            'pekerjaan.required' => 'Pekerjaan harus diisi',
+        ]);
+        try {
+            $jumlah = $request->jumlah;
+            $data = Indikator::where('ditampilkan', 1)->where('category_id', 2)->get();
+            $last_id =EvaluasiRekap::max('id')+1;
+            $kuisioner = array();
+            foreach ($data as $item) {
+                $nilai = $request->input('nilai' . $item->id);
+                $kuisioner[] = array(
+                    // 'nama' => htmlspecialchars($request->nama),
+                    'nama' => 'user'.$last_id,
+                    'pekerjaan' => htmlspecialchars($request->pekerjaan),
+                    'indikator_id' => $item->id,
+                    'nama_indikator' => $item->nama_indikator,
+                    'category_id' => 2,
+                    'skor' => $nilai,
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                );
+            }
+            Evaluasi::insert($kuisioner);
+            $total = array_sum(array_column($kuisioner, 'skor'));
+            $rata = $total / $jumlah;
+            EvaluasiRekap::create([
+                // 'nama' => htmlspecialchars($request->nama),
+                'nama' => 'user'.$last_id,
+                'category_id' => 2,
+                'pekerjaan' => htmlspecialchars($request->pekerjaan),
+                'total_skor' => $total,
+                'rata_rata' => $rata,
+            ]);
+            if (!empty(htmlspecialchars($request->saran))) {
+                Saran::create([
+                    // 'nama' => htmlspecialchars($request->nama),
+                    'nama' => 'user'.$last_id,
+                    'pekerjaan' => htmlspecialchars($request->pekerjaan),
+                    'category_id' => 2,
+                    'saran' => htmlspecialchars($request->saran),
+                ]);
+            }
+            $notification = array(
+                'message' => 'Kuisioner berhasil disimpan!',
+                'alert-type' => 'success',
+                'titel' => 'Berhasil!'
+            );
+            return redirect()->back()->with($notification);
+        } catch (\Exception $e) {
+            DB::rollback();
+            $notification = array(
+                'message' => 'Kuisioner gagal disimpan! ' . $e->getMessage(),
+                'alert-type' => 'error',
+                'titel' => 'Gagal'
+            );
+            return redirect()->back()->with($notification);
+        }
+    }
+
 
     //surveilayananmanajemen (2)
         public function surveilayananmanajemen()
