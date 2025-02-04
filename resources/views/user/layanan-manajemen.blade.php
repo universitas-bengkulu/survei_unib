@@ -7,15 +7,16 @@
 </div>
 @endsection
 @section('content')
-    <div class="  bg-blue-900">
-        <section aria-labelledby="products-heading" class="pb-24 p-6  ">
+    <div class="  bg-blue-900 relative" >
+        <img src="{{ asset('assets/images/business-background-16.png') }}" alt="bg-img" class="w-full h-full object-cover    brightness-50 absolute z-0" />
+        <section aria-labelledby="products-heading" class="pb-32 p-6  z-10 relative">
             <div class="grid">
                 <img class=" place-self-center    h-20" src="{{ asset('assets/Logo.svg') }}" alt="Img" />
             </div>
 
             <h2 class="mb-6 text-center font-sans text-xl lg:text-3xl font-bold text-white uppercase  ">
-                Survei Kepuasan Pengguna<br>
-                untuk Dosen dan Tenaga Kependidikan<br>
+                Survei Kepuasan <br>
+                Layanan Manajemen <br>
                 Universitas Bengkulu TAHUN
                 <script>
                     document.write(new Date().getFullYear())
@@ -24,11 +25,11 @@
 
         </section>
     </div>
-    <section class="  pattren  pb-8  text-gray-600  body-font  duration-300 transform  -mt-10   ">
-        <div class="bg-blue-900 h-[15vh]"></div>
-        <div class="px-2">
+    <section class="  pattren  pb-8  text-gray-600  body-font  duration-300 transform    ">
+        <div class="  h-[15vh]"></div>
+        <div class="px-2 -mt-56 relative">
             <div
-                class="container     mx-auto bg-white -mt-36 duration-300 transform    lg:w-11/12    lg:px-12 md:px-8 px-4 py-3 rounded-lg   shadow-[0px_30px_20px_0px_#333] ">
+                class="container     mx-auto bg-white  duration-300 transform    lg:w-11/12     lg:px-12 md:px-8 px-4 py-3 rounded-lg   shadow-[0px_30px_20px_0px_#333] ">
                 <div class="col-md-12" style="margin-bottom: 10px;">
                     @if ($message = Session::get('error'))
                         <div class="alert alert-danger alert-block">
@@ -63,7 +64,7 @@
                 @else
                     <div
                         class=" w-full mt-6 main-question mb-8 flex flex-col divide-y text-gray-800  text-base">
-                        <form action="{{ route('evaluasi-dosen-tentik.post') }}" method="post">
+                        <form action="{{ route('survei-layanan-manajemen.post') }}" method="post">
                             @csrf
                             <input type="hidden" name="jumlah" value="{{ count($indikators) }}">
                             <input type="hidden" name="nama_lengkap" value="{{ Session::get('nama_lengkap') }}">
@@ -76,7 +77,7 @@
 
                                 <div class="mt-6 px-6 py-4   w-full">
                                     <div class="  -mt-6 lg:px-6      grid grid-cols-1  ">
-                                        <div class="mb-3   ">
+                                        {{-- <div class="mb-3   ">
 
                                             <label for="nama"
                                                 class=" after:content-['*'] after:text-red-500 font-semibold  text-white  after:ml-2 text-sm pb-1">Nama
@@ -90,10 +91,10 @@
                                             @if ($errors->has('nama'))
                                                 <p class="text-red-500 text-sm font-bold">{{ $errors->first('nama') }}</p>
                                             @endif
-                                        </div>
+                                        </div> --}}
                                         <div class="mb-3">
                                             <label for="pekerjaan"
-                                                class=" after:content-['*'] after:text-red-500 font-semibold  text-white  after:ml-2 text-sm pb-1">pekerjaan</label>
+                                                class=" after:content-['*'] after:text-red-500 font-semibold  text-white  after:ml-2 text-sm pb-1">Pekerjaan</label>
                                             <select name="pekerjaan"
                                                 class="   w-full rounded-lg border-2  border-white
                                                 bg-white px-3 py-2.5 text-sm font-normal transition-all duration-500  focus:border-white
@@ -124,16 +125,14 @@
                                     <div class="  -mt-6 px-6 ">
 
 
-                                        <p class="text-sm    ">Survei ini dilakukan untuk melihat kepuasan Pengguna untuk
-                                            Dosen dan Tenaga
-                                            Kependidikan Universitas
+                                        <p class="text-sm    ">Survei ini dilakukan untuk menilai {{$categories->nama_category}} Universitas
                                             Bengkulu (UNIB).
                                             Beri penilaian terhadap item-item penilaian di bawah ini dengan cara memilih
                                             salah
                                             satu opsi pada
                                             kolom
                                             Persepsi.</p>
-                                        <p class="text-xl font-extrabold   ">Kriteria Penilaian</p>
+                                        <p class="text-lg font-extrabold   ">Kriteria Penilaian</p>
 
                                         <ul class=" list-disc    ml-10 text-left   text-sm ">
                                             <li><strong>Sangat Baik</strong> = Nilai 5</li>
@@ -154,7 +153,7 @@
                                 <div>
                                     <div
                                         class=" text-white   bg-blue-800  inline-block    items-center relative rounded-xl     p-4      transform duration-500 ease-in mx-4 md:mx-0  md:left-4 -top-10 lg:text-xl text-sm font-sans lg:font-bold ">
-                                        Survei Kepuasan Pengguna untuk Dosen dan Tenaga Kependidikan Universitas Bengkulu Tahun
+                                        Survei Kepuasan Pengguna untuk menilai {{$categories->nama_category}} Universitas Bengkulu Tahun
                                         <script>
                                             document.write(new Date().getFullYear())
                                         </script>
@@ -180,7 +179,7 @@
                                                                     name="nilai{{ $item->id }}" value="5" required
                                                                     class="h-4 w-4 border-gray-300 mt-[2px] focus:ring-2 focus:ring-blue-300"
                                                                     aria-labelledby="nilai_{{ $item->id }}_5"
-                                                                    aria-describedby="nilai_{{ $item->id }}_5">
+                                                                    aria-describedby="nilai_{{ $item->id }}_5" checked>
                                                                 <label for="nilai_{{ $item->id }}_5"
                                                                     class="text-sm font-medium text-gray-900   ml-2 block">
                                                                     Sangat baik
@@ -254,12 +253,12 @@
                                         <div class=" md:mx-4 lg:mx-6 py-6">
                                             <label for="comment"
                                                 class="block mb-2  font-bold text-gray-900  ">Masukan
-                                                Pesan dan Saran Anda Untuk Dosen dan Tenaga Kependidikan Universitas
+                                                Pesan dan Saran Anda Untuk menilai {{$categories->nama_category}} Universitas
                                                 Bengkulu
                                                 <span class="text-green-500 text-sm font-normal">(Optional)</span></label>
                                             <textarea name="saran" id="saran" rows="4"
                                                 class="block p-2.5 w-full  text-gray-900   rounded-lg   border-[#294DAA] border-2 focus:ring-blue-500 focus:border-blue-500  "
-                                                placeholder="Masukan Saran Evaluasi Kinerja Dosen"></textarea>
+                                                placeholder="Masukan Saran {{$categories->nama_category}}"></textarea>
                                         </div>
                                         <div class="grid">
                                             <input type="submit" value="SIMPAN SURVEI" name="simpan"

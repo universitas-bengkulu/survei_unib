@@ -18,9 +18,19 @@ class Evaluasi extends Model
         'indikator_id',
         'nama_indikator',
         'instansi',
-        'category',
+        'category_id',
         'skor',
         'created_at',
         'updated_at'
     ];
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    public function indikator()
+    {
+        return $this->belongsTo(Indikator::class);
+    }
 }

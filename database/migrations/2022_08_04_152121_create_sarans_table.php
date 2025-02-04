@@ -23,7 +23,7 @@ class CreateSaransTable extends Migration
             $table->string('instansi')->nullable();
 
             $table->text('saran')->nullable();
-            $table->integer('category');
+            $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
 
             $table->timestamps();
         });

@@ -40,16 +40,16 @@ class EvaluasiExport implements FromCollection, WithHeadings, WithStyles, WithCu
     public function headings(): array
     {
         // First row
-        $headings1 = ['Nama'];
+        $headings1 = ['Responden'];
         $headings1[] = 'Pertanyaan';
-        for ($i = 1; $i < $this->questions; $i++) {
+        for ($i = 1; $i < $this->questions->count(); $i++) {
             $headings1[] = '';
         }
         $headings1[] = 'Total';
 
         // Second row
         $headings2 = [''];
-        for ($i = 1; $i <= $this->questions; $i++) {
+        for ($i = 1; $i <= $this->questions->count(); $i++) {
             $headings2[] = $i;
         }
         $headings2[] = '';
@@ -63,10 +63,11 @@ class EvaluasiExport implements FromCollection, WithHeadings, WithStyles, WithCu
      */
     public function map($evaluasi): array
     {
-        $row = [$evaluasi->nama];
+        static $no = 1;
+        $row = ['Responden ' . $no++];
 
-        for ($i = 1; $i <= $this->questions; $i++) {
-            $row[] = $evaluasi->$i;
+        foreach ($this->questions as $question) {
+            $row[] = isset($evaluasi->{$question->id}) ? $evaluasi->{$question->id} : 0;
         }
 
         $row[] = $evaluasi->total;
@@ -80,7 +81,7 @@ class EvaluasiExport implements FromCollection, WithHeadings, WithStyles, WithCu
     public function styles(Worksheet $sheet)
     {
         // Merge cells for first row headers
-        $lastColumn = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($this->questions + 1);
+        $lastColumn = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($this->questions->count() + 1);
         $sheet->mergeCells('B1:' . $lastColumn . '1');
 
         // Style for headers

@@ -21,9 +21,8 @@ class CreateEvaluasisTable extends Migration
             $table->string('pendidikan')->nullable();
             $table->string('pekerjaan')->nullable();
             $table->string('instansi')->nullable();
-            $table->integer('category');
-
-            $table->unsignedBigInteger('indikator_id')->nullable();
+            $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
+            $table->foreignId('indikator_id')->nullable()->constrained('indikators')->onDelete('set null');
             $table->string('nama_indikator')->nullable();
             $table->integer('skor')->nullable();
             $table->timestamps();

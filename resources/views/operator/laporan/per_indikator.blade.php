@@ -154,13 +154,16 @@
         <div class="col-md-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fa fa-book"></i>&nbsp;Manajemen Data Indikator</h3>
+                    <h3 class="box-title"><i class="fa fa-book"></i>&nbsp;Manajemen Data Laporan Per Indikator <strong
+                            class="text-success">{{ $category->nama_category }}</strong></h3>
                 </div>
                 <div class="mb-3">
-                    <a href="{{ route('evaluasi.export') }}" class="btn btn-success  "
-                        style="margin-left: 25px; margin-top: 10px;">
-                        <i class="fas fa-file-excel"></i> Export to Excel
-                    </a>
+                    <form
+                        action="{{ route('evaluasi.export.' . $category->slug, [$category->id, $category->slug]) }}"
+                        method="POST">
+                        {{ csrf_field() }} {{ method_field('POST') }}
+                        <button type="submit" class="btn btn-success  " style="margin-left: 25px; margin-top: 10px;"><i class="fas fa-file-excel"></i> Export to Excel</button>
+                    </form>
                 </div>
                 <div class="box-body">
                     <div class="col-lg-4 col-xs-12" style="padding-bottom:10px !important;">
@@ -193,7 +196,7 @@
                         <!-- small box -->
                         <div class="small-box bg-green" style="margin-bottom:0px;">
                             <div class="inner">
-                                <h3>{{ collect($evaluasiList)->max('total') }}</h3>
+                                <h3>{{ number_format(collect($evaluasiList)->max('total'), 0) }}</h3>
                                 <p>Skor Tertinggi</p>
                             </div>
                             <div class="icon">
@@ -211,7 +214,7 @@
                                 <table class="table table-hover table-striped table-bordered" id="table">
                                     <thead style="background-color: #3C8DBC; color: white;">
                                         <tr>
-                                            <th rowspan="2" style="text-align:center">Nama</th>
+                                            <th rowspan="2" style="text-align:center">Responden</th>
                                             <th style="text-align:center" colspan="{{ $questions->count() }}">Pertanyaan
                                             </th>
 
@@ -225,9 +228,12 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        @php
+                                            $no = 1;
+                                        @endphp
                                         @foreach ($evaluasiList as $evaluasi)
                                             <tr class="hover:bg-gray-50">
-                                                <td>{{ $evaluasi->nama }}</td>
+                                                <td>Responden {{ $no++ }}</td>
                                                 @foreach ($questions as $question)
                                                     <td class="px-4 py-2 border text-center">
                                                         {{ isset($evaluasi->{$question->id}) ? $evaluasi->{$question->id} : 0 }}

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DosenController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\IndikatorController;
@@ -8,6 +9,7 @@ use App\Http\Controllers\OperatorController;
 use App\Http\Controllers\PandaController;
 use App\Http\Controllers\PerencanaanController;
 use App\Http\Controllers\TendikController;
+use App\Models\Category;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -24,10 +26,17 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix'  => '/'],function(){
     Route::get('/',[HomeController::class, 'dashboard'])->name('dashboard');
+
+    $categories = Category::all();
+    foreach ($categories as $category) {
+        Route::get('/'.$category->slug, [HomeController::class, str_replace('-', '', $category->slug)])
+            ->name('survei.'.$category->slug);
+        Route::post('post-/'.$category->slug,[HomeController::class, 'post_'.str_replace('-', '', $category->slug)])->name($category->slug.'.post');
+    }
+
     Route::get('/dosen-tendik',[HomeController::class, 'dosentendik'])->name('dosen-tendik');
     Route::get('/alumni',[HomeController::class, 'alumni'])->name('alumni');
     Route::get('/sarana-prasarana',[HomeController::class, 'saranaprasarana'])->name('sarana-prasarana');
-    Route::post('evaluasi-dosen-tentik/',[HomeController::class, 'postDosenTendik'])->name('evaluasi-dosen-tentik.post');
     Route::post('lulusan/',[HomeController::class, 'postLulusan'])->name('lulusan.post');
     Route::post('sarana-prasarana/',[HomeController::class, 'postSaranaPrasarana'])->name('saranaprasarana.post');
 });
@@ -42,63 +51,33 @@ Route::group(['prefix'  => 'operator/'],function(){
     })->name('operator.login');
 
     Route::get('/dashboard',[OperatorController::class, 'dashboard'])->name('operator.dashboard');
+    Route::get('/jenis-survei',[CategoryController::class, 'index'])->name('operator.category');
+    Route::post('/post-survei',[CategoryController::class, 'post'])->name('operator.category.post');
+    Route::post('/update-survei',[CategoryController::class, 'update'])->name('operator.category.update');
+    Route::delete('/{id}/delete/',[CategoryController::class, 'delate'])->name('operator.category.delete');
 
-    //dosen dan tendik
-    Route::group(['prefix'  => 'indikator-dosen-tendik/'],function(){
-        Route::get('/e',[IndikatorController::class, 'indikatorDosenTendik'])->name('operator.indikator');
-        Route::get('/',[IndikatorController::class, 'indikatorDosenTendik'])->name('operator.indikator.dosen_tendik');
-        Route::post('/',[IndikatorController::class, 'postDosenTendik'])->name('operator.indikator.post.dosen_tendik');
-        Route::delete('/{id}/aktif',[IndikatorController::class, 'aktifDosenTendik'])->name('operator.indikator.aktif.dosen_tendik');
-        Route::delete('/{id}/nonaktif',[IndikatorController::class, 'nonaktifDosenTendik'])->name('operator.indikator.nonaktif.dosen_tendik');
-    });
+    $categories = Category::all();
+    foreach ($categories as $category) {
+        Route::group(['prefix'  => 'indikator-'.$category->slug.'/'],function() use ($category) {
+            Route::get('/'.base64_encode(date('Ymd').$category->id),[IndikatorController::class, 'indikator'])->name('operator.indikator.'.$category->slug);
+            Route::post('/',[IndikatorController::class, 'postIndikator'])->name('operator.indikator.post.'.$category->slug);
+            Route::post('/{id}/aktif/{slug}',[IndikatorController::class, 'aktifIndikator'])->name('operator.indikator.aktif.'.$category->slug);
+            Route::post('/{id}/nonaktif/{slug}',[IndikatorController::class, 'nonaktifIndikator'])->name('operator.indikator.nonaktif.'.$category->slug);
+            Route::delete('/{id}/delete/{slug}',[IndikatorController::class, 'delateIndikator'])->name('operator.indikator.delete.'.$category->slug);
+        });
 
-    Route::group(['prefix'  => 'laporan-dosen-tendik/'],function(){
-        Route::get('/per_prodi',[LaporanController::class, 'perProdi'])->name('operator.laporan.per_prodi');
-        Route::get('/pesan_dan_indikator',[LaporanController::class, 'indikator'])->name('operator.laporan.per_indikator');
-        Route::get('/pesan_dan_saran',[LaporanController::class, 'saran'])->name('operator.laporan.saran');
+        Route::group(['prefix'  => 'laporan-'.$category->slug.'/'],function() use ($category) {
+            Route::get('/per_indikator/'.base64_encode(date('Ymd').$category->id),[LaporanController::class, 'laporan_per_indikator'])->name('operator.laporan.per_indikator.'.$category->slug);
+            Route::post('/{id}/export/{slug}',[LaporanController::class, 'export'])->name('evaluasi.export.'.$category->slug);
+            Route::get('/pesan_dan_saran/'.base64_encode(date('Ymd').$category->id),[LaporanController::class, 'saran'])->name('operator.laporan.saran.'.$category->slug);
 
-        Route::get('evaluasi/export', [LaporanController::class, 'export'])->name('evaluasi.export');
-    });
-
-
-    //alumni
-    Route::group(['prefix'  => 'indikator-alumni/'],function(){
-        Route::get('/',[IndikatorController::class, 'indikatorAlumni'])->name('operator.indikator.alumni');
-        Route::post('/',[IndikatorController::class, 'postAlumni'])->name('operator.indikator.post.alumni');
-        Route::delete('/{id}/aktif',[IndikatorController::class, 'aktifIndikatorAlumni'])->name('operator.indikator.aktif.alumni');
-        Route::delete('/{id}/nonaktif',[IndikatorController::class, 'nonaktifIndikatorAlumni'])->name('operator.indikator.nonaktif.alumni');
-    });
-
-    Route::group(['prefix'  => 'laporan-alumni/'],function(){
-        Route::get('/pesan_dan_indikator',[LaporanController::class, 'indikatorAlumni'])->name('operator.laporan.per_indikator.alumni');
-        Route::get('/pesan_dan_saran',[LaporanController::class, 'saranAlumni'])->name('operator.laporan.saran.alumni');
-
-        Route::get('evaluasi/export', [LaporanController::class, 'exportAlumni'])->name('evaluasi.export.alumni');
-    });
-
-
-    //sarana prasarana
-    Route::group(['prefix'  => 'indikator-sarana-prasarana/'],function(){
-        Route::get('/',[IndikatorController::class, 'indikatorSaranaPrasarana'])->name('operator.indikator.sarana_prasarana');
-        Route::post('/',[IndikatorController::class, 'postSaranaPrasarana'])->name('operator.indikator.post.sarana_prasarana');
-        Route::delete('/{id}/aktif',[IndikatorController::class, 'aktifIndikatorSaranaPrasarana'])->name('operator.indikator.aktif.sarana_prasarana');
-        Route::delete('/{id}/nonaktif',[IndikatorController::class, 'nonaktifIndikatorSaranaPrasarana'])->name('operator.indikator.nonaktif.sarana_prasarana');
-    });
-
-    Route::group(['prefix'  => 'laporan-sarana-prasarana/'],function(){
-        Route::get('/pesan_dan_indikator',[LaporanController::class, 'indikatorSaranaPrasarana'])->name('operator.laporan.per_indikator.sarana_prasarana');
-        Route::get('/pesan_dan_saran',[LaporanController::class, 'saranSaranaPrasarana'])->name('operator.laporan.saran.sarana_prasarana');
-
-        Route::get('evaluasi/export', [LaporanController::class, 'exportSaranaPrasarana'])->name('evaluasi.export.sarana_prasarana');
-    });
-
+        });
+    }
 });
 
 Auth::routes();
 Route::post('/pandalogin',[PandaController::class, 'pandaLogin'])->name('panda.login');
 Route::get('/logout', [PandaController::class, 'authLogout'])->name('authLogout');
-
-
 
 Route::group(['prefix'  => 'perencanaan/'],function(){
     Route::get('/login', function () {

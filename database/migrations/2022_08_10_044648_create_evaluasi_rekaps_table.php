@@ -21,7 +21,7 @@ class CreateEvaluasiRekapsTable extends Migration
             $table->string('pendidikan')->nullable();
             $table->string('pekerjaan')->nullable();
             $table->string('instansi')->nullable();
-            $table->integer('category');
+            $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
 
 
             $table->integer('total_skor')->nullable();

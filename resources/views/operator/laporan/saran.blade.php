@@ -58,16 +58,32 @@
     <div class="col-md-12">
         <div class="box box-primary">
             <div class="box-header with-border">
-            <h3 class="box-title"><i class="fa fa-info-circle"></i>&nbsp;Pesan & Saran</h3>
+            <h3 class="box-title"><i class="fa fa-info-circle"></i>&nbsp;Pesan & Saran <strong
+                class="text-success">{{ $category->nama_category }}</strong></h3>
             </div>
             <div class="box-body">
                 <table class="table table-hover table-striped" id="table">
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>pendidikan</th>
-                            <th>pekerjaan</th>
-                            <th>usia</th>
+                            @if($sarans->pluck('nama')->filter()->isNotEmpty())
+                                <th>Nama</th>
+                            @endif
+                            @if($sarans->pluck('jenis_kelamin')->filter()->isNotEmpty())
+                                <th>Jenis kelamin</th>
+                            @endif
+                            @if($sarans->pluck('pendidikan')->filter()->isNotEmpty())
+                                <th>Pendidikan</th>
+                            @endif
+
+                            @if($sarans->pluck('pekerjaan')->filter()->isNotEmpty())
+                                <th>Pekerjaan</th>
+                            @endif
+
+                            @if($sarans->pluck('usia')->filter()->isNotEmpty())
+                                <th>Usia</th>
+                            @endif
+
                             <th>Pesan / Saran</th>
                             <th>Waktu</th>
                         </tr>
@@ -79,10 +95,27 @@
                         @forelse ($sarans as $saran)
                             <tr>
                                 <td>{{ $no++ }}</td>
-                                <td>{{ $saran->pendidikan }}</td>
-                                <td>{{ $saran->pekerjaan }}</td>
-                                <td>{{ $saran->usia }}</td>
-                                <td>{{ $saran->saran }}</td>
+                                @if($sarans->pluck('nama')->filter()->isNotEmpty())
+                                <td>{{ $saran->nama ?? '-' }}</td>
+                                @endif
+                                @if($sarans->pluck('jenis_kelamin')->filter()->isNotEmpty())
+                                <td>{{ $saran->jenis_kelamin ?? '-' }}</td>
+                                @endif
+                                @if($sarans->pluck('pendidikan')->filter()->isNotEmpty())
+                                <td>{{ $saran->pendidikan ?? '-' }}</td>
+                                @endif
+
+                                @if($sarans->pluck('pekerjaan')->filter()->isNotEmpty())
+                                <td>{{ $saran->pekerjaan ?? '-' }}</td>
+                                @endif
+
+                                @if($sarans->pluck('usia')->filter()->isNotEmpty())
+                                <td>{{ $saran->usia ?? '-' }}</td>
+                                @endif
+
+
+
+                                <td>{{ $saran->saran ?? '-' }}</td>
                                 <td>{{ Carbon\Carbon::parse($saran->created_at)->isoFormat('D MMMM Y') }}</td>
                             </tr>
                         @empty

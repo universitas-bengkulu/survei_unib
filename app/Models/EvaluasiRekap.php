@@ -14,7 +14,12 @@ class EvaluasiRekap extends Model
         'usia',
         'pendidikan',
         'instansi',
-        'category',
+        'category_id',
         'pekerjaan','total_skor','rata_rata'
     ];
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
 }

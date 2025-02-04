@@ -149,19 +149,21 @@
     </style>
 @endpush
 @section('content')
-
     <div class="row">
         <div class="col-md-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fa fa-book"></i>&nbsp;Manajemen Data Indikator Kepuasan Untuk Lulusan</h3>
+                    <h3 class="box-title"><i class="fa fa-book"></i>&nbsp;Manajemen Indikator <strong
+                            class="text-success">{{ $category->nama_category }}</strong></h3>
                 </div>
                 <div class="box-body">
                     <div class="row">
-                        <form action="{{ route('operator.indikator.post.alumni') }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('operator.indikator.post.' . $category->slug) }}" method="POST">
                             {{ csrf_field() }} {{ method_field('POST') }}
                             <div class="form-group col-md-12">
                                 <label for="">Indikator Penilaian</label>
+                                <input type="hidden" name="category_id" id="category_id" value="{{ $category->id }}">
+                                <input type="hidden" name="slug" id="slug" value="{{ $category->slug }}">
                                 <input type="text" name="nama_indikator" id="nama_indikator" class="form-control">
                                 <div>
                                     @if ($errors->has('nama_indikator'))
@@ -169,7 +171,6 @@
                                     @endif
                                 </div>
                             </div>
-
                             <div class="col-md-12 text-center">
                                 <button type="reset" name="reset" class="btn btn-danger btn-sm btn-flat"><i
                                         class="fa fa-refresh"></i>&nbsp;Ulangi</button>
@@ -196,7 +197,7 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Nama Indikator</th>
-                                        <th>Hapus</th>
+                                        <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -207,34 +208,40 @@
                                         <tr>
                                             <td> {{ $no++ }} </td>
                                             <td> {{ $indikator->nama_indikator }} </td>
-
-
                                             <td style="display:inline-block !important;">
                                                 <table>
                                                     <tr>
                                                         <td>
-
                                                             @if ($indikator->ditampilkan == 1)
                                                                 <form
-                                                                    action="{{ route('operator.indikator.aktif.alumni', [$indikator->id]) }}"
+                                                                    action="{{ route('operator.indikator.aktif.' . $category->slug, [$indikator->id, $category->slug]) }}"
                                                                     method="POST">
-                                                                    {{ csrf_field() }} {{ method_field('DELETE') }}
+                                                                    {{ csrf_field() }} {{ method_field('POST') }}
                                                                     <button type="submit"
                                                                         class="btn btn-success btn-sm btn-flat"><i
                                                                             class="fa fa-check"></i>&nbsp; Aktif</button>
                                                                 </form>
                                                             @else
                                                                 <form
-                                                                    action="{{ route('operator.indikator.nonaktif.alumni', [$indikator->id]) }}"
+                                                                    action="{{ route('operator.indikator.nonaktif.' . $category->slug, [$indikator->id, $category->slug]) }}"
                                                                     method="POST">
-                                                                    {{ csrf_field() }} {{ method_field('DELETE') }}
+                                                                    {{ csrf_field() }} {{ method_field('POST') }}
                                                                     <button type="submit"
-                                                                        class="btn btn-danger btn-sm btn-flat"><i
-                                                                            class="fa fa-close"></i>&nbsp; Non-aktif</button>
+                                                                        class="btn btn-warning btn-sm btn-flat"><i
+                                                                            class="fa fa-close"></i>&nbsp;
+                                                                        Non-aktif</button>
                                                                 </form>
                                                             @endif
-
-
+                                                        </td>
+                                                        <td>
+                                                            <form
+                                                                action="{{ route('operator.indikator.delete.' . $category->slug, [$indikator->id, $category->slug]) }}"
+                                                                method="POST">
+                                                                {{ csrf_field() }} {{ method_field('DELETE') }}
+                                                                <button type="submit"
+                                                                    class="btn btn-danger btn-sm btn-flat"><i
+                                                                        class="fa fa-trash"></i>&nbsp; Hapus</button>
+                                                            </form>
                                                         </td>
                                                     </tr>
                                                 </table>

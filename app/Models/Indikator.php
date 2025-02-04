@@ -11,6 +11,6 @@ class Indikator extends Model
     protected $fillable = [
         'nama_indikator',
         'ditampilkan',
-        'category',
+        'category_id',
     ];
 }

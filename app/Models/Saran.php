@@ -15,7 +15,12 @@ class Saran extends Model
         'pendidikan',
         'pekerjaan',
         'instansi',
-        'category',
+        'category_id',
         'saran',
     ];
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
 }

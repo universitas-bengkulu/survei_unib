@@ -44,77 +44,33 @@
                             yang
                             diberikan oleh Universitas Bengkulu.
                         </p>
-                        <div class="mx-auto grid grid-cols-1 gap-x-1 md:gap-x-8 gap-y-10 lg:grid-cols-3 md:grid-cols-2">
-                            <a href="{{ route('dosen-tendik') }}"
-                                class="rounded-md bg-blue-900 duration-300 transform content-div md:p-2 p-1 group shadow-lg hover:shadow-xl">
-                                <div class="bg-white py-6 px-3 shadow-[inset_0px_0px_10px_0px_#000] rounded-md">
-                                    <div
-                                        class="relative   items-end overflow-hidden  grid  group-hover:opacity-25 duration-300 transform">
-                                        <img class="   rounded-md place-self-center h-16"
-                                            src="{{ asset('assets/Logo.svg') }}" alt="Img" />
-                                    </div>
-                                    <div class=" group-hover:opacity-25 duration-200 transform mt-3 px-2 h-10">
-                                        <h2 class="text-gray-800 font-bold text-center line-clamp-2">Survei Kepuasan Dosen
-                                            dan Tendik</h2>
-                                    </div>
-                                    <div
-                                        class="absolute  w-full top-0 left-0  text-center  grid  h-full  opacity-0 group-hover:opacity-100  duration-200 transform">
-                                        <div class="  text-center   place-self-center  ">
-                                            <div
-                                                class="text-center px-10 py-3 mx-auto   text-sm bg-blue-600 rounded-lg hover:bg-blue-500 focus:ring focus:ring-orange-300 focus:ring-opacity-80 duration-300 transform text-white font-bold ">
-                                                Isi
-                                                Survei</div>
+                        <div
+                            class="mx-auto grid grid-cols-1 gap-x-1 md:gap-x-8 gap-y-10 lg:grid-cols-3 md:grid-cols-2 2xl:grid-cols-4">
+                            @foreach ($categories as $category)
+                                <a href="{{ route('survei.'.$category->slug) }}"
+                                    class="rounded-md bg-blue-900 duration-300 transform content-div md:p-2 p-1 group shadow-lg hover:shadow-xl">
+                                    <div class="bg-white py-6 px-3 shadow-[inset_0px_0px_10px_0px_#000] rounded-md">
+                                        <div
+                                            class="relative   items-end overflow-hidden  grid  group-hover:opacity-25 duration-300 transform">
+                                            <img class="   rounded-md place-self-center h-16"
+                                                src="{{ asset('assets/Logo.svg') }}" alt="Img" />
+                                        </div>
+                                        <div class=" group-hover:opacity-25 duration-200 transform mt-3 px-2 h-10">
+                                            <h2 class="text-gray-800 font-bold text-center line-clamp-2">{{$category->nama_category}}</h2>
+                                        </div>
+                                        <div
+                                            class="absolute  w-full top-0 left-0  text-center  grid  h-full  opacity-0 group-hover:opacity-100  duration-200 transform">
+                                            <div class="  text-center   place-self-center  ">
+                                                <div
+                                                    class="text-center px-10 py-3 mx-auto   text-sm bg-blue-600 rounded-lg hover:bg-blue-500 focus:ring focus:ring-orange-300 focus:ring-opacity-80 duration-300 transform text-white font-bold ">
+                                                    Isi
+                                                    Survei</div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </a>
-                            <a href="{{ route('alumni') }}"
-                                class="rounded-md bg-blue-900 duration-300 transform content-div md:p-2 p-1 group shadow-lg hover:shadow-xl">
-                                <div class="bg-white py-6 px-3 shadow-[inset_0px_0px_10px_0px_#000] rounded-md">
-                                    <div
-                                        class="relative   items-end overflow-hidden  grid  group-hover:opacity-25 duration-300 transform">
-                                        <img class="   rounded-md place-self-center h-16"
-                                            src="{{ asset('assets/Logo.svg') }}" alt="Img" />
-                                    </div>
-                                    <div class=" group-hover:opacity-25 duration-200 transform mt-3 px-2 h-10">
-                                        <h2 class="text-gray-800 font-bold text-center line-clamp-2">Survei Kepuasan
-                                            Pengguna Lulusan</h2>
-                                    </div>
-                                    <div
-                                        class="absolute w-full top-0 left-0  text-center  grid  h-full  opacity-0 group-hover:opacity-100  duration-200 transform">
-                                        <div class="  text-center   place-self-center  ">
-                                            <div href="details.html"
-                                                class="text-center px-10 py-3 mx-auto   text-sm bg-blue-600 rounded-lg hover:bg-blue-500 focus:ring focus:ring-orange-300 focus:ring-opacity-80 duration-300 transform text-white font-bold ">
-                                                Isi
-                                                Survei</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                            <a href="{{ route('sarana-prasarana') }}"
-                                class="rounded-md bg-blue-900 duration-300 transform content-div md:p-2 p-1 group shadow-lg hover:shadow-xl">
-                                <div class="bg-white py-6 px-3 shadow-[inset_0px_0px_10px_0px_#000] rounded-md">
-                                    <div
-                                        class="relative   items-end overflow-hidden  grid  group-hover:opacity-25 duration-300 transform">
-                                        <img class="   rounded-md place-self-center h-16"
-                                            src="{{ asset('assets/Logo.svg') }}" alt="Img" />
-                                    </div>
-                                    <div class=" group-hover:opacity-25 duration-200 transform mt-3 px-2 h-10">
-                                        <h2 class="text-gray-800 font-bold text-center line-clamp-2">Survei Kepuasan
-                                            Pengguna Sarana dan Prasarana UNIB
-                                        </h2>
-                                    </div>
-                                    <div
-                                        class="absolute w-full top-0 left-0  text-center  grid  h-full  opacity-0 group-hover:opacity-100  duration-200 transform">
-                                        <div class="  text-center   place-self-center  ">
-                                            <div
-                                                class="text-center px-10 py-3 mx-auto   text-sm bg-blue-600 rounded-lg hover:bg-blue-500 focus:ring focus:ring-orange-300 focus:ring-opacity-80 duration-300 transform text-white font-bold ">
-                                                Isi
-                                                Survei</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
+                                </a>
+                            @endforeach
+
                         </div>
                     </section>
 
