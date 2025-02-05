@@ -14,4 +14,10 @@ class Saran extends Model
     {
         return $this->belongsTo(Category::class);
     }
+
+    public function evaluasiRekap()
+    {
+        return $this->belongsTo(EvaluasiRekap::class);
+    }
+
 }

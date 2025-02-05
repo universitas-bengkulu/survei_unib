@@ -1,14 +1,11 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\DosenController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\IndikatorController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\OperatorController;
 use App\Http\Controllers\PandaController;
-use App\Http\Controllers\PerencanaanController;
-use App\Http\Controllers\TendikController;
 use App\Models\Category;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -76,6 +73,7 @@ Route::group(['prefix'  => 'operator/'],function(){
         Route::group(['prefix'  => 'indikator-'.$category->slug.'/'],function() use ($category) {
             Route::get('/'.base64_encode(date('Ymd').$category->id),[IndikatorController::class, 'indikator'])->name('operator.indikator.'.$category->slug);
             Route::post('/',[IndikatorController::class, 'postIndikator'])->name('operator.indikator.post.'.$category->slug);
+            Route::post('/{id}/update/{slug}',[IndikatorController::class, 'updateIndikator'])->name('operator.indikator.update.'.$category->slug);
             Route::post('/{id}/aktif/{slug}',[IndikatorController::class, 'aktifIndikator'])->name('operator.indikator.aktif.'.$category->slug);
             Route::post('/{id}/nonaktif/{slug}',[IndikatorController::class, 'nonaktifIndikator'])->name('operator.indikator.nonaktif.'.$category->slug);
             Route::delete('/{id}/delete/{slug}',[IndikatorController::class, 'delateIndikator'])->name('operator.indikator.delete.'.$category->slug);
@@ -99,5 +97,4 @@ Route::group(['prefix'  => 'perencanaan/'],function(){
         return view('auth/login_perencanaan');
     })->name('perencanaan.login');
 
-    Route::get('/dashboard',[PerencanaanController::class, 'dashboard'])->name('perencanaan.dashboard');
 });

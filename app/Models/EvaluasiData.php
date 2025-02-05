@@ -5,8 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Evaluasi_data extends Model
+class EvaluasiData extends Model
 {
     use HasFactory;
     protected $guarded = [];
+
+    public function evaluasiRekap()
+    {
+        return $this->belongsTo(EvaluasiRekap::class);
+    }
+
 }

@@ -42,6 +42,23 @@ class IndikatorController extends Controller
         return redirect()->route('operator.indikator.'.$request->slug)->with($notification);
     }
 
+    public function updateIndikator($id, $slug, Request $request){
+        $attributes = [
+            'nama_indikator'   =>  'Nama Indikator',
+        ];
+        $this->validate($request, [
+            'nama_indikator'    =>  'required',
+        ],$attributes);
+
+        $indikator = Indikator::where('id', $id)->first();
+        $indikator->update(['nama_indikator'    =>  htmlspecialchars($request->nama_indikator)]);
+        $notification = array(
+            'message' => 'Berhasil, indikator penilaian berhasil diubah!',
+            'alert-type' => 'success'
+        );
+        return redirect()->route('operator.indikator.'.$slug)->with($notification);
+    }
+
     public function aktifIndikator($id, $slug){
         $indikator = Indikator::where('id', $id)->first();
         $indikator->update(['ditampilkan' => 0]);

@@ -197,6 +197,7 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Nama Indikator</th>
+                                        <th>Ditampilkan</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
@@ -208,35 +209,39 @@
                                         <tr>
                                             <td> {{ $no++ }} </td>
                                             <td> {{ $indikator->nama_indikator }} </td>
+                                            <td>@if ($indikator->ditampilkan == 1)
+                                                <form
+                                                    action="{{ route('operator.indikator.aktif.' . $category->slug, [$indikator->id, $category->slug]) }}"
+                                                    method="POST">
+                                                    {{ csrf_field() }} {{ method_field('POST') }}
+                                                    <button type="submit"
+                                                        class="btn btn-success btn-sm btn-flat"><i
+                                                            class="fa fa-check"></i>&nbsp; Ya</button>
+                                                </form>
+                                            @else
+                                                <form
+                                                    action="{{ route('operator.indikator.nonaktif.' . $category->slug, [$indikator->id, $category->slug]) }}"
+                                                    method="POST">
+                                                    {{ csrf_field() }} {{ method_field('POST') }}
+                                                    <button type="submit"
+                                                        class="btn btn-warning btn-sm btn-flat"><i
+                                                            class="fa fa-close"></i>&nbsp;
+                                                        Tidak</button>
+                                                </form>
+                                            @endif</td>
                                             <td style="display:inline-block !important;">
                                                 <table>
                                                     <tr>
                                                         <td>
-                                                            @if ($indikator->ditampilkan == 1)
-                                                                <form
-                                                                    action="{{ route('operator.indikator.aktif.' . $category->slug, [$indikator->id, $category->slug]) }}"
-                                                                    method="POST">
-                                                                    {{ csrf_field() }} {{ method_field('POST') }}
-                                                                    <button type="submit"
-                                                                        class="btn btn-success btn-sm btn-flat"><i
-                                                                            class="fa fa-check"></i>&nbsp; Aktif</button>
-                                                                </form>
-                                                            @else
-                                                                <form
-                                                                    action="{{ route('operator.indikator.nonaktif.' . $category->slug, [$indikator->id, $category->slug]) }}"
-                                                                    method="POST">
-                                                                    {{ csrf_field() }} {{ method_field('POST') }}
-                                                                    <button type="submit"
-                                                                        class="btn btn-warning btn-sm btn-flat"><i
-                                                                            class="fa fa-close"></i>&nbsp;
-                                                                        Non-aktif</button>
-                                                                </form>
-                                                            @endif
+                                                            <button type="button" class="btn btn-warning btn-sm btn-flat" data-toggle="modal" data-target="#editModal{{ $indikator->id }}">
+                                                                <i class="fa fa-edit"></i>&nbsp; Edit
+                                                            </button>
                                                         </td>
                                                         <td>
+
                                                             <form
                                                                 action="{{ route('operator.indikator.delete.' . $category->slug, [$indikator->id, $category->slug]) }}"
-                                                                method="POST">
+                                                                method="POST" style="display:inline;">
                                                                 {{ csrf_field() }} {{ method_field('DELETE') }}
                                                                 <button type="submit"
                                                                     class="btn btn-danger btn-sm btn-flat"><i
@@ -247,6 +252,36 @@
                                                 </table>
                                             </td>
                                         </tr>
+
+                                        <!-- Edit Modal -->
+                                        <div class="modal fade" id="editModal{{ $indikator->id }}" tabindex="-1" role="dialog" aria-labelledby="editModalLabel{{ $indikator->id }}" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h3 class="modal-title" id="editModalLabel{{ $indikator->id }}"><strong>Edit Indikator</strong></h3>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <form action="{{ route('operator.indikator.update.' . $category->slug, [$indikator->id, $category->slug]) }}" method="POST">
+                                                        {{ csrf_field() }} {{ method_field('POST') }}
+                                                        <div class="modal-body">
+                                                            <div class="form-group">
+                                                                <label for="nama_indikator">Nama Indikator</label>
+                                                                <input type="text" name="nama_indikator" id="nama_indikator" class="form-control" value="{{ $indikator->nama_indikator }}">
+                                                                @if ($errors->has('nama_indikator'))
+                                                                    <small class="form-text text-danger">{{ $errors->first('nama_indikator') }}</small>
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                            <button type="submit" class="btn btn-primary">Save changes</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
                                     @endforeach
                                 </tbody>
                             </table>

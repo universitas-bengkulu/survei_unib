@@ -55,15 +55,15 @@ class LaporanController extends Controller
         $idd = $request->segment(4);
         $id = base64_decode($idd);
         $category_id = substr($id, 8);
-        $category = Category::where('id', $category_id)->first();
-        $sarans = Saran::select('pendidikan','pekerjaan','nama', 'saran','created_at')->orderBy('pendidikan')->where('category_id', $category_id)->orderBy('pekerjaan')->orderBy('created_at','desc')->get();
+        $category = Category::with('formulirs')->where('id', $category_id)->first();
+        $sarans = Saran::with(['evaluasiRekap.evaluasiDatas'])->where('category_id', $category_id)->orderBy('sarans.created_at','desc')->get();
+
 
         return view('operator/laporan.saran',[
             'sarans'    => $sarans,
             'category'  => $category,
         ]);
     }
-
 
     //function export
 
@@ -77,7 +77,7 @@ class LaporanController extends Controller
 
         // Start building the pivot query
         $query = DB::table('evaluasis')
-            ->select('evaluasis.nama')
+            ->select('evaluasis.evaluasi_rekap_id')
             ->join('indikators', 'indikators.id', '=', 'evaluasis.indikator_id')
             ->where('evaluasis.category_id', $category_id);
 
@@ -92,8 +92,8 @@ class LaporanController extends Controller
 
         // Add total column
         $query->selectRaw('SUM(skor) as total')
-            ->groupBy('nama')
-            ->orderBy('nama');
+            ->groupBy('evaluasi_rekap_id')
+            ->orderBy('evaluasi_rekap_id');
 
         return $query;
     }
@@ -106,7 +106,7 @@ class LaporanController extends Controller
             ->orderBy('id')
             ->get();
 
-        $select = ['nama'];
+        $select = ['evaluasi_rekap_id'];
 
         foreach ($questions as $question) {
             $select[] = DB::raw("MAX(CASE WHEN indikator_id = {$question->id} THEN skor END) as '{$question->id}'");
@@ -116,8 +116,8 @@ class LaporanController extends Controller
 
         return DB::table('evaluasis')
             ->select($select)->where('category_id', $category_id)
-            ->groupBy('nama')
-            ->orderBy('nama');
+            ->groupBy('evaluasi_rekap_id')
+            ->orderBy('evaluasi_rekap_id');
     }
 
     // Get results

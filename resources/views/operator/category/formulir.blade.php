@@ -153,7 +153,7 @@
         <div class="col-md-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fa fa-book"></i>&nbsp;Manajemen Formulir  </h3>
+                    <h3 class="box-title"><i class="fa fa-book"></i>&nbsp;Manajemen Formulir </h3>
                 </div>
                 <div class="box-body">
                     <div class="row">
@@ -161,7 +161,8 @@
                             {{ csrf_field() }} {{ method_field('POST') }}
                             <div class="form-group col-md-12">
                                 <label for="">Nama Inputan (Label)</label>
-                                <input type="hidden" name="id" id="id" value="{{$category_id}}" class="form-control">
+                                <input type="hidden" name="id" id="id" value="{{ $category_id }}"
+                                    class="form-control">
                                 <input type="text" name="label" id="label" class="form-control">
                                 <div>
                                     @if ($errors->has('label'))
@@ -169,12 +170,24 @@
                                     @endif
                                 </div>
                             </div>
-                            <div class="form-group col-md-12">
+                            <div class="form-group col-md-6">
                                 <label for="">Nama Variable</label>
                                 <input type="text" name="variable" id="variable" class="form-control">
                                 <div>
                                     @if ($errors->has('variable'))
                                         <small class="form-text text-danger">{{ $errors->first('variable') }}</small>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="">Wajib Isi (required)</label>
+                                <select type="text" name="wajib" id="wajib" class="form-control">
+                                    <option value="1">Ya</option>
+                                    <option value="0">Tidak</option>
+                                </select>
+                                <div>
+                                    @if ($errors->has('wajib'))
+                                        <small class="form-text text-danger">{{ $errors->first('wajib') }}</small>
                                     @endif
                                 </div>
                             </div>
@@ -205,6 +218,7 @@
                                         <th>No</th>
                                         <th>Label</th>
                                         <th>Variable</th>
+                                        <th>Required</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
@@ -218,11 +232,20 @@
                                             <td> {{ $no++ }} </td>
                                             <td> {{ $item->label }} </td>
                                             <td> {{ $item->variable }} </td>
+                                            <td>
+                                                @if ($item->required == 1)
+                                                    <span class="label label-success">Ya</span>
+                                                @else
+                                                    <span class="label label-danger">Tidak</span>
+                                                @endif
+                                            </td>
                                             <td style="display:inline-block !important;">
                                                 <table>
                                                     <tr>
                                                         <td>
-                                                            <button type="button" class="btn btn-warning btn-sm btn-flat" data-toggle="modal" data-target="#editModal{{ $item->id }}">
+                                                            <button type="button" class="btn btn-warning btn-sm btn-flat"
+                                                                data-toggle="modal"
+                                                                data-target="#editModal{{ $item->id }}">
                                                                 <i class="fa fa-edit"></i>&nbsp; Ubah
                                                             </button>
                                                         </td>
@@ -243,49 +266,80 @@
                                         </tr>
 
                                         <!-- Edit Modal -->
-                                        <div class="modal fade" id="editModal{{ $item->id }}" tabindex="-1" role="dialog" aria-labelledby="editModalLabel{{ $item->id }}" aria-hidden="true">
+                                        <div class="modal fade" id="editModal{{ $item->id }}" tabindex="-1"
+                                            role="dialog" aria-labelledby="editModalLabel{{ $item->id }}"
+                                            aria-hidden="true">
                                             <div class="modal-dialog" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h3 class="modal-title" id="editModalLabel{{ $item->id }}"><strong>Ubah Jenis Survei</strong></h3>
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <h3 class="modal-title" id="editModalLabel{{ $item->id }}">
+                                                            <strong>Ubah Jenis Survei</strong>
+                                                        </h3>
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close">
                                                             <span aria-hidden="true">&times;</span>
                                                         </button>
                                                     </div>
-                                                    <form action="{{ route('operator.category.formulir.update') }}" method="POST">
+                                                    <form action="{{ route('operator.category.formulir.update') }}"
+                                                        method="POST">
                                                         {{ csrf_field() }} {{ method_field('POST') }}
                                                         <div class="modal-body">
                                                             <div class="form-group col-md-12">
                                                                 <label for="">Nama Inputan (Label)</label>
-                                                                <input type="hidden" name="id" id="id" value="{{ $item->id }}" class="form-control">
-                                                                <input type="hidden" name="category_id" id="category_id" value="{{$category_id}}" class="form-control">
+                                                                <input type="hidden" name="id" id="id"
+                                                                    value="{{ $item->id }}" class="form-control">
+                                                                <input type="hidden" name="category_id" id="category_id"
+                                                                    value="{{ $category_id }}" class="form-control">
 
-                                                                <input type="text" value="{{ $item->label }}" name="label" id="label" class="form-control">
+                                                                <input type="text" value="{{ $item->label }}"
+                                                                    name="label" id="label" class="form-control">
                                                                 <div>
                                                                     @if ($errors->has('label'))
-                                                                        <small class="form-text text-danger">{{ $errors->first('label') }}</small>
+                                                                        <small
+                                                                            class="form-text text-danger">{{ $errors->first('label') }}</small>
                                                                     @endif
                                                                 </div>
                                                             </div>
                                                             <div class="form-group col-md-12">
                                                                 <label for="">Nama Variable</label>
-                                                                <input type="text" value="{{ $item->variable }}" name="variable" id="variable" class="form-control">
+                                                                <input type="text" value="{{ $item->variable }}"
+                                                                    name="variable" id="variable" class="form-control">
                                                                 <div>
                                                                     @if ($errors->has('variable'))
-                                                                        <small class="form-text text-danger">{{ $errors->first('variable') }}</small>
+                                                                        <small
+                                                                            class="form-text text-danger">{{ $errors->first('variable') }}</small>
+                                                                    @endif
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group col-md-12">
+                                                                <label for="">Wajib Isi (required)</label>
+                                                                <select type="text" name="wajib" id="wajib"
+                                                                    class="form-control">
+                                                                    <option value="1"
+                                                                        {{ $item->required == 1 ? 'selected' : '' }}>Ya
+                                                                    </option>
+                                                                    <option value="0"
+                                                                        {{ $item->required == 0 ? 'selected' : '' }}>Tidak
+                                                                    </option>
+                                                                </select>
+                                                                <div>
+                                                                    @if ($errors->has('wajib'))
+                                                                        <small
+                                                                            class="form-text text-danger">{{ $errors->first('wajib') }}</small>
                                                                     @endif
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-                                                            <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                                                            <button type="button" class="btn btn-secondary"
+                                                                data-dismiss="modal">Tutup</button>
+                                                            <button type="submit" class="btn btn-primary">Simpan
+                                                                Perubahan</button>
                                                         </div>
                                                     </form>
                                                 </div>
                                             </div>
                                         </div>
-
                                     @endforeach
                                 </tbody>
                             </table>

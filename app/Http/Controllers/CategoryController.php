@@ -108,15 +108,18 @@ class CategoryController extends Controller
         $attributes = [
             'label'   =>  'Label formulir',
             'variable'   =>  'Variable formulir',
+            'wajib'   =>  'Required formulir',
         ];
         $this->validate($request, [
             'label'    =>  'required',
             'variable'    =>  'required',
+            'wajib'    =>  'required',
         ],$attributes);
 
         Formulir::create([
             'category_id'    =>  $request->id,
             'label'    =>  htmlspecialchars($request->label),
+            'required'    =>  $request->wajib,
             'variable'    =>  htmlspecialchars($request->variable),
         ]);
 
@@ -131,16 +134,19 @@ class CategoryController extends Controller
         $attributes = [
             'label'   =>  'Label formulir',
             'variable'   =>  'Variable formulir',
+            'wajib'   =>  'Required formulir',
         ];
         $this->validate($request, [
             'label'    =>  'required',
             'variable'    =>  'required',
+            'wajib'    =>  'required',
         ],$attributes);
 
         $formulir = Formulir::findOrFail($request->id);
         $formulir->update([
             'label'    =>  htmlspecialchars($request->label),
             'variable'    =>  htmlspecialchars($request->variable),
+            'required'    =>  $request->wajib,
         ]);
 
         $notification = array(

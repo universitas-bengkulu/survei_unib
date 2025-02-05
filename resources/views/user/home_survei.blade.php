@@ -75,13 +75,13 @@
                                         <div class="mb-3   ">
 
                                             <label for="{{$form->variable}}"
-                                                class=" after:content-['*'] after:text-red-500 font-semibold  text-white  after:ml-2 text-sm pb-1">{{$form->label}}</label>
+                                                class=" {{$form->required==1? "after:content-['*'] after:text-red-500" : ''}}  font-semibold  text-white  after:ml-2 text-sm pb-1">{{$form->label}}</label>
                                             <input type="text" id="{{$form->variable}}" name="{{$form->variable}}"
                                                 class="   w-full rounded-lg border-2  border-white
                                                 bg-white px-3 py-2.5 text-sm font-normal transition-all duration-500   focus:border-white
                                                 focus:ring-white
                                                 focus:shadow-[-4px_4px_10px_0px_#000]  "
-                                                placeholder="Masukan {{$form->label}}" required/>
+                                                placeholder="Masukan {{$form->label}}" {{$form->required==1? 'required' : ''}}/>
                                             @if ($errors->has($form->variable))
                                                 <p class="text-red-500 text-sm font-bold">{{ $errors->first($form->variable) }}</p>
                                             @endif

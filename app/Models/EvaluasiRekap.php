@@ -14,4 +14,14 @@ class EvaluasiRekap extends Model
     {
         return $this->belongsTo(Category::class);
     }
+
+    public function sarans()
+    {
+        return $this->hasMany(Saran::class);
+    }
+
+    public function evaluasiDatas()
+    {
+        return $this->hasMany(EvaluasiData::class, 'evaluasi_rekap_id');
+    }
 }

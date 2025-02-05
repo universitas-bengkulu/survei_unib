@@ -15,12 +15,7 @@ class CreateSaransTable extends Migration
     {
         Schema::create('sarans', function (Blueprint $table) {
             $table->id();
-            $table->string('nama')->nullable();
-            $table->string('jenis_kelamin')->nullable();
-            $table->string('usia')->nullable();
-            $table->string('pendidikan')->nullable();
-            $table->string('pekerjaan')->nullable();
-            $table->string('instansi')->nullable();
+            $table->foreignId('evaluasi_rekap_id')->constrained('evaluasi_rekaps')->onDelete('cascade');
 
             $table->text('saran')->nullable();
             $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');

@@ -13,7 +13,7 @@ class CreateEvaluasiDatasTable extends Migration
      */
     public function up()
     {
-        Schema::create('evaluasi_datas', function (Blueprint $table) {
+        Schema::create('evaluasi_data', function (Blueprint $table) {
             $table->id();
             $table->foreignId('evaluasi_rekap_id')->constrained('evaluasi_rekaps')->onDelete('cascade');
             $table->string('variable');
@@ -30,6 +30,6 @@ class CreateEvaluasiDatasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('evaluasi_datas');
+        Schema::dropIfExists('evaluasi_data');
     }
 }
