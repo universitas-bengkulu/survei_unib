@@ -1,14 +1,21 @@
 @extends('layouts.user')
 @section('back')
-<div class="hidden md:block">
-    <a href="/" class="px-4 py-2 bg-red-500 hover:bg-red-700 transform duration-200   rounded-md text-sm text-white inline-block  ">
-    <div class="flex">
-        <svg  class="w-5 h-5" fill="currentColor" class="bi bi-arrow-left-short" viewBox="0 0 16 16"> <path fill-rule="evenodd" d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5z"/> </svg> <span >Kembali</span></div></a>
-</div>
+    <div class="hidden md:block">
+        <a href="/"
+            class="px-4 py-2 bg-red-500 hover:bg-red-700 transform duration-200   rounded-md text-sm text-white inline-block  ">
+            <div class="flex">
+                <svg class="w-5 h-5" fill="currentColor" class="bi bi-arrow-left-short" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                        d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5z" />
+                </svg> <span>Kembali</span>
+            </div>
+        </a>
+    </div>
 @endsection
 @section('content')
-    <div class="  bg-blue-900 relative" >
-        <img src="{{ asset('assets/images/business-background-16.png') }}" alt="bg-img" class="w-full h-full object-cover    brightness-50 absolute z-0" />
+    <div class="  bg-blue-900 relative">
+        <img src="{{ asset('assets/images/business-background-16.png') }}" alt="bg-img"
+            class="w-full h-full object-cover    brightness-50 absolute z-0" />
         <section aria-labelledby="products-heading" class="pb-32 p-6  z-10 relative">
             <div class="grid">
                 <img class=" place-self-center    h-20" src="{{ asset('assets/Logo.svg') }}" alt="Img" />
@@ -60,9 +67,8 @@
 
                     </div>
                 @else
-                    <div
-                        class=" w-full mt-6 main-question mb-8 flex flex-col divide-y text-gray-800  text-base">
-                        <form action="{{ route($categories->slug.'.post') }}" method="post">
+                    <div class=" w-full mt-6 main-question mb-8 flex flex-col divide-y text-gray-800  text-base">
+                        <form action="{{ route($categories->slug . '.post') }}" method="post">
                             @csrf
                             <input type="hidden" name="jumlah" value="{{ count($indikators) }}">
                             <input type="hidden" name="category_id" value="{{ $categories->id }}">
@@ -71,22 +77,89 @@
 
                                 <div class="mt-6 px-6 py-4   w-full">
                                     <div class="  -mt-6 lg:px-6      grid grid-cols-1  ">
-                                        @foreach ($formulir as $form )
-                                        <div class="mb-3   ">
+                                        @foreach ($formulir as $form)
+                                            @if ($form->type == 'select')
+                                                <div class="mb-3   ">
 
-                                            <label for="{{$form->variable}}"
-                                                class=" {{$form->required==1? "after:content-['*'] after:text-red-500" : ''}}  font-semibold  text-white  after:ml-2 text-sm pb-1">{{$form->label}}</label>
-                                            <input type="text" id="{{$form->variable}}" name="{{$form->variable}}"
-                                                class="   w-full rounded-lg border-2  border-white
-                                                bg-white px-3 py-2.5 text-sm font-normal transition-all duration-500   focus:border-white
-                                                focus:ring-white
-                                                focus:shadow-[-4px_4px_10px_0px_#000]  "
-                                                placeholder="Masukan {{$form->label}}" {{$form->required==1? 'required' : ''}}/>
-                                            @if ($errors->has($form->variable))
-                                                <p class="text-red-500 text-sm font-bold">{{ $errors->first($form->variable) }}</p>
+                                                    <label for="{{ $form->variable }}"
+                                                        class=" {{ $form->required == 1 ? "after:content-['*'] after:text-red-500" : '' }}  font-semibold  text-white  after:ml-2 text-sm pb-1">{{ $form->label }}</label>
+                                                    <select id="{{ $form->variable }}" name="{{ $form->variable }}"
+                                                        class="   w-full rounded-lg border-2  border-white
+                                                    bg-white px-3 py-2.5 text-sm font-normal transition-all duration-500   focus:border-white
+                                                    focus:ring-white
+                                                    focus:shadow-[-4px_4px_10px_0px_#000]  "
+                                                        {{ $form->required == 1 ? 'required' : '' }}>
+                                                        <option value="" disabled selected>--- Pilih {{ $form->label }}  --- </option>
+                                                        @foreach (explode(';', $form->additional) as $option)
+                                                            <option value="{{ $option }}">{{ $option }}
+                                                            </option>
+                                                        @endforeach
+
+                                                    </select>
+                                                    @if ($errors->has($form->variable))
+                                                        <p class="text-red-500 text-sm font-bold">
+                                                            {{ $errors->first($form->variable) }}</p>
+                                                    @endif
+                                                </div>
+                                            @elseif ($form->type == 'radio')
+                                                <div class="mb-3">
+                                                    <label for="{{ $form->variable }}"
+                                                        class="{{ $form->required == 1 ? "after:content-['*'] after:text-red-500" : '' }} font-semibold text-white after:ml-2 text-sm pb-1">{{ $form->label }}</label>
+                                                    <div class="bg-white rounded-md p-4">
+                                                        @foreach (explode(';', $form->additional) as $option)
+                                                            <div class="flex items-center mb-2">
+                                                                <input type="radio"
+                                                                    id="{{ $form->variable }}_{{ $option }}_{{ $form->id }}"
+                                                                    name="{{ $form->variable }}"
+                                                                    value="{{ $option }}"
+                                                                    {{ $form->required == 1 ? 'required' : '' }}
+                                                                    class="h-4 w-4 border-gray-300 focus:ring-2 focus:ring-blue-300">
+                                                                <label
+                                                                    for="{{ $form->variable }}_{{ $option }}_{{ $form->id }}"
+                                                                    class="ml-2 text-sm font-medium text-black">{{ $option }}</label>
+                                                            </div>
+                                                        @endforeach
+                                                    </div>
+                                                    @if ($errors->has($form->variable))
+                                                        <p class="text-red-500 text-sm font-bold">
+                                                            {{ $errors->first($form->variable) }}</p>
+                                                    @endif
+                                                </div>
+                                            @elseif ($form->type == 'checkbox')
+                                                <label for="{{ $form->variable }}"
+                                                    class="{{ $form->required == 1 ? "after:content-['*'] after:text-red-500" : '' }} font-semibold text-white after:ml-2 text-sm pb-1">{{ $form->label }}</label>
+                                                <div class="bg-white rounded-md p-4">
+                                                    @foreach (explode(';', $form->additional) as $option)
+                                                        <div class="flex items-center mb-2">
+                                                            <input type="checkbox"
+                                                                id="{{ $form->variable }}_{{ $option }}"
+                                                                name="{{ $form->variable }}[]" value="{{ $option }}"
+                                                                class="h-4 w-4 border-gray-300 focus:ring-2 focus:ring-blue-300">
+                                                            <label
+                                                                for="{{ $form->variable }}_{{ $option }}"
+                                                                class="ml-2 text-sm font-medium text-black">{{ $option }} </label>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            @else
+                                                <div class="mb-3   ">
+
+                                                    <label for="{{ $form->variable }}"
+                                                        class=" {{ $form->required == 1 ? "after:content-['*'] after:text-red-500" : '' }}  font-semibold  text-white  after:ml-2 text-sm pb-1">{{ $form->label }}</label>
+                                                    <input type="{{ $form->type }}" id="{{ $form->variable }}"
+                                                        name="{{ $form->variable }}"
+                                                        class="   w-full rounded-lg border-2  border-white
+                                                    bg-white px-3 py-2.5 text-sm font-normal transition-all duration-500   focus:border-white
+                                                    focus:ring-white
+                                                    focus:shadow-[-4px_4px_10px_0px_#000]  "
+                                                        placeholder="Masukan {{ $form->label }}"
+                                                        {{ $form->required == 1 ? 'required' : '' }} />
+                                                    @if ($errors->has($form->variable))
+                                                        <p class="text-red-500 text-sm font-bold">
+                                                            {{ $errors->first($form->variable) }}</p>
+                                                    @endif
+                                                </div>
                                             @endif
-                                        </div>
-
                                         @endforeach
 
                                         {{-- <div class="mb-3">
@@ -122,7 +195,7 @@
                                     <div class="  -mt-6 px-6 ">
 
 
-                                        <p class="text-sm    "> {{$categories->nama_category}} Universitas
+                                        <p class="text-sm    "> {{ $categories->nama_category }} Universitas
                                             Bengkulu (UNIB).
                                             Beri penilaian terhadap item-item penilaian di bawah ini dengan cara memilih
                                             salah
@@ -150,7 +223,7 @@
                                 <div>
                                     <div
                                         class=" text-white   bg-blue-800  inline-block    items-center relative rounded-xl     p-4      transform duration-500 ease-in mx-4 md:mx-0  md:left-4 -top-10 lg:text-xl text-sm font-sans lg:font-bold ">
-                                         {{$categories->nama_category}} Universitas Bengkulu Tahun
+                                        {{ $categories->nama_category }} Universitas Bengkulu Tahun
                                         <script>
                                             document.write(new Date().getFullYear())
                                         </script>
@@ -164,7 +237,8 @@
                                             <div class="item px-6 py-2 w-full" x-data="{ isOpen: false }">
                                                 <p href="#" class="flex   justify-between text-xl font-semibold"
                                                     @click.prevent="isOpen = true">
-                                                <h4 class="font-semibold">{{ $i }}. {{ $item->nama_indikator }}
+                                                <h4 class="font-semibold">{{ $i }}.
+                                                    {{ $item->nama_indikator }}
                                                 </h4>
                                                 </p>
                                                 <div class="mt-2 duration-300 transform">
@@ -173,10 +247,12 @@
                                                             <!-- 5  -->
                                                             <div class="flex  mb-2">
                                                                 <input type="radio" id="nilai_{{ $item->id }}_5"
-                                                                    name="nilai{{ $item->id }}" value="5" required
+                                                                    name="nilai{{ $item->id }}" value="5"
+                                                                    required
                                                                     class="h-4 w-4 border-gray-300 mt-[2px] focus:ring-2 focus:ring-blue-300"
                                                                     aria-labelledby="nilai_{{ $item->id }}_5"
-                                                                    aria-describedby="nilai_{{ $item->id }}_5" checked>
+                                                                    aria-describedby="nilai_{{ $item->id }}_5"
+                                                                    checked>
                                                                 <label for="nilai_{{ $item->id }}_5"
                                                                     class="text-sm font-medium text-gray-900   ml-2 block">
                                                                     Sangat baik
@@ -232,7 +308,7 @@
                                                                     required
                                                                     class="h-4 w-4 border-gray-300 mt-[2px] focus:ring-2 focus:ring-blue-300"
                                                                     aria-labelledby="nilai_{{ $item->id }}_1"
-                                                                    aria-describedby="nilai_{{ $item->id }}_1"  >
+                                                                    aria-describedby="nilai_{{ $item->id }}_1">
                                                                 <label for="nilai_{{ $item->id }}_1"
                                                                     class="text-sm font-medium text-gray-900    ml-2 block">
                                                                     Sangat Kurang
@@ -248,14 +324,13 @@
                                         @endforeach
 
                                         <div class=" md:mx-4 lg:mx-6 py-6">
-                                            <label for="comment"
-                                                class="block mb-2  font-bold text-gray-900  ">Masukan
-                                                Pesan dan Saran Anda Untuk  {{$categories->nama_category}} Universitas
+                                            <label for="comment" class="block mb-2  font-bold text-gray-900  ">Masukan
+                                                Pesan dan Saran Anda Untuk {{ $categories->nama_category }} Universitas
                                                 Bengkulu
                                                 <span class="text-green-500 text-sm font-normal">(Optional)</span></label>
                                             <textarea name="saran" id="saran" rows="4"
                                                 class="block p-2.5 w-full  text-gray-900   rounded-lg   border-[#294DAA] border-2 focus:ring-blue-500 focus:border-blue-500  "
-                                                placeholder="Masukan Saran {{$categories->nama_category}}"></textarea>
+                                                placeholder="Masukan Saran {{ $categories->nama_category }}"></textarea>
                                         </div>
                                         <div class="grid">
                                             <input type="submit" value="SIMPAN SURVEI" name="simpan"
@@ -275,14 +350,14 @@
 @endsection
 
 @push('scripts')
-<script>
-    @if(Session::has('message'))
-        Swal.fire({
-            title: "{{ Session::get('titel') }}",
-            text: "{{ Session::get('message') }}",
-            icon: "{{ Session::get('alert-type') }}",
-            button: "Ok",
-        });
-    @endif
-</script>
+    <script>
+        @if (Session::has('message'))
+            Swal.fire({
+                title: "{{ Session::get('titel') }}",
+                text: "{{ Session::get('message') }}",
+                icon: "{{ Session::get('alert-type') }}",
+                button: "Ok",
+            });
+        @endif
+    </script>
 @endpush

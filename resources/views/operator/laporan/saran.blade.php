@@ -81,7 +81,18 @@
                             <tr>
                                 <td>{{ $no++ }}</td>
                                 @foreach ($saran->evaluasiRekap->evaluasiDatas as $data)
-                                    <td>{{ $data->isi }}</td>
+                                    <td>
+                                        @if (strpos($data->isi, ';') !== false)
+                                            <ul>
+                                                @foreach (explode(';', $data->isi) as $list)
+                                                    <li>{{ $list }}</li>
+                                                @endforeach
+                                            </ul>
+                                        @else
+                                            {{ $data->isi }}
+                                        @endif
+
+                                    </td>
                                 @endforeach
                                 <td class="bg-info">{{ $saran->saran ?? '-' }}</td>
                                 <td>{{ Carbon\Carbon::parse($saran->created_at)->isoFormat('D MMMM Y') }}</td>

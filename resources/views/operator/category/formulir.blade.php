@@ -153,7 +153,8 @@
         <div class="col-md-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fa fa-book"></i>&nbsp;Manajemen Formulir </h3>
+                    <h3 class="box-title"><i class="fa fa-book"></i>&nbsp;Manajemen Formulir <strong
+                        class="text-success">{{ $category->nama_category }}</strong></h3>
                 </div>
                 <div class="box-body">
                     <div class="row">
@@ -163,7 +164,7 @@
                                 <label for="">Nama Inputan (Label)</label>
                                 <input type="hidden" name="id" id="id" value="{{ $category_id }}"
                                     class="form-control">
-                                <input type="text" name="label" id="label" class="form-control">
+                                <input type="text" name="label" id="label" class="form-control" required>
                                 <div>
                                     @if ($errors->has('label'))
                                         <small class="form-text text-danger">{{ $errors->first('label') }}</small>
@@ -172,7 +173,7 @@
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="">Nama Variable</label>
-                                <input type="text" name="variable" id="variable" class="form-control">
+                                <input type="text" name="variable" id="variable" class="form-control" required>
                                 <div>
                                     @if ($errors->has('variable'))
                                         <small class="form-text text-danger">{{ $errors->first('variable') }}</small>
@@ -181,7 +182,7 @@
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="">Wajib Isi (required)</label>
-                                <select type="text" name="wajib" id="wajib" class="form-control">
+                                <select type="text" name="wajib" id="wajib" class="form-control" required>
                                     <option value="1">Ya</option>
                                     <option value="0">Tidak</option>
                                 </select>
@@ -191,6 +192,70 @@
                                     @endif
                                 </div>
                             </div>
+                            <div class="form-group col-md-12">
+                                <label for="">Type Inputan</label>
+                                <select type="text" name="type" id="type" class="form-control" required>
+                                    <option value="text">Text</option>
+                                    <option value="date">Date</option>
+                                    <option value="email">Email</option>
+                                    <option value="number">Number</option>
+                                    <option value="radio">Radio</option>
+                                    <option value="checkbox">Checkbox</option>
+                                    <option value="select">Select</option>
+                                </select>
+                                <div>
+                                    @if ($errors->has('type'))
+                                        <small class="form-text text-danger">{{ $errors->first('type') }}</small>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="form-group col-md-12" id="options-container" style="display: none;">
+                                <label for="options">Options</label>
+                                <input type="text" name="options[]" class="form-control mb-2" placeholder="Option 1">
+                                <input type="text" name="options[]" class="form-control mb-2" placeholder="Option 2">
+                                <button type="button" class="btn btn-success btn-sm" id="add-option"><i class="fa fa-plus"></i> Add Option</button>
+                                <button type="button" class="btn btn-danger btn-sm" id="delete-option"><i class="fa fa-minus"></i> Delete Option</button>
+                            </div>
+                            <script>
+                                document.addEventListener('DOMContentLoaded', function () {
+                                    const typeInput = document.getElementById('type');
+                                    const optionsContainer = document.getElementById('options-container');
+                                    const addOptionButton = document.getElementById('add-option');
+
+                                    typeInput.addEventListener('change', function () {
+                                        if (this.value === 'radio' || this.value === 'checkbox' || this.value === 'select') {
+                                            optionsContainer.style.display = 'block';
+                                        } else {
+                                            optionsContainer.style.display = 'none';
+                                        }
+                                    });
+
+                                    addOptionButton.addEventListener('click', function () {
+                                        const newOption = document.createElement('input');
+                                        newOption.type = 'text';
+                                        newOption.name = 'options[]';
+                                        newOption.className = 'form-control mb-2';
+                                        newOption.placeholder = `Option ${optionsContainer.querySelectorAll('input').length + 1}`;
+                                        optionsContainer.insertBefore(newOption, addOptionButton);
+                                    });
+                                });
+                            </script>
+
+
+                            <script>
+                                document.addEventListener('DOMContentLoaded', function () {
+                                    const deleteOptionButton = document.getElementById('delete-option');
+                                    const optionsContainer = document.getElementById('options-container');
+
+                                    deleteOptionButton.addEventListener('click', function () {
+                                        const options = optionsContainer.querySelectorAll('input[name="options[]"]');
+                                        if (options.length > 2) {
+                                            optionsContainer.removeChild(options[options.length - 1]);
+                                        }
+                                    });
+                                });
+                            </script>
+
                             <div class="col-md-12 text-center">
                                 <button type="reset" name="reset" class="btn btn-danger btn-sm btn-flat"><i
                                         class="fa fa-refresh"></i>&nbsp;Ulangi</button>
@@ -218,6 +283,7 @@
                                         <th>No</th>
                                         <th>Label</th>
                                         <th>Variable</th>
+                                        <th>Type</th>
                                         <th>Required</th>
                                         <th>Aksi</th>
                                     </tr>
@@ -232,6 +298,16 @@
                                             <td> {{ $no++ }} </td>
                                             <td> {{ $item->label }} </td>
                                             <td> {{ $item->variable }} </td>
+                                            <td> {{ $item->type }}
+                                                @if ($item->type=='select')
+                                                    <select>
+                                                        <option>Example</option>
+                                                    </select>
+
+                                                @else
+                                                    <input type="{{ $item->type }}" value="{{ $item->type }}">
+                                                @endif
+                                                 </td>
                                             <td>
                                                 @if ($item->required == 1)
                                                     <span class="label label-success">Ya</span>

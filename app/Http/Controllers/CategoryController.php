@@ -96,10 +96,12 @@ class CategoryController extends Controller
 
 
     public function formulir ($id){
-        $formulir = formulir::where('category_id',$id)->get();
+        $formulir = Formulir::where('category_id',$id)->get();
+        $category  = Category::where('id', $id)->first();
         return view('operator.category.formulir',[
             'formulir'      => $formulir,
             'category_id'   => $id,
+            'category'   => $category,
         ]);
     }
 
@@ -109,17 +111,21 @@ class CategoryController extends Controller
             'label'   =>  'Label formulir',
             'variable'   =>  'Variable formulir',
             'wajib'   =>  'Required formulir',
+            'type'   =>  'Type formulir',
         ];
         $this->validate($request, [
             'label'    =>  'required',
             'variable'    =>  'required',
             'wajib'    =>  'required',
-        ],$attributes);
+            'type'    =>  'required',
 
+        ],$attributes);
         Formulir::create([
             'category_id'    =>  $request->id,
             'label'    =>  htmlspecialchars($request->label),
             'required'    =>  $request->wajib,
+            'type'    =>  $request->type,
+            'additional'    =>  htmlspecialchars(implode('; ', $request->options)),
             'variable'    =>  htmlspecialchars($request->variable),
         ]);
 

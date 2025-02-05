@@ -90,10 +90,17 @@ class HomeController extends Controller
 
 
             foreach ($formulir as $item) {
+                if($item->variable == 'checkbox'){
+                    $isi = implode('; ', $request->options);
+                }
+                else {
+                    $input = $request->input($item->variable);
+                    $isi = is_array($input) ? implode('; ', $input) : htmlspecialchars($input);
+                }
                 $data_user[] = array(
                     'evaluasi_rekap_id' => $last_id,
                     'variable'   => htmlspecialchars($item->variable),
-                    'isi' =>  htmlspecialchars($request->input($item->variable)),
+                    'isi' =>  $isi,
                     'created_at' => Carbon::now(),
                     'updated_at' => Carbon::now(),
                 );

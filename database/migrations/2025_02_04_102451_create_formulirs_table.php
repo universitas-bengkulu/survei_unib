@@ -20,6 +20,7 @@ class CreateFormulirsTable extends Migration
             $table->string('variable');
             $table->string('type');
             $table->boolean('required');
+            $table->text('additional');
             $table->timestamps();
         });
     }
