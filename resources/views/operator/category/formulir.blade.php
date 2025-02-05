@@ -154,7 +154,7 @@
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <h3 class="box-title"><i class="fa fa-book"></i>&nbsp;Manajemen Formulir <strong
-                        class="text-success">{{ $category->nama_category }}</strong></h3>
+                            class="text-success">{{ $category->nama_category }}</strong></h3>
                 </div>
                 <div class="box-body">
                     <div class="row">
@@ -212,17 +212,18 @@
                             <div class="form-group col-md-12" id="options-container" style="display: none;">
                                 <label for="options">Options</label>
                                 <input type="text" name="options[]" class="form-control mb-2" placeholder="Option 1">
-                                <input type="text" name="options[]" class="form-control mb-2" placeholder="Option 2">
-                                <button type="button" class="btn btn-success btn-sm" id="add-option"><i class="fa fa-plus"></i> Add Option</button>
-                                <button type="button" class="btn btn-danger btn-sm" id="delete-option"><i class="fa fa-minus"></i> Delete Option</button>
+                                <button type="button" class="btn btn-success btn-sm" id="add-option"><i
+                                        class="fa fa-plus"></i> Add Option</button>
+                                <button type="button" class="btn btn-danger btn-sm" id="delete-option"><i
+                                        class="fa fa-minus"></i> Delete Option</button>
                             </div>
                             <script>
-                                document.addEventListener('DOMContentLoaded', function () {
+                                document.addEventListener('DOMContentLoaded', function() {
                                     const typeInput = document.getElementById('type');
                                     const optionsContainer = document.getElementById('options-container');
                                     const addOptionButton = document.getElementById('add-option');
 
-                                    typeInput.addEventListener('change', function () {
+                                    typeInput.addEventListener('change', function() {
                                         if (this.value === 'radio' || this.value === 'checkbox' || this.value === 'select') {
                                             optionsContainer.style.display = 'block';
                                         } else {
@@ -230,7 +231,7 @@
                                         }
                                     });
 
-                                    addOptionButton.addEventListener('click', function () {
+                                    addOptionButton.addEventListener('click', function() {
                                         const newOption = document.createElement('input');
                                         newOption.type = 'text';
                                         newOption.name = 'options[]';
@@ -243,13 +244,13 @@
 
 
                             <script>
-                                document.addEventListener('DOMContentLoaded', function () {
+                                document.addEventListener('DOMContentLoaded', function() {
                                     const deleteOptionButton = document.getElementById('delete-option');
                                     const optionsContainer = document.getElementById('options-container');
 
-                                    deleteOptionButton.addEventListener('click', function () {
+                                    deleteOptionButton.addEventListener('click', function() {
                                         const options = optionsContainer.querySelectorAll('input[name="options[]"]');
-                                        if (options.length > 2) {
+                                        if (options.length > 1) {
                                             optionsContainer.removeChild(options[options.length - 1]);
                                         }
                                     });
@@ -285,6 +286,7 @@
                                         <th>Variable</th>
                                         <th>Type</th>
                                         <th>Required</th>
+                                        <th>Additional</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
@@ -299,20 +301,30 @@
                                             <td> {{ $item->label }} </td>
                                             <td> {{ $item->variable }} </td>
                                             <td> {{ $item->type }}
-                                                @if ($item->type=='select')
+                                                @if ($item->type == 'select')
                                                     <select>
                                                         <option>Example</option>
                                                     </select>
-
                                                 @else
                                                     <input type="{{ $item->type }}" value="{{ $item->type }}">
                                                 @endif
-                                                 </td>
+                                            </td>
                                             <td>
                                                 @if ($item->required == 1)
                                                     <span class="label label-success">Ya</span>
                                                 @else
                                                     <span class="label label-danger">Tidak</span>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if (strpos($item->additional, ';') !== false)
+                                                    <ul>
+                                                        @foreach (explode(';', $item->additional) as $list)
+                                                            <li>{{ $list }}</li>
+                                                        @endforeach
+                                                    </ul>
+                                                @else
+                                                    {{ $item->additional }}
                                                 @endif
                                             </td>
                                             <td style="display:inline-block !important;">

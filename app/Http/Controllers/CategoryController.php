@@ -120,6 +120,7 @@ class CategoryController extends Controller
             'type'    =>  'required',
 
         ],$attributes);
+
         Formulir::create([
             'category_id'    =>  $request->id,
             'label'    =>  htmlspecialchars($request->label),
