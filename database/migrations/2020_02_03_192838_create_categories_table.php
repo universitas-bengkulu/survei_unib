@@ -18,6 +18,7 @@ class CreateCategoriesTable extends Migration
             $table->string('nama_category');
             $table->string('slug')->unique();
             $table->boolean('default')->default(1);
+            $table->text('deskripsi')->nullable();
             $table->timestamps();
         });
     }

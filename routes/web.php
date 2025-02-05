@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\DeskripsiController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\IndikatorController;
 use App\Http\Controllers\LaporanController;
@@ -70,6 +71,11 @@ Route::group(['prefix'  => 'operator/'],function(){
 
     $categories = Category::all();
     foreach ($categories as $category) {
+        Route::group(['prefix'  => 'deskripsi-'.$category->slug.'/'],function() use ($category) {
+            Route::get('/'.base64_encode(date('Ymd').$category->id),[DeskripsiController::class, 'deskripsi'])->name('operator.deskripsi.'.$category->slug);
+            Route::post('/{id}/update/{slug}',[DeskripsiController::class, 'updateDeskripsi'])->name('operator.deskripsi.update.'.$category->slug);
+        });
+
         Route::group(['prefix'  => 'indikator-'.$category->slug.'/'],function() use ($category) {
             Route::get('/'.base64_encode(date('Ymd').$category->id),[IndikatorController::class, 'indikator'])->name('operator.indikator.'.$category->slug);
             Route::post('/',[IndikatorController::class, 'postIndikator'])->name('operator.indikator.post.'.$category->slug);

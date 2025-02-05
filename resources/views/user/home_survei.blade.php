@@ -193,8 +193,7 @@
                                 </div>
                                 <div class="  lg:px-6 py-4 -mt-5  ">
                                     <div class="  -mt-6 px-6 ">
-
-
+                                        @if ($categories->deskripsi== NULL)
                                         <p class="text-sm    "> {{ $categories->nama_category }} Universitas
                                             Bengkulu (UNIB).
                                             Beri penilaian terhadap item-item penilaian di bawah ini dengan cara memilih
@@ -214,6 +213,13 @@
                                         <p class="text-sm    ">Atas kesediaan semua responden yang telah
                                             berpartisipasi dalam pengisian kuesioner ini kami
                                             ucapkan terima kasih.</p>
+
+                                        @else
+                                        {!!$categories->deskripsi!!}
+                                        @endif
+
+
+
                                     </div>
                                 </div>
                             </div>
