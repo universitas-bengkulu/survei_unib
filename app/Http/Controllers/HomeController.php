@@ -53,6 +53,7 @@ class HomeController extends Controller
     }
     public function post_survei(Request $request)
     {
+
         $formulir = Formulir::where('category_id', $request->category_id)->get();
         $rules = [];
         $messages = [];
@@ -72,9 +73,8 @@ class HomeController extends Controller
                 'category_id' => $request->category_id,
             ]);
 
-
             foreach ($data as $item) {
-                $nilai = $request->input('nilai' . $item->id);
+                $nilai = $request->input('nilai_' . $item->id);
                 $kuisioner[] = array(
                     'evaluasi_rekap_id' => $last_id,
                     'indikator_id' => $item->id,

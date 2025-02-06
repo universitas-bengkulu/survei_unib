@@ -12,7 +12,12 @@
         </a>
     </div>
 @endsection
+
 @section('content')
+@php
+    use App\Models\Option;
+    $options = Option::where('category_id', $categories->id)->get();
+@endphp
     <div class="  bg-blue-900 relative">
         <img src="{{ asset('assets/images/business-background-16.png') }}" alt="bg-img"
             class="w-full h-full object-cover    brightness-50 absolute z-0" />
@@ -89,7 +94,8 @@
                                                     focus:ring-white
                                                     focus:shadow-[-4px_4px_10px_0px_#000]  "
                                                         {{ $form->required == 1 ? 'required' : '' }}>
-                                                        <option value="" disabled selected>--- Pilih {{ $form->label }}  --- </option>
+                                                        <option value="" disabled selected>--- Pilih
+                                                            {{ $form->label }} --- </option>
                                                         @foreach (explode(';', $form->additional) as $option)
                                                             <option value="{{ $option }}">{{ $option }}
                                                             </option>
@@ -135,9 +141,9 @@
                                                                 id="{{ $form->variable }}_{{ $option }}"
                                                                 name="{{ $form->variable }}[]" value="{{ $option }}"
                                                                 class="h-4 w-4 border-gray-300 focus:ring-2 focus:ring-blue-300">
-                                                            <label
-                                                                for="{{ $form->variable }}_{{ $option }}"
-                                                                class="ml-2 text-sm font-medium text-black">{{ $option }} </label>
+                                                            <label for="{{ $form->variable }}_{{ $option }}"
+                                                                class="ml-2 text-sm font-medium text-black">{{ $option }}
+                                                            </label>
                                                         </div>
                                                     @endforeach
                                                 </div>
@@ -188,34 +194,34 @@
                                 <div>
                                     <div
                                         class=" text-white   bg-blue-800  inline-block    items-center relative rounded-xl     p-4     transform duration-500 ease-in   left-4 -top-10 lg:text-xl text-sm font-sans font-extrabold">
-                                        CATATAN!
+                                        INFO!
                                     </div>
                                 </div>
                                 <div class="  lg:px-6 py-4 -mt-5  ">
                                     <div class="  -mt-6 px-6 ">
-                                        @if ($categories->deskripsi== NULL)
-                                        <p class="text-sm    "> {{ $categories->nama_category }} Universitas
-                                            Bengkulu (UNIB).
-                                            Beri penilaian terhadap item-item penilaian di bawah ini dengan cara memilih
-                                            salah
-                                            satu opsi pada
-                                            kolom
-                                            Persepsi.</p>
-                                        <p class="text-lg font-extrabold   ">Kriteria Penilaian</p>
+                                        @if ($categories->deskripsi == null)
+                                            <p class="text-sm    "> {{ $categories->nama_category }} Universitas
+                                                Bengkulu (UNIB).
+                                                Beri penilaian terhadap item-item penilaian di bawah ini dengan cara memilih
+                                                salah
+                                                satu opsi pada
+                                                kolom
+                                                Persepsi.</p>
+                                            <p class="text-lg font-extrabold   ">Kriteria Penilaian</p>
 
-                                        <ul class=" list-disc    ml-10 text-left   text-sm ">
-                                            <li><strong>Sangat Baik</strong> = Nilai 5</li>
-                                            <li><strong>Baik</strong> = Nilai 4</li>
-                                            <li><strong>Cukup</strong> = Nilai 3</li>
-                                            <li><strong>Kurang</strong> = Nilai 2</li>
-                                            <li><strong>Sangat Kurang</strong> = Nilai 1</li>
-                                        </ul>
-                                        <p class="text-sm    ">Atas kesediaan semua responden yang telah
-                                            berpartisipasi dalam pengisian kuesioner ini kami
-                                            ucapkan terima kasih.</p>
+                                            <ul class=" list-disc    ml-10 text-left   text-sm ">
+                                                @foreach ($options as $option )
+                                                <li><strong>{{$option->nama_option}}</strong> = Nilai {{$option->nilai}}</li>
 
+
+                                                @endforeach
+
+                                            </ul>
+                                            <p class="text-sm    ">Atas kesediaan semua responden yang telah
+                                                berpartisipasi dalam pengisian kuesioner ini kami
+                                                ucapkan terima kasih.</p>
                                         @else
-                                        {!!$categories->deskripsi!!}
+                                            {!! $categories->deskripsi !!}
                                         @endif
 
 
@@ -248,78 +254,33 @@
                                                 </h4>
                                                 </p>
                                                 <div class="mt-2 duration-300 transform">
+
                                                     <div class="  pt-1  ">
                                                         <fieldset class=" grid   grid-cols-1  text-left">
-                                                            <!-- 5  -->
-                                                            <div class="flex  mb-2">
-                                                                <input type="radio" id="nilai_{{ $item->id }}_5"
-                                                                    name="nilai{{ $item->id }}" value="5"
-                                                                    required
-                                                                    class="h-4 w-4 border-gray-300 mt-[2px] focus:ring-2 focus:ring-blue-300"
-                                                                    aria-labelledby="nilai_{{ $item->id }}_5"
-                                                                    aria-describedby="nilai_{{ $item->id }}_5"
-                                                                    checked>
-                                                                <label for="nilai_{{ $item->id }}_5"
-                                                                    class="text-sm font-medium text-gray-900   ml-2 block">
-                                                                    Sangat baik
-                                                                </label>
-                                                            </div>
+                                                            @if ($item->auto == 1)
+                                                            @php
+                                                                $no =1;
+                                                            @endphp
+                                                            @foreach ($options as $option)
+                                                                <div class="flex  mb-2">
+                                                                    <input type="radio"
+                                                                        id="nilai_{{ $item->id }}_{{ $no }}"
+                                                                        name="nilai_{{ $item->id }}" value="{{ $option->nilai }}"
+                                                                        required
+                                                                        class="h-4 w-4 border-gray-300 mt-[2px] focus:ring-2 focus:ring-blue-300"
+                                                                        aria-labelledby="nilai_{{ $item->id }}_{{ $no }}"
+                                                                        aria-describedby="nilai_{{ $item->id }}_{{ $no }}"
+                                                                        >
+                                                                    <label for="nilai_{{ $item->id }}_{{ $no++ }}"
+                                                                        class="text-sm font-medium text-gray-900   ml-2 block">
+                                                                        {{ $option->nama_option }}
+                                                                    </label>
+                                                                </div>
+                                                            @endforeach
+                                                            @endif
 
-                                                            <!-- 5  -->
-                                                            <div class="flex  mb-2">
-                                                                <input type="radio" id="nilai_{{ $item->id }}_4"
-                                                                    name="nilai{{ $item->id }}" value="4"
-                                                                    required
-                                                                    class="h-4 w-4 border-gray-300 mt-[2px] focus:ring-2 focus:ring-blue-300"
-                                                                    aria-labelledby="nilai_{{ $item->id }}_4"
-                                                                    aria-describedby="nilai_{{ $item->id }}_4">
-                                                                <label for="nilai_{{ $item->id }}_4"
-                                                                    class="text-sm font-medium text-gray-900   ml-2 block">
-                                                                    Baik
-                                                                </label>
-                                                            </div>
 
-                                                            <!-- 3  -->
-                                                            <div class="flex  mb-2">
-                                                                <input type="radio" id="nilai_{{ $item->id }}_3"
-                                                                    name="nilai{{ $item->id }}" value="3"
-                                                                    required
-                                                                    class="h-4 w-4 border-gray-300 mt-[2px] focus:ring-2 focus:ring-blue-300"
-                                                                    aria-labelledby="nilai_{{ $item->id }}_3"
-                                                                    aria-describedby="nilai_{{ $item->id }}_3">
-                                                                <label for="nilai_{{ $item->id }}_3"
-                                                                    class="text-sm font-medium text-gray-900   ml-2 block">
-                                                                    Cukup
-                                                                </label>
-                                                            </div>
 
-                                                            <!-- 2  -->
-                                                            <div class="flex  mb-2">
-                                                                <input type="radio" id="nilai_{{ $item->id }}_2"
-                                                                    name="nilai{{ $item->id }}" value="2"
-                                                                    required
-                                                                    class="h-4 w-4 border-gray-300 mt-[2px] focus:ring-2 focus:ring-blue-300"
-                                                                    aria-labelledby="nilai_{{ $item->id }}_2"
-                                                                    aria-describedby="nilai_{{ $item->id }}_2">
-                                                                <label for="nilai_{{ $item->id }}_2"
-                                                                    class="text-sm font-medium text-gray-900   ml-2 block">
-                                                                    Kurang
-                                                                </label>
-                                                            </div>
-
-                                                            <!-- 1  -->
-                                                            <div class="flex  mb-2">
-                                                                <input type="radio" id="nilai_{{ $item->id }}_1"
-                                                                    name="nilai{{ $item->id }}" value="1"
-                                                                    required
-                                                                    class="h-4 w-4 border-gray-300 mt-[2px] focus:ring-2 focus:ring-blue-300"
-                                                                    aria-labelledby="nilai_{{ $item->id }}_1"
-                                                                    aria-describedby="nilai_{{ $item->id }}_1">
-                                                                <label for="nilai_{{ $item->id }}_1"
-                                                                    class="text-sm font-medium text-gray-900    ml-2 block">
-                                                                    Sangat Kurang
-                                                                </label>
-                                                            </div>
 
                                                         </fieldset>
                                                     </div>
