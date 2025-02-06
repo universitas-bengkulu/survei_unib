@@ -130,5 +130,9 @@ class HomeController extends Controller
         }
     }
 
+    public function surveikerjasama (){
+        return view('user.custom.kerja_sama');
+    }
+
 
 }

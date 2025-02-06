@@ -46,7 +46,7 @@
 @endforeach
 
 
-<li style="padding-left:2px;">
+{{-- <li style="padding-left:2px;">
     <a class="dropdown-item" href="{{ route('logout') }}"
         onclick="event.preventDefault();
                         document.getElementById('logout-form').submit();">
@@ -57,4 +57,4 @@
         @csrf
     </form>
 
-</li>
+</li> --}}

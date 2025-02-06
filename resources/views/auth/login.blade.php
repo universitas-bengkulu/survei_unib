@@ -60,7 +60,7 @@
                     </div>
                     @else
                     <h6>Login Operator</h6>
-                    <p style="text-align:center; margin-bottom:20px;">SURVEY KEPUASAN MASYARAKAT (SKM) TERHADAP PELAYANAN INFORMASI PUBLIK
+                    <p style="text-align:center; margin-bottom:20px;">SURVEY KEPUASAN
                         <br>UNIVERSITAS BENGKULU </p>
                 @endif
                 <form method="post" action="{{ route('login') }}">

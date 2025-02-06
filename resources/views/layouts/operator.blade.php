@@ -5,8 +5,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="csrf-token" content="{{ csrf_token() }}">
-  <title>LPTIK Universitas Bengkulu</title>
-  <link rel="shortcut icon" href="{{ asset('assets/student/images/koperasi.png') }}">
+  <title> Universitas Bengkulu</title>
+  <link rel="shortcut icon" href="{{ asset('assets/Logo.svg') }}">
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.7 -->
@@ -71,12 +71,15 @@
         <ul class="nav navbar-nav">
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                <i class="fa fa-user"></i>
-                <span class="hidden-xs">
-                    @if (Auth::check())
-                        {{ Auth::user()->nm_lengkap }}
-                    @endif
+            <a href="{{ route('logout') }}" class="dropdown-toggle bg-red" data-toggle="dropdown" onclick="event.preventDefault();
+                                            document.getElementById('logout-form').submit();">
+                <span  >
+                            <i class="fa fa-power-off text-danger" style="margin-right: 5px"></i>{{ __('Logout') }}
+
+
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            @csrf
+                        </form>
                 </span>
             </a>
 

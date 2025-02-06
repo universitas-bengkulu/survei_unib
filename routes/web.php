@@ -28,7 +28,7 @@ Route::group(['prefix'  => '/'],function(){
     $categories = Category::all();
     foreach ($categories as $category) {
         if($category->default==1){
-            Route::get('/'.base64_encode(date('Ymd').$category->id).'/'.$category->slug, [HomeController::class, 'home_survei'])->name('survei.'.$category->slug);
+            Route::get('/'.base64_encode('Evaluasi'.$category->id).'/'.$category->slug, [HomeController::class, 'home_survei'])->name('survei.'.$category->slug);
             Route::post('post-/'.$category->slug,[HomeController::class, 'post_survei'])->name($category->slug.'.post');
         }else{
             Route::get('/'.$category->slug, [HomeController::class, str_replace('-', '', $category->slug)])
@@ -72,12 +72,12 @@ Route::group(['prefix'  => 'operator/'],function(){
     $categories = Category::all();
     foreach ($categories as $category) {
         Route::group(['prefix'  => 'deskripsi-'.$category->slug.'/'],function() use ($category) {
-            Route::get('/'.base64_encode(date('Ymd').$category->id),[DeskripsiController::class, 'deskripsi'])->name('operator.deskripsi.'.$category->slug);
+            Route::get('/'.base64_encode('Evaluasi'.$category->id),[DeskripsiController::class, 'deskripsi'])->name('operator.deskripsi.'.$category->slug);
             Route::post('/{id}/update/{slug}',[DeskripsiController::class, 'updateDeskripsi'])->name('operator.deskripsi.update.'.$category->slug);
         });
 
         Route::group(['prefix'  => 'indikator-'.$category->slug.'/'],function() use ($category) {
-            Route::get('/'.base64_encode(date('Ymd').$category->id),[IndikatorController::class, 'indikator'])->name('operator.indikator.'.$category->slug);
+            Route::get('/'.base64_encode('Evaluasi'.$category->id),[IndikatorController::class, 'indikator'])->name('operator.indikator.'.$category->slug);
             Route::post('/',[IndikatorController::class, 'postIndikator'])->name('operator.indikator.post.'.$category->slug);
             Route::post('/{id}/update/{slug}',[IndikatorController::class, 'updateIndikator'])->name('operator.indikator.update.'.$category->slug);
             Route::post('/{id}/aktif/{slug}',[IndikatorController::class, 'aktifIndikator'])->name('operator.indikator.aktif.'.$category->slug);
@@ -90,9 +90,9 @@ Route::group(['prefix'  => 'operator/'],function(){
         });
 
         Route::group(['prefix'  => 'laporan-'.$category->slug.'/'],function() use ($category) {
-            Route::get('/per_indikator/'.base64_encode(date('Ymd').$category->id),[LaporanController::class, 'laporan_per_indikator'])->name('operator.laporan.per_indikator.'.$category->slug);
+            Route::get('/per_indikator/'.base64_encode('Evaluasi'.$category->id),[LaporanController::class, 'laporan_per_indikator'])->name('operator.laporan.per_indikator.'.$category->slug);
             Route::post('/{id}/export/{slug}',[LaporanController::class, 'export'])->name('evaluasi.export.'.$category->slug);
-            Route::get('/pesan_dan_saran/'.base64_encode(date('Ymd').$category->id),[LaporanController::class, 'saran'])->name('operator.laporan.saran.'.$category->slug);
+            Route::get('/pesan_dan_saran/'.base64_encode('Evaluasi'.$category->id),[LaporanController::class, 'saran'])->name('operator.laporan.saran.'.$category->slug);
 
         });
     }
@@ -102,9 +102,3 @@ Auth::routes();
 Route::post('/pandalogin',[PandaController::class, 'pandaLogin'])->name('panda.login');
 Route::get('/logout', [PandaController::class, 'authLogout'])->name('authLogout');
 
-Route::group(['prefix'  => 'perencanaan/'],function(){
-    Route::get('/login', function () {
-        return view('auth/login_perencanaan');
-    })->name('perencanaan.login');
-
-});
