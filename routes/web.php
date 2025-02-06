@@ -68,7 +68,6 @@ Route::group(['prefix'  => 'operator/'],function(){
     Route::post('/update-formulir',[CategoryController::class, 'update_formulir'])->name('operator.category.formulir.update');
     Route::delete('/{category_id}/delete/{id}/formulir',[CategoryController::class, 'delate_formulir'])->name('operator.category.formulir.delete');
 
-
     $categories = Category::all();
     foreach ($categories as $category) {
         Route::group(['prefix'  => 'deskripsi-'.$category->slug.'/'],function() use ($category) {
@@ -93,6 +92,7 @@ Route::group(['prefix'  => 'operator/'],function(){
             Route::get('/per_indikator/'.base64_encode('Evaluasi'.$category->id),[LaporanController::class, 'laporan_per_indikator'])->name('operator.laporan.per_indikator.'.$category->slug);
             Route::post('/{id}/export/{slug}',[LaporanController::class, 'export'])->name('evaluasi.export.'.$category->slug);
             Route::get('/pesan_dan_saran/'.base64_encode('Evaluasi'.$category->id),[LaporanController::class, 'saran'])->name('operator.laporan.saran.'.$category->slug);
+            Route::get('/pesan_dan_saran/'.base64_encode('Evaluasi'.$category->id) .'/export',[LaporanController::class, 'exportSaran'])->name('operator.laporan.saran.'.$category->slug .'.export');
 
         });
     }

@@ -297,7 +297,7 @@
                             <div class="modal-header">
                                 <h5 class="modal-title" id="yearFilterModalLabel">Filter</h5>
                             </div>
-                            <form action="{{ route('operator.laporan.per_indikator.survei-layanan-manajemen') }}" method="get">
+                            <form action="{{ route('operator.laporan.per_indikator.'. $category->slug) }}" method="get">
                                 <div class="modal-body">
                                     <div class="form-group">
                                         <label for="filter-year">Tahun</label>
@@ -312,7 +312,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-                                    <a href="{{ route('operator.laporan.per_indikator.survei-layanan-manajemen') }}"
+                                    <a href="{{ route('operator.laporan.per_indikator.'. $category->slug) }}"
                                         class="btn btn-info">Hapus Filter</a>
                                     <button type="submit" class="btn btn-primary">Tampilkan</button>
                                 </div>
@@ -320,5 +320,4 @@
                         </div>
                     </div>
                 </div>
-
 @endsection

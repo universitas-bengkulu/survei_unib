@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\SaranEvaluasiExport;
 use App\Models\EvaluasiRekap;
 use App\Models\Indikator;
 use App\Models\Saran;
@@ -62,17 +63,48 @@ class LaporanController extends Controller
 
     public function saran(Request $request)
     {
+        $filteredYear = $request->get('year');
+
         $idd = $request->segment(4);
         $id = base64_decode($idd);
         $category_id = substr($id, 8);
         $category = Category::with('formulirs')->where('id', $category_id)->first();
-        $sarans = Saran::with(['evaluasiRekap.evaluasiDatas'])->where('category_id', $category_id)->orderBy('sarans.created_at', 'desc')->get();
-
+        $sarans = Saran::with(['evaluasiRekap.evaluasiDatas'])
+            ->when($filteredYear, function ($query, $filteredYear) {
+                return $query->whereYear('sarans.created_at', $filteredYear);
+            })
+            ->where('category_id', $category_id)
+            ->orderBy('sarans.created_at', 'desc')
+            ->get();
 
         return view('operator/laporan.saran', [
             'sarans' => $sarans,
             'category' => $category,
+            'filteredYear' => $filteredYear,
         ]);
+    }
+
+    public function exportSaran(Request $request)
+    {
+        $filteredYear = $request->get('year');
+        $appendName = $filteredYear ? '- Tahun ' . $filteredYear .'-'. time() : time();
+
+        $idd = $request->segment(4);
+        $id = base64_decode($idd);
+        $category_id = substr($id, 8);
+        $category = Category::with('formulirs')->where('id', $category_id)->first();
+        $sarans = Saran::with(['evaluasiRekap.evaluasiDatas'])
+            ->when($filteredYear, function ($query, $filteredYear) {
+                return $query->whereYear('sarans.created_at', $filteredYear);
+            })
+            ->where('category_id', $category_id)
+            ->orderBy('sarans.created_at', 'desc')
+            ->get();
+
+        return Excel::download(
+            new SaranEvaluasiExport($sarans, $category),
+            'Saran Evaluasi-' . $category->nama_category . '-' . $appendName . '.xlsx'
+        );
     }
 
     //function export
