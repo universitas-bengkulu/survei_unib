@@ -165,6 +165,9 @@
   <div class="control-sidebar-bg"></div>
 </div>
 <!-- ./wrapper -->
+
+    @yield('custom_html')
+
 <!-- jQuery 3 -->
 <script src="{{ asset('assets/student/bower_components/jquery/dist/jquery.min.js') }}"></script>
 <script src="{{ asset('assets/student/validator/validator.min.js') }}"></script>

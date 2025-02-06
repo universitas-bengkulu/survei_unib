@@ -68,7 +68,6 @@ Route::group(['prefix'  => 'operator/'],function(){
     Route::post('/update-formulir',[CategoryController::class, 'update_formulir'])->name('operator.category.formulir.update');
     Route::delete('/{category_id}/delete/{id}/formulir',[CategoryController::class, 'delate_formulir'])->name('operator.category.formulir.delete');
 
-
     $categories = Category::all();
     foreach ($categories as $category) {
         Route::group(['prefix'  => 'deskripsi-'.$category->slug.'/'],function() use ($category) {
@@ -83,12 +82,17 @@ Route::group(['prefix'  => 'operator/'],function(){
             Route::post('/{id}/aktif/{slug}',[IndikatorController::class, 'aktifIndikator'])->name('operator.indikator.aktif.'.$category->slug);
             Route::post('/{id}/nonaktif/{slug}',[IndikatorController::class, 'nonaktifIndikator'])->name('operator.indikator.nonaktif.'.$category->slug);
             Route::delete('/{id}/delete/{slug}',[IndikatorController::class, 'delateIndikator'])->name('operator.indikator.delete.'.$category->slug);
+
+            Route::post('/{id}/set-option/{slug}',[IndikatorController::class, 'setOption'])->name('operator.setoption.update.'.$category->slug);
+            Route::post('/{id}/option/{slug}',[IndikatorController::class, 'updateOption'])->name('operator.option.update.'.$category->slug);
+            Route::delete('/{id}/delete/option/{slug}',[IndikatorController::class, 'delateOption'])->name('operator.option.delete.'.$category->slug);
         });
 
         Route::group(['prefix'  => 'laporan-'.$category->slug.'/'],function() use ($category) {
             Route::get('/per_indikator/'.base64_encode(date('Ymd').$category->id),[LaporanController::class, 'laporan_per_indikator'])->name('operator.laporan.per_indikator.'.$category->slug);
             Route::post('/{id}/export/{slug}',[LaporanController::class, 'export'])->name('evaluasi.export.'.$category->slug);
             Route::get('/pesan_dan_saran/'.base64_encode(date('Ymd').$category->id),[LaporanController::class, 'saran'])->name('operator.laporan.saran.'.$category->slug);
+            Route::get('/pesan_dan_saran/'.base64_encode(date('Ymd').$category->id) .'/export',[LaporanController::class, 'exportSaran'])->name('operator.laporan.saran.'.$category->slug .'.export');
 
         });
     }
