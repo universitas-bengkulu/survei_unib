@@ -35,7 +35,7 @@
     </li>
     <li>
         <a href="{{ route('logout') }}" class="btn btn-danger"
-            onclick="event.preventDefault();
+           onclick="event.preventDefault();
                         document.getElementById('logout-form').submit();"><i
                 class="fa fa-sign-out"></i>&nbsp; Logout</a>
         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
@@ -161,8 +161,20 @@
                     <form
                         action="{{ route('evaluasi.export.' . $category->slug, [$category->id, $category->slug]) }}"
                         method="POST">
-                        {{ csrf_field() }} {{ method_field('POST') }}
-                        <button type="submit" class="btn btn-success  " style="margin-left: 25px; margin-top: 10px;"><i class="fas fa-file-excel"></i> Export to Excel</button>
+                        {{ csrf_field() }}
+                        {{ method_field('POST') }}
+
+                        @if($filteredYear)
+                            <input type="hidden" name="year" value="{{ $filteredYear }}">
+                        @endif
+
+                        <button type="submit" class="btn btn-success  " style="margin-left: 25px; margin-top: 10px;"><i
+                                class="fas fa-file-excel"></i> Export to Excel
+                        </button>
+                        <a href="#" data-toggle="modal" data-target="#yearFilterModal" class="btn btn-info"
+                           style="margin-top: 10px;">
+                            <i class="fa fa-filter"></i>
+                        </a>
                     </form>
                 </div>
                 <div class="box-body">
@@ -209,50 +221,54 @@
                 <div class="box-body">
                     <div class="row">
 
+                        @if($filteredYear)
+                            <div class="col-12" style="padding-left: 30px; margin-bottom: 20px;">
+                                Tampilkan tahun: <strong>{{ $filteredYear }}</strong>
+                            </div>
+                        @endif
+
                         <div class="col-md-12 table-responsive" style="padding:0px 40px">
                             <div class="overflow-x-auto">
                                 <table class="table table-hover table-striped table-bordered" id="table">
                                     <thead style="background-color: #3C8DBC; color: white;">
-                                        <tr>
-                                            <th rowspan="2" style="text-align:center">Responden</th>
-                                            <th style="text-align:center" colspan="{{ $questions->count() }}">Pertanyaan
-                                            </th>
+                                    <tr>
+                                        <th rowspan="2" style="text-align:center">Responden</th>
+                                        <th style="text-align:center" colspan="{{ $questions->count() }}">Pertanyaan
+                                        </th>
 
-                                            <th rowspan="2" style="text-align:center">Total</th>
+                                        <th rowspan="2" style="text-align:center">Total</th>
 
-                                        </tr>
-                                        <tr>
-                                            @for ($i = 1; $i <= $questions->count(); $i++)
-                                                <th> {{ $i }}</th>
-                                            @endfor
-                                        </tr>
+                                    </tr>
+                                    <tr>
+                                        @for ($i = 1; $i <= $questions->count(); $i++)
+                                            <th> {{ $i }}</th>
+                                        @endfor
+                                    </tr>
                                     </thead>
                                     <tbody>
-                                        @php
-                                            $no = 1;
-                                        @endphp
-                                        @foreach ($evaluasiList as $evaluasi)
-                                            <tr class="hover:bg-gray-50">
-                                                <td>Responden {{ $no++ }}</td>
-                                                @foreach ($questions as $question)
-                                                    <td class="px-4 py-2 border text-center">
-                                                        {{ isset($evaluasi->{$question->id}) ? $evaluasi->{$question->id} : 0 }}
-                                                    </td>
-                                                @endforeach
-                                                <td class="px-4 py-2 border font-bold text-center">
-                                                    {{ $evaluasi->total }}
+                                    @php
+                                        $no = 1;
+                                    @endphp
+                                    @foreach ($evaluasiList as $evaluasi)
+                                        <tr class="hover:bg-gray-50">
+                                            <td>Responden {{ $no++ }}</td>
+                                            @foreach ($questions as $question)
+                                                <td class="px-4 py-2 border text-center">
+                                                    {{ isset($evaluasi->{$question->id}) ? $evaluasi->{$question->id} : 0 }}
                                                 </td>
-                                            </tr>
-                                        @endforeach
+                                            @endforeach
+                                            <td class="px-4 py-2 border font-bold text-center">
+                                                {{ $evaluasi->total }}
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                     </tbody>
                                 </table>
                             </div>
-
                         </div>
                     </div>
                 </div>
             </div>
-            </section>
             @push('styles')
                 <style>
                     .table-container {
@@ -262,12 +278,47 @@
                 </style>
             @endpush
 
-        @endsection
+            @endsection
 
-        @push('scripts')
-            <script>
-                $(document).ready(function() {
-                    $('#table').DataTable({});
-                });
-            </script>
-        @endpush
+            @push('scripts')
+                <script>
+                    $(document).ready(function () {
+                        $('#table').DataTable({});
+                    });
+                </script>
+            @endpush
+
+            @section('custom_html')
+                <!-- Modal untuk filter tahun -->
+                <div class="modal fade" id="yearFilterModal" tabindex="-1" aria-labelledby="yearFilterModalLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="yearFilterModalLabel">Filter</h5>
+                            </div>
+                            <form action="{{ route('operator.laporan.per_indikator.survei-layanan-manajemen') }}" method="get">
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <label for="filter-year">Tahun</label>
+                                        <select name="year" id="filter-year" class="form-control">
+                                            <option value="">Pilih Tahun</option>
+                                            @for ($i = 2023; $i <= date('Y'); $i++)
+                                                <option value="{{ $i }}" {{ $i == $filteredYear ? 'selected' : '' }}>
+                                                    {{ $i }}</option>
+                                            @endfor
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                                    <a href="{{ route('operator.laporan.per_indikator.survei-layanan-manajemen') }}"
+                                        class="btn btn-info">Hapus Filter</a>
+                                    <button type="submit" class="btn btn-primary">Tampilkan</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+@endsection
