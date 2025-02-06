@@ -18,6 +18,8 @@ class DatabaseSeeder extends Seeder
             UserTableSeeder::class,
             CategorySeeder::class,
             IndikatorSeeder::class,
+            FormulirSeeder::class,
+
         ]);
 
     }
