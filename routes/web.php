@@ -83,6 +83,10 @@ Route::group(['prefix'  => 'operator/'],function(){
             Route::post('/{id}/aktif/{slug}',[IndikatorController::class, 'aktifIndikator'])->name('operator.indikator.aktif.'.$category->slug);
             Route::post('/{id}/nonaktif/{slug}',[IndikatorController::class, 'nonaktifIndikator'])->name('operator.indikator.nonaktif.'.$category->slug);
             Route::delete('/{id}/delete/{slug}',[IndikatorController::class, 'delateIndikator'])->name('operator.indikator.delete.'.$category->slug);
+
+            Route::post('/{id}/set-option/{slug}',[IndikatorController::class, 'setOption'])->name('operator.setoption.update.'.$category->slug);
+            Route::post('/{id}/option/{slug}',[IndikatorController::class, 'updateOption'])->name('operator.option.update.'.$category->slug);
+            Route::delete('/{id}/delete/option/{slug}',[IndikatorController::class, 'delateOption'])->name('operator.option.delete.'.$category->slug);
         });
 
         Route::group(['prefix'  => 'laporan-'.$category->slug.'/'],function() use ($category) {

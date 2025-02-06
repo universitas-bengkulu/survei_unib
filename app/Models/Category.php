@@ -35,4 +35,9 @@ class Category extends Model
     {
         return $this->hasMany(Formulir::class);
     }
+
+    public function options()
+    {
+        return $this->hasMany(Option::class);
+    }
 }

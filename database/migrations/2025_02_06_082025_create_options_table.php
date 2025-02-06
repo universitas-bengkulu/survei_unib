@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateIndikatorsTable extends Migration
+class CreateOptionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,14 @@ class CreateIndikatorsTable extends Migration
      */
     public function up()
     {
-        Schema::create('indikators', function (Blueprint $table) {
+        Schema::create('options', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_indikator');
-            $table->boolean('ditampilkan');
-            $table->boolean('auto')->default(0);
+            $table->integer('indikator_id');
             $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
+            $table->string('nama_option');
+            $table->string('nilai');
+            $table->string('type');
+
             $table->timestamps();
         });
     }
@@ -30,6 +32,6 @@ class CreateIndikatorsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('indikators');
+        Schema::dropIfExists('options');
     }
 }
