@@ -457,6 +457,16 @@
                                                                         class="form-text text-danger">{{ $errors->first('nama_option') }}</small>
                                                                 @endif
                                                             </div>
+                                                            <div class="form-group">
+                                                                <label for="nilai">Nilai option</label>
+                                                                <input type="number" name="nilai"
+                                                                    id="nilai" class="form-control"
+                                                                    value="{{ $option->nilai }}">
+                                                                @if ($errors->has('nilai'))
+                                                                    <small
+                                                                        class="form-text text-danger">{{ $errors->first('nilai') }}</small>
+                                                                @endif
+                                                            </div>
                                                         </div>
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-secondary"

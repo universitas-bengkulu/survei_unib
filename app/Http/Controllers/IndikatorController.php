@@ -127,6 +127,39 @@ class IndikatorController extends Controller
         return redirect()->route('operator.indikator.' . $slug)->with($notification);
     }
 
+    public function updateOption($id, $slug, Request $request)
+    {
+        $attributes = [
+            'nama_option'   =>  'Nama Option',
+            'nilai'   =>  'Nilai Option',
+        ];
+        $this->validate($request, [
+            'nama_option'    =>  'required',
+            'nilai'    =>  'required',
+        ], $attributes);
+
+        $option = Option::where('id', $id)->first();
+        $option->update([
+            'nama_option'    =>  htmlspecialchars($request->nama_option),
+            'nilai'    =>  htmlspecialchars($request->nilai)
+                            ]);
+        $notification = array(
+            'message' => 'Berhasil, Option berhasil diubah!',
+            'alert-type' => 'success'
+        );
+        return redirect()->route('operator.indikator.' . $slug)->with($notification);
+    }
+
+    public function delateOption($id, $slug)
+    {
+        Option::where('id', $id)->delete();
+        $notification = array(
+            'message' => 'Berhasil, Option berhasil dihapus!',
+            'alert-type' => 'success'
+        );
+        return redirect()->route('operator.indikator.' . $slug)->with($notification);
+    }
+
     public function aktifIndikator($id, $slug)
     {
         $indikator = Indikator::where('id', $id)->first();

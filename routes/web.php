@@ -94,6 +94,9 @@ Route::group(['prefix'  => 'operator/'],function(){
             Route::get('/pesan_dan_saran/'.base64_encode('Evaluasi'.$category->id),[LaporanController::class, 'saran'])->name('operator.laporan.saran.'.$category->slug);
             Route::get('/pesan_dan_saran/'.base64_encode('Evaluasi'.$category->id) .'/export',[LaporanController::class, 'exportSaran'])->name('operator.laporan.saran.'.$category->slug .'.export');
 
+            Route::post('/{id}/import/{slug}',[LaporanController::class, 'import'])->name('evaluasi.import.'.$category->slug);
+            Route::get('/{id}/download-template/{slug}',[LaporanController::class, 'generateTemplate'])->name('evaluasi.download-template.'.$category->slug);
+
         });
     }
 });

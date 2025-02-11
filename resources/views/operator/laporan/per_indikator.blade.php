@@ -158,24 +158,63 @@
                             class="text-success">{{ $category->nama_category }}</strong></h3>
                 </div>
                 <div class="mb-3">
-                    <form
-                        action="{{ route('evaluasi.export.' . $category->slug, [$category->id, $category->slug]) }}"
-                        method="POST">
-                        {{ csrf_field() }}
-                        {{ method_field('POST') }}
+                    <div class="row">
+                        <div class="col-md-6"><form
+                            action="{{ route('evaluasi.export.' . $category->slug, [$category->id, $category->slug]) }}"
+                            method="POST">
+                            {{ csrf_field() }}
+                            {{ method_field('POST') }}
 
-                        @if($filteredYear)
-                            <input type="hidden" name="year" value="{{ $filteredYear }}">
-                        @endif
+                            @if($filteredYear)
+                                <input type="hidden" name="year" value="{{ $filteredYear }}">
+                            @endif
 
-                        <button type="submit" class="btn btn-success  " style="margin-left: 25px; margin-top: 10px;"><i
-                                class="fas fa-file-excel"></i> Export to Excel
-                        </button>
-                        <a href="#" data-toggle="modal" data-target="#yearFilterModal" class="btn btn-info"
-                           style="margin-top: 10px;">
-                            <i class="fa fa-filter"></i>
-                        </a>
-                    </form>
+                            <button type="submit" class="btn btn-success  " style="margin-left: 25px; margin-top: 10px;"><i
+                                    class="fas fa-file-excel"></i> Export to Excel
+                            </button>
+                            <a href="#" data-toggle="modal" data-target="#yearFilterModal" class="btn btn-info"
+                               style="margin-top: 10px;">
+                                <i class="fa fa-filter"></i>
+                                Filter Tahun
+                            </a>
+
+                        </form></div>
+                        <div class="col-md-6 d-flex text-right " style="right: 25px"><!-- Button trigger modal -->
+                            <a href="{{ route('evaluasi.download-template.' . $category->slug, [$category->id, $category->slug]) }}" class="btn btn-primary">Download Template</a>
+
+                            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#importModal" >
+                                <i class="fa fa-upload"></i> Import
+                            </button></div>
+                    </div>
+
+
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="importModal" tabindex="-1" role="dialog" aria-labelledby="importModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="importModalLabel">Import Data</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <form action="{{ route('evaluasi.import.' . $category->slug, [$category->id, $category->slug]) }}" method="POST" enctype="multipart/form-data">
+                                    @csrf
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                            <label for="file">Pilih file untuk diimport</label>
+                                            <input type="file" name="file" class="form-control" required>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                                        <button type="submit" class="btn btn-success">Import</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="box-body">
                     <div class="col-lg-4 col-xs-12" style="padding-bottom:10px !important;">
@@ -232,6 +271,7 @@
                                 <table class="table table-hover table-striped table-bordered" id="table">
                                     <thead style="background-color: #3C8DBC; color: white;">
                                     <tr>
+                                        <th rowspan="2" style="text-align:center">No</th>
                                         <th rowspan="2" style="text-align:center">Responden</th>
                                         <th style="text-align:center" colspan="{{ $questions->count() }}">Pertanyaan
                                         </th>
@@ -251,6 +291,7 @@
                                     @endphp
                                     @foreach ($evaluasiList as $evaluasi)
                                         <tr class="hover:bg-gray-50">
+                                            <td>{{ $no }}</td>
                                             <td>Responden {{ $no++ }}</td>
                                             @foreach ($questions as $question)
                                                 <td class="px-4 py-2 border text-center">

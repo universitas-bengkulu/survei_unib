@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Evaluasi;
 use App\Models\EvaluasiRekap;
 use Carbon\Carbon;
@@ -16,15 +17,24 @@ class OperatorController extends Controller
     }
 
     public function dashboard(){
-        $evaluasi = EvaluasiRekap::all()->count();
-        $today = EvaluasiRekap::whereDate('created_at', Carbon::today())->get()->count();
-        $rata_rata = Evaluasi::select(DB::raw('avg(skor) as skor'))->first();
-        $rata_rata_today = Evaluasi::select(DB::raw('avg(skor) as skor'))->whereDate('created_at', Carbon::today())->first();
-        return view('operator.dashboard',[
-            'evaluasi' => $evaluasi,
-            'today' => $today,
-            'rata_rata' => $rata_rata,
-            'rata_rata_today' => $rata_rata_today,
-        ]);
+        $jumlah_survei = Category::count();
+
+    $categories = Category::all();
+    $evaluasi_per_category = [];
+
+    foreach ($categories as $category) {
+        $evaluasi_per_category[$category->id] = [
+            'jumlah_evaluasi' => EvaluasiRekap::where('category_id', $category->id)->count(),
+            'jumlah_evaluasi_today' => EvaluasiRekap::where('category_id', $category->id)->whereDate('created_at', Carbon::today())->count(),
+            'average_skor' => Evaluasi::where('category_id', $category->id)->avg('skor'),
+            'average_skor_today' => Evaluasi::where('category_id', $category->id)->whereDate('created_at', Carbon::today())->avg('skor'),
+        ];
+    }
+
+    return view('operator.dashboard', [
+        'jumlah_survei' => $jumlah_survei,
+        'evaluasi_per_category' => $evaluasi_per_category,
+        'categories' => $categories,
+    ]);
     }
 }

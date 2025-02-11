@@ -67,61 +67,64 @@
     <div class="col-md-12 sm-6">
         <div class="box box-primary">
 
-            <div class="box-header with-border">
-            <h3 class="box-title"><i class="fa fa-info-circle"></i>&nbsp;Informasi Evaluasi</h3>
+
+            <div class="box-footer">
+                <div class="row">
+                    @foreach ($evaluasi_per_category as $category_id => $data)
+                    <div class="col-md-12  ">
+                        <h4 style="background-color: #ccc; color: #000; border-radius: 4px; padding: 5px; font-weight: 800">{{ $categories->find($category_id)->nama_category }}</h4>
+                    </div>
+                    <div class="col-lg-3 col-xs-12" style="padding-bottom:10px !important;">
+                        <!-- small box -->
+                        <div class="small-box bg-aqua" style="margin-bottom:0px;">
+                            <div class="inner">
+                                <b style="">{{ $data['jumlah_evaluasi'] }}<i> Jumlah Evaluasi</i></b>
+                            </div>
+                            <div class="icon" style="font-size: 30px; margin-top:10px">
+                            <i class="fa fa-users"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-xs-12" style="padding-bottom:10px !important;">
+                        <!-- small box -->
+                        <div class="small-box bg-blue" style="margin-bottom:0px;">
+                            <div class="inner">
+                                <b style="">{{ $data['jumlah_evaluasi_today'] }}<i> Evaluasi Hari Ini</i></b>
+
+                            </div>
+                            <div class="icon" style="font-size: 30px; margin-top:10px">
+                            <i class="fa fa-check-circle"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-xs-12" style="padding-bottom:10px !important;">
+                        <!-- small box -->
+                        <div class="small-box bg-yellow" style="margin-bottom:0px;">
+                            <div class="inner">
+                                <b style="">{{ number_format($data['average_skor'], 2) }}<i> Rata-Rata Keseluruhan</i></b>
+
+                            </div>
+                            <div class="icon" style="font-size: 30px; margin-top:10px">
+                            <i class="fa fa-graduation-cap"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-xs-12" style="padding-bottom:10px !important;">
+                        <!-- small box -->
+                        <div class="small-box bg-green" style="margin-bottom:0px;">
+                            <div class="inner">
+                            <b style="">{{ number_format($data['average_skor_today'], 2) }}<i> Rata-Rata Hari Ini</i></b>
+
+                            </div>
+                            <div class="icon" style="font-size: 30px; margin-top:10px">
+                            <i class="fa fa-book"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    @endforeach
+                </div>
             </div>
-            <div class="box-body">
-                <div class="col-lg-3 col-xs-12" style="padding-bottom:10px !important;">
-                    <!-- small box -->
-                    <div class="small-box bg-aqua" style="margin-bottom:0px;">
-                        <div class="inner">
-                        <h3>{{ $evaluasi }}</h3>
-
-                        <p>Jumlah Evaluasi</p>
-                        </div>
-                        <div class="icon">
-                        <i class="fa fa-users"></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-xs-12" style="padding-bottom:10px !important;">
-                    <!-- small box -->
-                    <div class="small-box bg-blue" style="margin-bottom:0px;">
-                        <div class="inner">
-                        <h3>{{ $today }}</h3>
-
-                        <p>Evaluasi Hari Ini</p>
-                        </div>
-                        <div class="icon">
-                        <i class="fa fa-check-circle"></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-xs-12" style="padding-bottom:10px !important;">
-                    <!-- small box -->
-                    <div class="small-box bg-yellow" style="margin-bottom:0px;">
-                        <div class="inner">
-                        <h3>{{ number_format($rata_rata->skor,2) }}</h3>
-
-                        <p>Rata-Rata Keseluruhan</p>
-                        </div>
-                        <div class="icon">
-                        <i class="fa fa-graduation-cap"></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-xs-12" style="padding-bottom:10px !important;">
-                    <!-- small box -->
-                    <div class="small-box bg-green" style="margin-bottom:0px;">
-                        <div class="inner">
-                        <h3>{{ number_format($rata_rata_today->skor,2) }}</h3>
-                        <p>Rata-Rata Hari Ini</p>
-                        </div>
-                        <div class="icon">
-                        <i class="fa fa-book"></i>
-                        </div>
-                    </div>
-                </div>
             </div>
             <!-- /.box-body -->
         </div>

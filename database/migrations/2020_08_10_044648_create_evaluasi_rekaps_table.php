@@ -16,7 +16,6 @@ class CreateEvaluasiRekapsTable extends Migration
         Schema::create('evaluasi_rekaps', function (Blueprint $table) {
             $table->id();
             $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
-
             $table->timestamps();
         });
     }

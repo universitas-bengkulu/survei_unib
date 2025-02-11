@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\SaranEvaluasiExport;
+use App\Imports\EvaluasisImport;
 use App\Models\EvaluasiRekap;
 use App\Models\Indikator;
 use App\Models\Saran;
@@ -11,7 +12,12 @@ use Illuminate\Support\Facades\DB;
 
 use App\Exports\EvaluasiExport;
 use App\Models\Category;
+use App\Models\Evaluasi;
 use Maatwebsite\Excel\Facades\Excel;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use Illuminate\Support\Str;
 
 class LaporanController extends Controller
 {
@@ -176,4 +182,83 @@ class LaporanController extends Controller
     {
         return self::generate($category_id)->toSql();
     }
+
+    public function import(Request $request, $category_id, $slug)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,csv',
+        ]);
+
+        Excel::import(new EvaluasisImport, $request->file('file'), $category_id);
+
+        return back()->with('success', 'Data evaluasi berhasil diimpor.');
+    }
+
+    public function generateTemplate($category_id, $slug)
+    {
+        // Create new Spreadsheet object
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // Get all active indikators
+        $indikators = Indikator::where('ditampilkan', true)
+            ->where('category_id', $category_id)
+            ->orderBy('category_id')
+            ->get();
+
+        // Set up column widths and styles
+        $columnWidth = 30;
+        $headerHeight = 60;
+
+        // Start from column A
+        $currentColumn = 'A';
+
+        // Add headers based on indikator names
+        foreach ($indikators as $indikator) {
+            // Set the header value
+            $sheet->setCellValue($currentColumn . '1', $indikator->nama_indikator);
+
+            // Set column width
+            $sheet->getColumnDimension($currentColumn)->setWidth($columnWidth);
+
+            // Style the header cell
+            $sheet->getStyle($currentColumn . '1')->applyFromArray([
+                'alignment' => [
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
+                    'vertical' => Alignment::VERTICAL_CENTER,
+                    'wrapText' => true
+                ],
+                'font' => [
+                    'bold' => true
+                ]
+            ]);
+
+            // Move to next column
+            $currentColumn++;
+        }
+
+        // Set row height for header
+        $sheet->getRowDimension(1)->setRowHeight($headerHeight);
+
+        // Add example row
+        $currentColumn = 'A';
+        foreach ($indikators as $indikator) {
+            $sheet->setCellValue($currentColumn . '2', '4');
+            $sheet->getStyle($currentColumn . '2')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+            $currentColumn++;
+        }
+
+        // Create response
+        $writer = new Xlsx($spreadsheet);
+
+        // Set headers for download
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="template-'.$slug.'.xlsx"');
+        header('Cache-Control: max-age=0');
+
+        // Save to PHP output stream
+        $writer->save('php://output');
+        exit;
+    }
+
 }
