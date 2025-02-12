@@ -18,7 +18,7 @@ class FormulirSeeder extends Seeder
             //dosen tendik
             //Formulir Survei Kepuasan Layanan Manajemen
             [ 'category_id' => 2, 'label' => 'Email','variable' => 'email', 'type' => 'email','required' => 1, 'additional' => ''],
-            [ 'category_id' => 2, 'label' => 'Nama (Tanpa Gelar)','variable' => 'nama', 'type' => 'text','required' => 1, 'additional' => ''],
+            // [ 'category_id' => 2, 'label' => 'Nama (Tanpa Gelar)','variable' => 'nama', 'type' => 'text','required' => 1, 'additional' => ''],
             [ 'category_id' => 2, 'label' => 'Pekerjaan','variable' => 'kerja', 'type' => 'radio','required' => 1, 'additional' => 'Dosen; Tenaga Kependidikan'],
 
             //Formulir Survei Kepuasan Kerja Sama

@@ -161,19 +161,20 @@
                             <div class=" col-md-12">
                                 <label for="">Jenis Jawaban Survei</label>
                                 <div class="row col-md-12">
-                                    <div class="col-md-2">
+                                    <div class="col-md-6">
                                         <input type="radio" id="pilih1" name="scale" value="skala" required aria-labelledby="pilih1" checked onclick="showNumberInput()">
                                         <label for="pilih1">Opsion skala</label>
+                                        <div class="col-md-12" id="number-input-container"  >
+                                            <input type="number" id="number-input" name="number_input" min="1" class="form-control" placeholder="Jumlah opsi" oninput="showOptions(this.value)">
+                                        </div>
                                     </div>
-                                    <div class="col-md-2" id="number-input-container" style="display: none;">
-                                        <input type="number" id="number-input" name="number_input" min="1" class="form-control" placeholder="Jumlah opsi" oninput="showOptions(this.value)">
-                                    </div>
+
                                     <script>
                                         function showNumberInput() {
                                             document.getElementById('number-input-container').style.display = 'block';
                                         }
                                     </script>
-                                    <div class="col-md-2">
+                                    <div class="col-md-6">
                                         <input type="radio" id="pilih2" name="scale" value="custom" required
                                             aria-labelledby="pilih2" aria-describedby="pilih2" class="disabled" disabled>
                                         <label for="pilih2">Custom</label>

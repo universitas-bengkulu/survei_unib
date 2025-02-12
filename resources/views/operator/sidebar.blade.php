@@ -19,7 +19,7 @@
 @endphp
 @foreach ($categories as $category)
     <li
-        class="treeview {{ set_active(['operator.indikator.' . $category->slug, 'operator.laporan.per_indikator.' . $category->slug]) }}">
+        class="treeview {{ set_active(['operator.indikator.' . $category->slug, 'operator.laporan.per_indikator.' . $category->slug, 'operator.deskripsi.' . $category->slug, 'operator.laporan.saran.' . $category->slug]) }}">
         <a href="#">
             {{-- <i class="fa fa-building"></i> --}}
             <span
@@ -40,7 +40,7 @@
                         class="fa fa-circle-o"></i> Laporan Per Indikator</a></li>
             <li class="{{ set_active('operator.laporan.saran.' . $category->slug) }}"><a
                     href="{{ route('operator.laporan.saran.' . $category->slug) }}"><i
-                        class="fa fa-circle-o"></i> Saran</a></li>
+                        class="fa fa-circle-o"></i>Informasi Tambahan/Saran</a></li>
         </ul>
     </li>
 @endforeach

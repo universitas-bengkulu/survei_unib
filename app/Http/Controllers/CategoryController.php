@@ -154,6 +154,7 @@ class CategoryController extends Controller
             'label'    =>  htmlspecialchars($request->label),
             'variable'    =>  htmlspecialchars($request->variable),
             'required'    =>  $request->wajib,
+            'additional'    =>  htmlspecialchars($request->additional),
         ]);
 
         $notification = array(

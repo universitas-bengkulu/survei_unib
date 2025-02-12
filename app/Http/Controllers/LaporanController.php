@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 use App\Exports\EvaluasiExport;
 use App\Models\Category;
 use App\Models\Evaluasi;
+use App\Models\Formulir;
 use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -189,7 +190,7 @@ class LaporanController extends Controller
             'file' => 'required|mimes:xlsx,csv',
         ]);
 
-        Excel::import(new EvaluasisImport, $request->file('file'), $category_id);
+        Excel::import(new EvaluasisImport($category_id), $request->file('file'));
 
         return back()->with('success', 'Data evaluasi berhasil diimpor.');
     }
@@ -205,6 +206,9 @@ class LaporanController extends Controller
             ->where('category_id', $category_id)
             ->orderBy('category_id')
             ->get();
+        $formulirs = Formulir::where('category_id', $category_id)
+            ->orderBy('category_id')
+            ->get();
 
         // Set up column widths and styles
         $columnWidth = 30;
@@ -212,6 +216,91 @@ class LaporanController extends Controller
 
         // Start from column A
         $currentColumn = 'A';
+        $sheet->setCellValue($currentColumn . '1', 'Tanggal survei/Kuesioner');
+        $sheet->getColumnDimension($currentColumn)->setWidth($columnWidth);
+        $sheet->getStyle($currentColumn . '1')->applyFromArray([
+            'alignment' => [
+            'horizontal' => Alignment::HORIZONTAL_CENTER,
+            'vertical' => Alignment::VERTICAL_CENTER,
+            'wrapText' => true
+            ],
+            'font' => [
+            'bold' => true
+            ],
+            'fill' => [
+            'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+            'startColor' => [
+                'argb' => 'FF00B050'
+            ]
+            ],
+            'borders' => [
+            'allBorders' => [
+                'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                'color' => ['argb' => 'FF000000'],
+            ],
+            ],
+        ]);
+        $currentColumn++;
+
+        $sheet->setCellValue($currentColumn . '1', 'Waktu survei/Kuesioner');
+        $sheet->getColumnDimension($currentColumn)->setWidth($columnWidth);
+        $sheet->getStyle($currentColumn . '1')->applyFromArray([
+            'alignment' => [
+            'horizontal' => Alignment::HORIZONTAL_CENTER,
+            'vertical' => Alignment::VERTICAL_CENTER,
+            'wrapText' => true
+            ],
+            'font' => [
+            'bold' => true
+            ],
+            'fill' => [
+            'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+            'startColor' => [
+                'argb' => 'FF00B050'
+            ]
+            ],
+            'borders' => [
+            'allBorders' => [
+                'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                'color' => ['argb' => 'FF000000'],
+            ],
+            ],
+        ]);
+        $currentColumn++;
+        // Add headers based on formulir labels
+        foreach($formulirs as $formulir){
+
+            $sheet->setCellValue($currentColumn . '1', $formulir->label);
+            // Set column width
+            $sheet->getColumnDimension($currentColumn)->setWidth($columnWidth);
+
+            // Style the header cell
+            $sheet->getStyle($currentColumn . '1')->applyFromArray([
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+                'vertical' => Alignment::VERTICAL_CENTER,
+                'wrapText' => true
+            ],
+            'font' => [
+                'bold' => true
+            ],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => [
+                    'argb' => 'FF9BC2E6'
+                ]
+                ],
+                'borders' => [
+            'allBorders' => [
+                'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                'color' => ['argb' => 'FF000000'],
+            ],
+            ],
+            ]);
+
+            // Move to next column
+            $currentColumn++;
+        }
 
         // Add headers based on indikator names
         foreach ($indikators as $indikator) {
@@ -223,14 +312,26 @@ class LaporanController extends Controller
 
             // Style the header cell
             $sheet->getStyle($currentColumn . '1')->applyFromArray([
-                'alignment' => [
-                    'horizontal' => Alignment::HORIZONTAL_CENTER,
-                    'vertical' => Alignment::VERTICAL_CENTER,
-                    'wrapText' => true
-                ],
-                'font' => [
-                    'bold' => true
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+                'vertical' => Alignment::VERTICAL_CENTER,
+                'wrapText' => true
+            ],
+            'font' => [
+                'bold' => true
+            ],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => [
+                    'argb' => 'FFFFFF00'
                 ]
+                ],
+                'borders' => [
+            'allBorders' => [
+                'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                'color' => ['argb' => 'FF000000'],
+            ],
+            ],
             ]);
 
             // Move to next column
@@ -239,14 +340,6 @@ class LaporanController extends Controller
 
         // Set row height for header
         $sheet->getRowDimension(1)->setRowHeight($headerHeight);
-
-        // Add example row
-        $currentColumn = 'A';
-        foreach ($indikators as $indikator) {
-            $sheet->setCellValue($currentColumn . '2', '4');
-            $sheet->getStyle($currentColumn . '2')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-            $currentColumn++;
-        }
 
         // Create response
         $writer = new Xlsx($spreadsheet);

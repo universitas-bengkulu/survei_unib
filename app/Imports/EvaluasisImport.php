@@ -5,7 +5,10 @@ namespace App\Imports;
 use App\Models\Evaluasi;
 use App\Models\EvaluasiRekap;
 use App\Models\Category;
+use App\Models\EvaluasiData;
+use App\Models\Formulir;
 use App\Models\Indikator;
+use App\Models\Saran;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
@@ -26,25 +29,58 @@ class EvaluasisImport implements ToCollection, WithHeadingRow
     public function collection(Collection $rows)
     {
         $category_id = $this->category_id;
+
         foreach ($rows as $row) {
+            $numericRow = array_values($row->toArray());
+            $date = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($numericRow[0])->format('Y-m-d');
+            $time = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($numericRow[1])->format('H:i:s');
+            $datetime = $date . ' ' . $time;
+            if (is_null($datetime) || empty($datetime) ) {
+                $datetime = now();
+            }
             $evaluasiRekap = EvaluasiRekap::create([
-                'category_id' => $category_id ,
+                'category_id' => $category_id,
+                'created_at' => $datetime,
+                'updated_at' => $datetime,
             ]);
+
             $evaluasiRekapId = $evaluasiRekap->id;
+
+            $saran = Saran::create([
+                'evaluasi_rekap_id' => $evaluasiRekapId,
+                'category_id' => $category_id,
+                'saran' => '-',
+                'created_at' => $datetime,
+                'updated_at' => $datetime,
+            ]);
+
+
+            $formulirs = Formulir::where('category_id', $category_id)->get();
             $indikators = Indikator::where('category_id', $category_id)->get();
-            $index = 0;
+            $index = 2;
 
-            foreach ($row as $skor) {
-                // Cari indikator berdasarkan urutan
-                if (isset($indikators[$index])) {
-                    $indikator = $indikators[$index];
-
+            foreach ($formulirs as $formulir) {
+                EvaluasiData::create([
+                    'evaluasi_rekap_id' => $evaluasiRekapId,
+                    'variable' => $formulir->label,
+                    'isi' =>  isset($numericRow[$index]) ? $numericRow[$index] : '-',
+                    'created_at' => $datetime,
+                    'updated_at' => $datetime,
+                ]);
+                $index++;
+            }
+            $loop_indikator = 0;
+            foreach ($indikators as $indikator) {
+                if (isset($numericRow[$index]) && !is_null($numericRow[$index])) {
+                    $indikator = $indikators[$loop_indikator++];
                     Evaluasi::create([
-                        'evaluasi_rekap_id' => $evaluasiRekapId, // Sesuaikan dengan request
+                        'evaluasi_rekap_id' => $evaluasiRekapId,
                         'category_id' => $category_id,
                         'indikator_id' => $indikator->id,
                         'nama_indikator' => $indikator->nama_indikator,
-                        'skor' => is_numeric($skor) ? (int)$skor : null,
+                        'skor' => isset($numericRow[$index]) ? $numericRow[$index] : 0,
+                        'created_at' => $datetime,
+                        'updated_at' => $datetime,
                     ]);
                 }
                 $index++;

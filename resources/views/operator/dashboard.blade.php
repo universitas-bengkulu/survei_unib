@@ -72,11 +72,11 @@
                 <div class="row">
                     @foreach ($evaluasi_per_category as $category_id => $data)
                     <div class="col-md-12  ">
-                        <h4 style="background-color: #ccc; color: #000; border-radius: 4px; padding: 5px; font-weight: 800">{{ $categories->find($category_id)->nama_category }}</h4>
+                        <h4 style=" color: #000; border-radius: 4px; padding: 5px; font-weight: 800">{{ $categories->find($category_id)->nama_category }}</h4>
                     </div>
                     <div class="col-lg-3 col-xs-12" style="padding-bottom:10px !important;">
                         <!-- small box -->
-                        <div class="small-box bg-aqua" style="margin-bottom:0px;">
+                        <div class="small-box bg-aqua" style="margin-bottom:0px;border-radius: 10px;">
                             <div class="inner">
                                 <b style="">{{ $data['jumlah_evaluasi'] }}<i> Jumlah Evaluasi</i></b>
                             </div>
@@ -87,7 +87,7 @@
                     </div>
                     <div class="col-lg-3 col-xs-12" style="padding-bottom:10px !important;">
                         <!-- small box -->
-                        <div class="small-box bg-blue" style="margin-bottom:0px;">
+                        <div class="small-box bg-blue" style="margin-bottom:0px;border-radius: 10px;">
                             <div class="inner">
                                 <b style="">{{ $data['jumlah_evaluasi_today'] }}<i> Evaluasi Hari Ini</i></b>
 
@@ -99,7 +99,7 @@
                     </div>
                     <div class="col-lg-3 col-xs-12" style="padding-bottom:10px !important;">
                         <!-- small box -->
-                        <div class="small-box bg-yellow" style="margin-bottom:0px;">
+                        <div class="small-box bg-yellow" style="margin-bottom:0px;border-radius: 10px;">
                             <div class="inner">
                                 <b style="">{{ number_format($data['average_skor'], 2) }}<i> Rata-Rata Keseluruhan</i></b>
 
@@ -111,7 +111,7 @@
                     </div>
                     <div class="col-lg-3 col-xs-12" style="padding-bottom:10px !important;">
                         <!-- small box -->
-                        <div class="small-box bg-green" style="margin-bottom:0px;">
+                        <div class="small-box bg-green" style="margin-bottom:0px;border-radius: 10px;">
                             <div class="inner">
                             <b style="">{{ number_format($data['average_skor_today'], 2) }}<i> Rata-Rata Hari Ini</i></b>
 
@@ -120,6 +120,9 @@
                             <i class="fa fa-book"></i>
                             </div>
                         </div>
+                    </div>
+                    <div class="col-md-12" style=" ;margin: 5px">
+                        <div style="border-top: 2px solid #3C8DBC;width: 100%;opacity: 20%;"></div>
                     </div>
 
                     @endforeach

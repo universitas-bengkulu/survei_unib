@@ -417,6 +417,16 @@
                                                                     @endif
                                                                 </div>
                                                             </div>
+                                                            <div class="form-group col-md-12">
+                                                                <label for="">Additional</label>
+                                                                <textarea name="additional" id="additional" class="form-control" rows="5" style="text-align: left" @if (!in_array($item->type, ['select', 'checkbox', 'radio'])) disabled @endif>{{ $item->additional }}</textarea>
+                                                                <span class="text-danger italic">gunakan tanda titik koma <b>;</b> untuk menambah lebih banyak opsi</span>
+                                                                <div>
+                                                                    @if ($errors->has('wajib'))
+                                                                        <small class="form-text text-danger">{{ $errors->first('wajib') }}</small>
+                                                                    @endif
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-secondary"
