@@ -11,11 +11,9 @@ use Illuminate\Http\Request;
 class IndikatorController extends Controller
 {
 
-    public function indikator(Request $request)
+    public function indikator(Request $request, $id, $slug)
     {
-        $idd = $request->segment(3);
-        $id = base64_decode($idd);
-        $category_id = substr($id, 8);
+        $category_id = $id;
         $indikators = Indikator::with(['category.options'])->where('category_id', $category_id)->get();
         $category = Category::where('id', $category_id)->first();
         $options = Option::where('category_id', $category_id)->get();
@@ -56,7 +54,7 @@ class IndikatorController extends Controller
             'message' => 'Berhasil, indikator penilaian berhasil ditambahkan!',
             'alert-type' => 'success'
         );
-        return redirect()->route('operator.indikator.' . $request->slug)->with($notification);
+        return redirect()->route('operator.indikator', [$request->category_id, $request->slug])->with($notification);
     }
 
     public function updateIndikator($id, $slug, Request $request)
@@ -69,12 +67,14 @@ class IndikatorController extends Controller
         ], $attributes);
 
         $indikator = Indikator::where('id', $id)->first();
+        $category_id = $indikator->category_id;
+
         $indikator->update(['nama_indikator'    =>  htmlspecialchars($request->nama_indikator)]);
         $notification = array(
             'message' => 'Berhasil, indikator penilaian berhasil diubah!',
             'alert-type' => 'success'
         );
-        return redirect()->route('operator.indikator.' . $slug)->with($notification);
+        return redirect()->route('operator.indikator' ,[$category_id, $slug])->with($notification);
     }
 
 
@@ -124,10 +124,10 @@ class IndikatorController extends Controller
             'message' => 'Berhasil, indikator penilaian berhasil diubah!',
             'alert-type' => 'success'
         );
-        return redirect()->route('operator.indikator.' . $slug)->with($notification);
+        return redirect()->route('operator.indikator' , [$id, $slug])->with($notification);
     }
 
-    public function updateOption($id, $slug, Request $request)
+    public function updateOption($category_id, $slug, Request $request)
     {
         $attributes = [
             'nama_option'   =>  'Nama Option',
@@ -138,7 +138,7 @@ class IndikatorController extends Controller
             'nilai'    =>  'required',
         ], $attributes);
 
-        $option = Option::where('id', $id)->first();
+        $option = Option::where('id', $request->id)->first();
         $option->update([
             'nama_option'    =>  htmlspecialchars($request->nama_option),
             'nilai'    =>  htmlspecialchars($request->nilai)
@@ -147,48 +147,51 @@ class IndikatorController extends Controller
             'message' => 'Berhasil, Option berhasil diubah!',
             'alert-type' => 'success'
         );
-        return redirect()->route('operator.indikator.' . $slug)->with($notification);
+        return redirect()->route('operator.indikator' , [$category_id, $slug])->with($notification);
     }
 
-    public function delateOption($id, $slug)
+    public function delateOption($category_id, $slug, Request $request)
     {
-        Option::where('id', $id)->delete();
+        Option::where('id', $request->id)->delete();
         $notification = array(
             'message' => 'Berhasil, Option berhasil dihapus!',
             'alert-type' => 'success'
         );
-        return redirect()->route('operator.indikator.' . $slug)->with($notification);
+        return redirect()->route('operator.indikator' , [$category_id, $slug])->with($notification);
     }
 
     public function aktifIndikator($id, $slug)
     {
         $indikator = Indikator::where('id', $id)->first();
+        $category_id = $indikator->category_id;
+
         $indikator->update(['ditampilkan' => 0]);
         $notification = array(
             'message' => 'Berhasil, indikator penilaian berhasil dinonaktifkan!',
             'alert-type' => 'success'
         );
-        return redirect()->route('operator.indikator.' . $slug)->with($notification);
+        return redirect()->route('operator.indikator' , [$category_id, $slug])->with($notification);
     }
 
     public function nonaktifIndikator($id, $slug)
     {
         $indikator = Indikator::where('id', $id)->first();
+        $category_id = $indikator->category_id;
         $indikator->update(['ditampilkan' => 1]);
         $notification = array(
             'message' => 'Berhasil, indikator penilaian berhasil diaktifkan!',
             'alert-type' => 'success'
         );
-        return redirect()->route('operator.indikator.' . $slug)->with($notification);
+        return redirect()->route('operator.indikator' , [$category_id, $slug])->with($notification);
     }
 
-    public function delateIndikator($id, $slug)
+    public function delateIndikator($id, $slug, Request $request)
     {
         Indikator::where('id', $id)->delete();
         $notification = array(
             'message' => 'Berhasil, indikator penilaian berhasil dihapus!',
             'alert-type' => 'success'
         );
-        return redirect()->route('operator.indikator.' . $slug)->with($notification);
+        return redirect()->route('operator.indikator' ,[$request->category_id ,$slug])->with($notification);
     }
 }

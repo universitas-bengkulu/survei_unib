@@ -9,7 +9,7 @@
     @endif
 @endsection
 @section('halaman')
-    Halaman Operator
+    Halaman {{auth()->user()->akses}}
 @endsection
 @section('content-title')
     Dashboard

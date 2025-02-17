@@ -1,25 +1,41 @@
-<li class="header" style="font-weight:bold;">MENU UTAMA</li>
-<li class="{{ set_active('operator.dashboard') }}">
+<li class="header" style="font-weight:bold;background-color: #3C8DBC; color: #fff ">MENU UTAMA</li>
+<li class="one {{ set_active('operator.dashboard') }}">
     <a href="{{ route('operator.dashboard') }}">
         <i class="fa fa-dashboard"></i> <span>Dashboard</span>
     </a>
 </li>
-<li class="{{ set_active('operator.category') }}">
+<style>
+    .sidebar-menu li.one.active a{ background-color: #b7e5ff4f !important; }
+</style>
+@if (auth()->user()->akses=='administrator')
+<li class="one {{ set_active('operator.category') }}">
     <a href="{{ route('operator.category') }}">
         <i class="fa fa-list"></i> <span>Jenis Survei</span>
     </a>
 </li>
+<li class="one {{ set_active(['operator.users', 'operator.edit', 'operator.add']) }}">
+    <a href="{{ route('operator.users') }}">
+        <i class="fa fa-users"></i> <span>Operator</span>
+    </a>
+</li>
 
-<li class="header" style="font-weight:bold;">DAFTAR SURVEI</li>
+@endif
 
-
+<li class="one {{ set_active('operator.resetPassword') }}">
+    <a href="{{ route('operator.resetPassword') }}">
+        <i class="fa fa-key"></i> <span>Reset Password </span>
+    </a>
+</li>
 @php
     use App\Models\Category;
-    $categories = Category::get();
+    $menu_categories = Category::get();
 @endphp
-@foreach ($categories as $category)
-    <li
-        class="treeview {{ set_active(['operator.indikator.' . $category->slug, 'operator.laporan.per_indikator.' . $category->slug, 'operator.deskripsi.' . $category->slug, 'operator.laporan.saran.' . $category->slug]) }}">
+<li class="header" style="font-weight:bold;background-color: #3C8DBC; color: #fff ">DAFTAR SURVEI <span class="badge bg-red pull-right-container" style="float: right; margin-right: -10px">{{$menu_categories->count()}}</span></li>
+
+
+
+@foreach ($menu_categories as $category)
+    <li class="treeview  {{ request()->is('operator/deskripsi/'.$category->id.'/'.$category->slug) || request()->is('operator/indikator/'.$category->id.'/'.$category->slug) ||request()->is('operator/laporan/'.$category->id.'/per_indikator/'.$category->slug)|| request()->is('operator/laporan/pesan_dan_saran/'.$category->id.'/'.$category->slug) || request()->is('operator/jenis-survei/'.$category->id.'/formulir')  ? 'active' : ''  }} ">
         <a href="#">
             {{-- <i class="fa fa-building"></i> --}}
             <span
@@ -29,17 +45,20 @@
             </span>
         </a>
         <ul class="treeview-menu">
-            <li class="{{ set_active('operator.deskripsi.' . $category->slug) }}"><a
-                href="{{ route('operator.deskripsi.' . $category->slug) }}"><i class="fa fa-circle-o"></i>
+            <li class="{{ request()->is('operator/deskripsi/'.$category->id.'/'.$category->slug) ? 'active' : '' }}"><a
+                href="{{ route('operator.deskripsi' , [$category->id , $category->slug]) }}"><i class="fa fa-circle-o"></i>
                 Deskripsi</a></li>
-            <li class="{{ set_active('operator.indikator.' . $category->slug) }}"><a
-                    href="{{ route('operator.indikator.' . $category->slug) }}"><i class="fa fa-circle-o"></i>
-                    Indikator</a></li>
-            <li class="{{ set_active('operator.laporan.per_indikator.' . $category->slug) }}"><a
-                    href="{{ route('operator.laporan.per_indikator.' . $category->slug) }}"><i
+            <li class="{{ request()->is('operator/jenis-survei/'.$category->id.'/formulir') ? 'active' : '' }}"><a
+                href="{{ route('operator.category.formulir' , [$category->id ]) }}"><i class="fa fa-circle-o"></i>
+                Form</a></li>
+            <li class="{{ request()->is('operator/indikator/'.$category->id.'/'.$category->slug) ? 'active' : '' }}"><a
+                    href="{{ route('operator.indikator', [$category->id , $category->slug]) }}"><i class="fa fa-circle-o"></i>
+                    Indikator/Pertanyaan</a></li>
+            <li class="{{ request()->is('operator/laporan/'.$category->id.'/per_indikator/'.$category->slug) ? 'active' : '' }}"><a
+                    href="{{ route('operator.laporan.per_indikator', [$category->id , $category->slug]) }}"><i
                         class="fa fa-circle-o"></i> Laporan Per Indikator</a></li>
-            <li class="{{ set_active('operator.laporan.saran.' . $category->slug) }}"><a
-                    href="{{ route('operator.laporan.saran.' . $category->slug) }}"><i
+            <li class="{{ request()->is('operator/laporan/pesan_dan_saran/'.$category->id.'/'.$category->slug) ? 'active' : '' }}"><a
+                    href="{{ route('operator.laporan.saran', [$category->id , $category->slug]) }}"><i
                         class="fa fa-circle-o"></i>Informasi Tambahan/Saran</a></li>
         </ul>
     </li>

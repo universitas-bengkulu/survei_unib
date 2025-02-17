@@ -8,6 +8,7 @@ use App\Models\EvaluasiData;
 use App\Models\EvaluasiRekap;
 use App\Models\Formulir;
 use App\Models\Indikator;
+use App\Models\Option;
 use App\Models\Saran;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -41,28 +42,26 @@ class HomeController extends Controller
     }
 
     //default
-    public function home_survei(Request $request)
+    public function home_survei(Request $request, $id, $slug)
     {
-        $idd = $request->segment(1);
-        $id = base64_decode($idd);
+        $id = base64_decode($id);
         $category_id = substr($id, 8);
         $categories = Category::where('id', $category_id)->first();
         $formulir = Formulir::where('category_id', $category_id)->get();
         $indikators = Indikator::where('ditampilkan', true)->where('category_id', $category_id)->get();
-        return view('user.home_survei', compact(['indikators', 'categories', 'formulir']));
+        $options = Option::where('category_id', $category_id)->get();
+            return view('user.home_survei', compact(['indikators', 'categories', 'formulir', 'options']));
     }
     public function post_survei(Request $request)
     {
-
         $formulir = Formulir::where('category_id', $request->category_id)->get();
         $rules = [];
         $messages = [];
         foreach ($formulir as $item) {
-            if($item->required == 1){
+            if ($item->required == 1) {
                 $rules[$item->variable] = 'required';
                 $messages[$item->variable . '.required'] = $item->label . ' harus diisi';
             }
-
         }
         $validated = $request->validate($rules, $messages);
         try {
@@ -86,14 +85,10 @@ class HomeController extends Controller
                 );
             }
             Evaluasi::insert($kuisioner);
-
-
-
             foreach ($formulir as $item) {
-                if($item->variable == 'checkbox'){
+                if ($item->variable == 'checkbox') {
                     $isi = implode('; ', $request->options);
-                }
-                else {
+                } else {
                     $input = $request->input($item->variable);
                     $isi = is_array($input) ? implode('; ', $input) : htmlspecialchars($input);
                 }
@@ -129,10 +124,4 @@ class HomeController extends Controller
             return redirect()->back()->with($notification);
         }
     }
-
-    public function surveikerjasama (){
-        return view('user.custom.kerja_sama');
-    }
-
-
 }

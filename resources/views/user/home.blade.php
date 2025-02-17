@@ -47,7 +47,7 @@
                         <div
                             class="mx-auto grid grid-cols-1 gap-x-1 md:gap-x-8 gap-y-10 lg:grid-cols-3 md:grid-cols-2 2xl:grid-cols-4">
                             @foreach ($categories as $category)
-                                <a href="{{ route('survei.'.$category->slug) }}"
+                                <a href="{{ route('survei.home.user', [base64_encode('Evaluasi'.$category->id),$category->slug]) }}"
                                     class="rounded-md bg-blue-900 duration-300 transform content-div md:p-2 p-1 group shadow-lg hover:shadow-xl">
                                     <div class="bg-white py-6 px-3 shadow-[inset_0px_0px_10px_0px_#000] rounded-md">
                                         <div

@@ -14,10 +14,6 @@
 @endsection
 
 @section('content')
-@php
-    use App\Models\Option;
-    $options = Option::where('category_id', $categories->id)->get();
-@endphp
     <div class="  bg-blue-900 relative">
         <img src="{{ asset('assets/images/business-background-16.png') }}" alt="bg-img"
             class="w-full h-full object-cover    brightness-50 absolute z-0" />
@@ -26,7 +22,7 @@
                 <img class=" place-self-center    h-20" src="{{ asset('assets/Logo.svg') }}" alt="Img" />
             </div>
             <h2 class="mb-6 mt-4 text-center font-sans text-xl lg:text-3xl font-bold text-white uppercase  ">
-                {{ $categories->nama_category }}<br>
+                {{ isset($categories->nama_category)? $categories->nama_category: '-'  }}<br>
                 Universitas Bengkulu Tahun
                 <script>
                     document.write(new Date().getFullYear())
@@ -73,7 +69,7 @@
                     </div>
                 @else
                     <div class=" w-full mt-6 main-question mb-8 flex flex-col divide-y text-gray-800  text-base">
-                        <form action="{{ route($categories->slug . '.post') }}" method="post">
+                        <form action="{{ route( 'survei.post', [$categories->id , $categories->slug]) }}" method="post">
                             @csrf
                             <input type="hidden" name="jumlah" value="{{ count($indikators) }}">
                             <input type="hidden" name="category_id" value="{{ $categories->id }}">

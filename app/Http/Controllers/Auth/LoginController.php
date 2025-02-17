@@ -42,6 +42,7 @@ class LoginController extends Controller
 
     public function login(Request $request){
         $input = $request->all();
+
         $messages = [
             'required' => ':attribute harus diisi',
             'username' => ':attribute harus berisi username yang valid.',
@@ -55,36 +56,34 @@ class LoginController extends Controller
             'password' =>  'required',
         ],$messages,$attributes);
 
-        if (auth()->attempt(array('username'   =>  htmlspecialchars($input['username']), 'password' =>  htmlspecialchars($input['password']), 'aktif'    =>  true))) {
-           if (Auth::check()) {
-            if (auth()->user()->akses == "administrator") {
-                $notification1 = array(
-                    'message' => 'Berhasil, anda login sebagai operator!',
-                    'alert-type' => 'success'
-                );
-                return redirect()->route('operator.dashboard')->with($notification1);;
-            }elseif (auth()->user()->akses == "tendik") {
-                $notification2 = array(
-                    'message' => 'Berhasil, anda login sebagai tenaga kependiidkan!',
-                    'alert-type' => 'success'
-                );
-                return redirect()->route('tendik.dashboard')->with($notification2);
-            }elseif (auth()->user()->akses == "perencanaan") {
-                $notification2 = array(
-                    'message' => 'Berhasil, anda login sebagai perencanaan!',
-                    'alert-type' => 'success'
-                );
-                return redirect()->route('perencanaan.dashboard')->with($notification2);
-            }
+        if (auth()->attempt(array('username'   =>  htmlspecialchars($input['username']), 'password' =>  htmlspecialchars($input['password'])))) {
+           if ( Auth::check()) {
+            if(auth()->user()->aktif==1){
+                if (auth()->user()->akses == "administrator") {
+                    $notification1 = array(
+                        'message' => 'Berhasil, anda login sebagai administrator!',
+                        'alert-type' => 'success'
+                    );
+                    return redirect()->route('operator.dashboard')->with($notification1);
+                }elseif (auth()->user()->akses == "operator") {
+                    $notification2 = array(
+                        'message' => 'Berhasil, anda login sebagai operator!',
+                        'alert-type' => 'success'
+                    );
+                    return redirect()->route('operator.dashboard')->with($notification2);
+                }
+            }else{
+                Auth::logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+                    return redirect()->route('login')->with('error','Akun sudah tidak aktif, Silahkan hubungi Admin');
+                }
            } else {
-                return redirect()->route('login')->with('error','Password salah atau akun sudah tidak aktif');
+                return redirect()->route('login')->with('error','Gagal Login Silahkan Coba lagi');
            }
         }else{
-            $notification = array(
-                'message' => 'Gagal, Password salah atau akun sudah tidak aktif, silahkan hubungi admin!',
-                'alert-type' => 'error'
-            );
-            return redirect()->route('login')->with($notification);
+            return redirect()->route('login')->with('error','username atau password salah!');
+
         }
     }
 

@@ -87,23 +87,27 @@ class EvaluasiExport implements FromCollection, WithHeadings, WithStyles, WithCu
         // Style for headers
         $headerStyle = [
             'font' => [
-                'bold' => true,
-                'color' => ['rgb' => 'FFFFFF'],
+            'bold' => true,
+            'color' => ['rgb' => 'FFFFFF'],
             ],
             'fill' => [
-                'fillType' => Fill::FILL_SOLID,
-                'startColor' => ['rgb' => '3C8DBC'],
+            'fillType' => Fill::FILL_SOLID,
+            'startColor' => ['rgb' => '3C8DBC'],
             ],
             'alignment' => [
-                'horizontal' => Alignment::HORIZONTAL_CENTER,
-                'vertical' => Alignment::VERTICAL_CENTER,
+            'horizontal' => Alignment::HORIZONTAL_CENTER,
+            'vertical' => Alignment::VERTICAL_CENTER,
             ],
             'borders' => [
-                'allBorders' => [
-                    'borderStyle' => Border::BORDER_THIN,
-                ],
+            'allBorders' => [
+                'borderStyle' => Border::BORDER_THIN,
+            ],
             ],
         ];
+
+        $totalColumn = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($this->questions->count() + 2);
+        $sheet->getStyle($totalColumn . '1')->applyFromArray($headerStyle);
+        $sheet->getStyle($totalColumn . '2')->applyFromArray($headerStyle);
 
         // Apply styles
         $sheet->getStyle('A1:' . $lastColumn . '2')->applyFromArray($headerStyle);
@@ -111,16 +115,27 @@ class EvaluasiExport implements FromCollection, WithHeadings, WithStyles, WithCu
         // Style for data cells
         $dataStyle = [
             'borders' => [
-                'allBorders' => [
-                    'borderStyle' => Border::BORDER_THIN,
-                ],
+            'allBorders' => [
+                'borderStyle' => Border::BORDER_THIN,
+            ],
             ],
             'alignment' => [
-                'horizontal' => Alignment::HORIZONTAL_CENTER,
+            'horizontal' => Alignment::HORIZONTAL_CENTER,
             ],
         ];
 
         $sheet->getStyle('A3:' . $lastColumn . $sheet->getHighestRow())->applyFromArray($dataStyle);
+
+        $totalColumn = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($this->questions->count() + 2);
+        $sheet->getStyle($totalColumn . '3:' . $totalColumn . $sheet->getHighestRow())->applyFromArray($dataStyle);
+
+        $totalColumnStyle = [
+            'fill' => [
+            'fillType' => Fill::FILL_SOLID,
+            'startColor' => ['rgb' => 'B7DEE8'],
+            ],
+        ];
+        $sheet->getStyle($totalColumn . '3:' . $totalColumn . $sheet->getHighestRow())->applyFromArray($totalColumnStyle);
     }
 
     /**

@@ -31,13 +31,11 @@ class LaporanController extends Controller
         ]);
     }
 
-    public function laporan_per_indikator(Request $request)
+    public function laporan_per_indikator(Request $request, $id, $slug)
     {
         $filteredYear = $request->get('year');
 
-        $idd = $request->segment(4);
-        $id = base64_decode($idd);
-        $category_id = substr($id, 8);
+        $category_id = $id;
         $category = Category::where('id', $category_id)->first();
         $results = $this->getPivotResults($category_id, $filteredYear);
 
@@ -68,13 +66,11 @@ class LaporanController extends Controller
         );
     }
 
-    public function saran(Request $request)
+    public function saran(Request $request, $id, $slug)
     {
         $filteredYear = $request->get('year');
 
-        $idd = $request->segment(4);
-        $id = base64_decode($idd);
-        $category_id = substr($id, 8);
+        $category_id = $id;
         $category = Category::with('formulirs')->where('id', $category_id)->first();
         $sarans = Saran::with(['evaluasiRekap.evaluasiDatas'])
             ->when($filteredYear, function ($query, $filteredYear) {
@@ -91,14 +87,12 @@ class LaporanController extends Controller
         ]);
     }
 
-    public function exportSaran(Request $request)
+    public function exportSaran(Request $request, $id, $slug)
     {
         $filteredYear = $request->get('year');
         $appendName = $filteredYear ? '- Tahun ' . $filteredYear .'-'. time() : time();
 
-        $idd = $request->segment(4);
-        $id = base64_decode($idd);
-        $category_id = substr($id, 8);
+        $category_id = $id;
         $category = Category::with('formulirs')->where('id', $category_id)->first();
         $sarans = Saran::with(['evaluasiRekap.evaluasiDatas'])
             ->when($filteredYear, function ($query, $filteredYear) {

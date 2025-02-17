@@ -1,7 +1,7 @@
 @extends('layouts.operator')
-@section('location','Dashboard')
+@section('location', 'Dashboard')
 @section('location2')
-    <i class="fa fa-dashboard"></i>&nbsp;DASHBOARD
+    {{ $category->nama_category }}
 @endsection
 @section('user-login')
     @if (Auth::check())
@@ -9,7 +9,7 @@
     @endif
 @endsection
 @section('halaman')
-    Halaman Operator
+    Halaman {{auth()->user()->akses}}
 @endsection
 @section('content-title')
     Dashboard
@@ -17,7 +17,8 @@
 @endsection
 @section('page')
     <li><a href="#"><i class="fa fa-home"></i> Survei Kepuasan</a></li>
-    <li class="active">Dashboard</li>
+    <li >Informasi Tambahan/saran</li>
+    <li class="active">{{ $category->nama_category }}</li>
 @endsection
 @section('sidebar-menu')
     @include('operator/sidebar')
@@ -153,7 +154,6 @@
                         <div class="col-12 col-md-6">
                             <h3 class="box-title">
                                 <i class="fa fa-info-circle"></i>&nbsp;Pesan & Saran
-                                <strong class="text-success">{{ $category->nama_category }}</strong>
                             </h3>
 
                             @if($filteredYear)
@@ -163,7 +163,7 @@
                             @endif
                         </div>
                         <div class="col-12 col-md-6 text-right">
-                            <a href="{{ route('operator.laporan.saran.'. $category->slug .'.export', ['year' => $filteredYear]) }}"
+                            <a href="{{ route('operator.laporan.saran.export', [$category->id, $category->slug, 'year' => $filteredYear]) }}"
                                class="btn btn-primary">
                                 Export Excel
                             </a>
@@ -230,7 +230,7 @@
                 <div class="modal-header">
                     <h5 class="modal-title" id="filterModalLabel">Filter</h5>
                 </div>
-                <form action="{{ route('operator.laporan.saran.'. $category->slug) }}" method="get">
+                <form action="{{ route('operator.laporan.saran', [$category->id, $category->slug] ) }}" method="get">
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="filter-year">Tahun</label>
@@ -245,7 +245,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-                        <a href="{{ route('operator.laporan.saran.'. $category->slug) }}"
+                        <a href="{{ route('operator.laporan.saran', [$category->id, $category->slug]) }}"
                            class="btn btn-info">Hapus Filter</a>
                         <button type="submit" class="btn btn-primary">Tampilkan</button>
                     </div>

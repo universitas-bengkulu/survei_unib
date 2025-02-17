@@ -7,10 +7,8 @@ use Illuminate\Http\Request;
 
 class DeskripsiController extends Controller
 {
-    public function deskripsi (Request $request){
-        $idd = $request->segment(3);
-        $id = base64_decode($idd);
-        $category_id = substr($id, 8);
+    public function deskripsi (Request $request, $id, $slug){
+        $category_id = $id;
         $deskripsi = Category::where('id', $category_id)->first();
         return view('operator.deskripsi.index',[
             'deskripsi'    => $deskripsi,
@@ -31,7 +29,7 @@ class DeskripsiController extends Controller
             'message' => 'Berhasil, Deskripsi berhasi di perbarui!',
             'alert-type' => 'success'
         );
-        return redirect()->route('operator.deskripsi.'.$slug)->with($notification);
+        return redirect()->route('operator.deskripsi', [$id, $slug])->with($notification);
     }
 
 }

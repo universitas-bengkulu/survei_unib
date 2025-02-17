@@ -1,7 +1,7 @@
 @extends('layouts.operator')
 @section('location', 'Dashboard')
 @section('location2')
-    <i class="fa fa-dashboard"></i>&nbsp;DASHBOARD
+    {{ $category->nama_category }}
 @endsection
 @section('user-login')
     @if (Auth::check())
@@ -9,7 +9,7 @@
     @endif
 @endsection
 @section('halaman')
-    Halaman Operator
+    Halaman {{auth()->user()->akses}}
 @endsection
 @section('content-title')
     Dashboard
@@ -17,7 +17,8 @@
 @endsection
 @section('page')
     <li><a href="#"><i class="fa fa-home"></i> Survei Kepuasan</a></li>
-    <li class="active">Dashboard</li>
+    <li >laporan Per Indikator</li>
+    <li class="active">{{ $category->nama_category }}</li>
 @endsection
 @section('sidebar-menu')
     @include('operator/sidebar')
@@ -154,13 +155,12 @@
         <div class="col-md-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fa fa-book"></i>&nbsp;Manajemen Data Laporan Per Indikator <strong
-                            class="text-success">{{ $category->nama_category }}</strong></h3>
+                    <h3 class="box-title"><i class="fa fa-book"></i>&nbsp;Manajemen Data Laporan Per Indikator  </h3>
                 </div>
                 <div class="mb-3">
                     <div class="row">
                         <div class="col-md-6"><form
-                            action="{{ route('evaluasi.export.' . $category->slug, [$category->id, $category->slug]) }}"
+                            action="{{ route('evaluasi.export' , [$category->id, $category->slug]) }}"
                             method="POST">
                             {{ csrf_field() }}
                             {{ method_field('POST') }}
@@ -180,7 +180,7 @@
 
                         </form></div>
                         <div class="col-md-6 d-flex text-right " style="right: 25px"><!-- Button trigger modal -->
-                            <a href="{{ route('evaluasi.download-template.' . $category->slug, [$category->id, $category->slug]) }}" class="btn btn-primary">Download Template</a>
+                            <a href="{{ route('evaluasi.download-template' , [$category->id, $category->slug]) }}" class="btn btn-primary">Download Template</a>
 
                             <button type="button" class="btn btn-info" data-toggle="modal" data-target="#importModal" >
                                 <i class="fa fa-upload"></i> Import
@@ -199,7 +199,7 @@
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
-                                <form action="{{ route('evaluasi.import.' . $category->slug, [$category->id, $category->slug]) }}" method="POST" enctype="multipart/form-data">
+                                <form action="{{ route('evaluasi.import' , [$category->id, $category->slug]) }}" method="POST" enctype="multipart/form-data">
                                     @csrf
                                     <div class="modal-body">
                                         <div class="form-group">
@@ -338,7 +338,7 @@
                             <div class="modal-header">
                                 <h5 class="modal-title" id="yearFilterModalLabel">Filter</h5>
                             </div>
-                            <form action="{{ route('operator.laporan.per_indikator.'. $category->slug) }}" method="get">
+                            <form action="{{ route('operator.laporan.per_indikator', [$category->id, $category->slug]) }}" method="get">
                                 <div class="modal-body">
                                     <div class="form-group">
                                         <label for="filter-year">Tahun</label>
@@ -353,7 +353,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-                                    <a href="{{ route('operator.laporan.per_indikator.'. $category->slug) }}"
+                                    <a href="{{ route('operator.laporan.per_indikator', [$category->id, $category->slug]) }}"
                                         class="btn btn-info">Hapus Filter</a>
                                     <button type="submit" class="btn btn-primary">Tampilkan</button>
                                 </div>
