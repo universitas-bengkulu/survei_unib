@@ -94,10 +94,6 @@ Route::group(['prefix'  => 'operator/'], function () {
         Route::post('/{id}/import/{slug}', [LaporanController::class, 'import'])->name('evaluasi.import');
         Route::get('/{id}/download-template/{slug}', [LaporanController::class, 'generateTemplate'])->name('evaluasi.download-template');
     });
-
-
-
-
 });
 
 Auth::routes();

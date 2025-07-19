@@ -33,11 +33,26 @@ class EvaluasisImport implements ToCollection, WithHeadingRow
         foreach ($rows as $row) {
             $numericRow = array_values($row->toArray());
             $date = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($numericRow[0])->format('Y-m-d');
-            $time = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($numericRow[1])->format('H:i:s');
+
+            $timeValue = trim($numericRow[1]);
+
+            if (is_numeric($timeValue)) {
+                $time = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($timeValue)->format('H:i:s');
+            } else {
+                $dt = \DateTime::createFromFormat('H:i:s', $timeValue)
+                    ?: \DateTime::createFromFormat('H:i', $timeValue);
+
+                if ($dt === false) {
+                    $time = null;
+                } else {
+                    $time = $dt->format('H:i:s');
+                }
+            }
             $datetime = $date . ' ' . $time;
-            if (is_null($datetime) || empty($datetime) ) {
+            if (empty($datetime)) {
                 $datetime = now();
             }
+
             $evaluasiRekap = EvaluasiRekap::create([
                 'category_id' => $category_id,
                 'created_at' => $datetime,
@@ -54,7 +69,6 @@ class EvaluasisImport implements ToCollection, WithHeadingRow
                 'updated_at' => $datetime,
             ]);
 
-
             $formulirs = Formulir::where('category_id', $category_id)->get();
             $indikators = Indikator::where('category_id', $category_id)->get();
             $index = 2;
@@ -67,8 +81,10 @@ class EvaluasisImport implements ToCollection, WithHeadingRow
                     'created_at' => $datetime,
                     'updated_at' => $datetime,
                 ]);
+
                 $index++;
             }
+
             $loop_indikator = 0;
             foreach ($indikators as $indikator) {
                 if (isset($numericRow[$index]) && !is_null($numericRow[$index])) {
@@ -83,6 +99,7 @@ class EvaluasisImport implements ToCollection, WithHeadingRow
                         'updated_at' => $datetime,
                     ]);
                 }
+
                 $index++;
             }
         }
