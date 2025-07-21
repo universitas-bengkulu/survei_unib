@@ -344,7 +344,7 @@
                                         <label for="filter-year">Tahun</label>
                                         <select name="year" id="filter-year" class="form-control">
                                             <option value="">Pilih Tahun</option>
-                                            @for ($i = 2023; $i <= date('Y'); $i++)
+                                            @for ($i = 2020; $i <= date('Y'); $i++)
                                                 <option value="{{ $i }}" {{ $i == $filteredYear ? 'selected' : '' }}>
                                                     {{ $i }}</option>
                                             @endfor
